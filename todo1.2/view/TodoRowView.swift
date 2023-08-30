@@ -30,7 +30,6 @@ struct TodoRowView: View {
                     .padding(.trailing, 30)
                     .padding(5)
 
-
         }
                 .font(.title2)
                 .padding(.vertical, 10)
@@ -52,7 +51,7 @@ struct CheckBox: View {
                     .onTapGesture {
                         isChecked.toggle()
                         todo.onCheckBoxClick()
-                        todoView.onCheckBoxClick(todo: todo)
+                        //todoView.onCheckBoxClick(todo: todo)
                     }
         }
 

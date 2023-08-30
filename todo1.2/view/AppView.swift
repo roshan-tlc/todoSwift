@@ -16,7 +16,7 @@ struct AppView: View {
     init() {
         UserTable.shared.createTable()
         ProjectTable.shared.createTable()
-        TodoDataBase.shared.createTable()
+        TodoTable.shared.createTable()
     }
     
     var body: some View {

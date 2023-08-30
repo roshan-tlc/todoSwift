@@ -10,11 +10,11 @@ import SwiftUI
 struct MenuView: View {
     
     @State var textField:String = ""
-    @State var userId:String = "1"
+    @State var userId:String = "2"
     @EnvironmentObject var listView: ProjectList
     @Environment(\.presentationMode) var presentationMode
     @State var isAddViewVisible = false
-    
+    @State var projects:[Project] = ProjectList().get(id: "2")
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
     
@@ -24,7 +24,7 @@ struct MenuView: View {
                     .font(.title)
                     .foregroundColor(.black)
             VStack {
-                UserView(userId: $userId)
+                UserView(id: userId)
             }
             VStack {
 
@@ -57,12 +57,15 @@ struct MenuView: View {
                 }
             }
             List {
-                ForEach(ProjectTable.shared.get()) { item in
+                ForEach(projects) { item in
                     NavigationLink(destination: TodoView(project: item)) {
                         ListRowView(project: item)
                     }
                 }
+                .onMove(perform: moveTodo)
             }
+
+            
             Spacer()
             
         }.frame(width: 300)
@@ -70,6 +73,12 @@ struct MenuView: View {
             .foregroundColor(Color.black)
                 .background(Color.secondary)
             .navigationBarBackButtonHidden(true)
+    }
+    
+    func moveTodo(from source: IndexSet, to destination: Int) {
+        projects.move(fromOffsets: source, toOffset: destination)
+        
+        
     }
     
     func addProject() {

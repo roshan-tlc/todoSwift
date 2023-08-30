@@ -5,10 +5,11 @@
 import SwiftUI
 
 struct UserEditView: View {
-    @Binding var userName: String
-    @Binding var userDescription: String
+    @State var userId:String
+    @State var userName:String
+    @State var description:String
     @Environment(\.presentationMode) var presentation
-
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -27,7 +28,8 @@ struct UserEditView: View {
                     .frame(alignment: .center)
                     .padding(.leading, 100)
                     .padding()
-                TextField("New Description", text: $userDescription)
+
+                TextField("New Description", text: $description)
                 
                     .frame(alignment: .center)
                     .padding(.leading, 100)
@@ -36,7 +38,7 @@ struct UserEditView: View {
                     HStack(spacing: 20) {
                         
                         Button(action: {
-                            UserList().addUser(name: userName, description: userDescription)
+                            UserList().addUser(id: userId, name: userName, description: description)
                             presentation.wrappedValue.dismiss()
                         }) {
                             Text("Save")
@@ -45,8 +47,7 @@ struct UserEditView: View {
                         .padding()
                         
                         Button(action: {
-                            userName = "user"
-                            userDescription = "description"
+
                             presentation.wrappedValue.dismiss()
                         }) {
                             Text("Cancle")
@@ -57,6 +58,3 @@ struct UserEditView: View {
         }
     }
 }
-
-
-

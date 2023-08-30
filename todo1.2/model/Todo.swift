@@ -8,7 +8,7 @@
 import Foundation
 import SQLite
 
-struct Todo : Identifiable {
+class Todo : Identifiable {
     let id : String
     let title : String
     var isCompleted : Bool
@@ -25,11 +25,16 @@ struct Todo : Identifiable {
         return id
     }
     
-    mutating func onCheckBoxClick() {
+    func onCheckBoxClick() {
         self.isCompleted.toggle()
     }
     
     static func > (lsh:Todo, rhs:Todo) -> Bool {
         return lsh.id > rhs.id
+    }
+    
+    enum todoStatus : Int {
+        case completed = 0
+        case unCompleted  = 1
     }
 }

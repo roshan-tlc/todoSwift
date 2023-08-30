@@ -112,7 +112,7 @@ struct TodoView: View {
                         AddTodoView(parentId: parentId)
                     }
                     List {
-                        ForEach(TodoDataBase.shared.get()) { todo in
+                        ForEach(paginatedTodo) { todo in
                             TodoRowView(todo: todo)
                         }
                         

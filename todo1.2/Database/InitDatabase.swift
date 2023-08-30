@@ -12,6 +12,7 @@ import Foundation
 class InitDataBase : Identifiable {
     
     private var db: Connection?
+    static var shared = InitDataBase()
     
     init() {
         do {
