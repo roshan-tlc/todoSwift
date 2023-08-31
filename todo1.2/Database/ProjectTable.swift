@@ -50,7 +50,7 @@ class ProjectTable : ObservableObject {
                 let id = row[0] as! Int64
                 let title = row[1] as! String
                 let userId = row[2] as! String
-                projects.append(Project(id: String(id), title: title, userId: userId, order: SearchFilter.OrderType.DSC))
+                projects.append(Project(id: id, title: title, userId: userId, order: SearchFilter.OrderType.DSC))
             }
         } catch {
             print("Error retrieving data: \(error)")
@@ -71,7 +71,7 @@ class ProjectTable : ObservableObject {
                 let id = row[0] as! Int64
                 let title = row[1] as! String
                 let userId = row[2] as! String
-                projects.append(Project(id: String(id), title: title, userId: userId, order: SearchFilter.OrderType.DSC))
+                projects.append(Project(id: id, title: title, userId: userId, order: SearchFilter.OrderType.DSC))
             }
         } catch {
             print("Error retrieving data: \(error)")
@@ -80,9 +80,13 @@ class ProjectTable : ObservableObject {
         print("project",projects)
         return projects
     }
+    
+    func searchFilter(searchFilteer:SearchFilter) {
+        
+    }
 
     
-    func remove(id:String) {
+    func remove(id:Int64) {
         guard let db = db else { return }
         
         do {

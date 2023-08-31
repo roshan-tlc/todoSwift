@@ -1,4 +1,3 @@
-
 //
 //  TodoViewModel.swift
 //  todo1.2
@@ -12,9 +11,9 @@ class TodoList: ObservableObject {
     //@Published var todos = [Todo]()
     private let filter = Filter()
     private let todoTable = TodoTable.shared
-    var id = 1
+    var id: Int64 = 1
 
-    func removeTodo(id: String) {
+    func removeTodo(id: Int64) {
 //        if let index = TodoList.todos.firstIndex(where: { $0.id == id }) {
 //            TodoList.todos.remove(at: index)
 //        }
@@ -22,44 +21,46 @@ class TodoList: ObservableObject {
     }
 
     func addTodo(title: String, parentId: String) {
-       // TodoList.todos.append(Todo(id: String(id), title: title, isCompleted: false, parentId: parentId))
-        todoTable.insert(todo: Todo(id: String(id), title: title, isCompleted: false, parentId: parentId))
+        // TodoList.todos.append(Todo(id: String(id), title: title, isCompleted: false, parentId: parentId))
+        todoTable.insert(todo: Todo(id: id, title: title, isCompleted: false, parentId: parentId))
         //print(TodoList.todos)
         id += 1
     }
 
-//    func onCheckBoxClick(todo: Todo) {
+    func onCheckBoxClick(todo: Todo) {
 //        if let index = todos.firstIndex(where: { $0.id == todo.id }) {
 //            todos[index] = todo
 //        }
-//
-//    }
+        todoTable.onCheckBoxChange(id: todo.getId())
+
+    }
 
     func getTodos(status: SearchFilter.Status, parentId: String) -> [Todo] {
         var filteredData = [Todo]()
-        print ("get todos  .....................", todoTable.get())
-        for todo in todoTable.get() {
-            if todo.parentId == parentId {
-                if (status == SearchFilter.Status.COMPLETED) {
-                    if (todo.isCompleted == true) {
-                        filteredData.append(todo)
-                    }
-                } else if (status == SearchFilter.Status.UNCOMPLETED) {
-                    if (todo.isCompleted == false) {
-                        filteredData.append(todo)
-                    }
-                } else {
+
+        for todo in todoTable.get(parentId: parentId) {
+            if (status == SearchFilter.Status.COMPLETED) {
+                if (todo.isCompleted == true) {
                     filteredData.append(todo)
                 }
+            } else if (status == SearchFilter.Status.UNCOMPLETED) {
+                if (todo.isCompleted == false) {
+                    filteredData.append(todo)
+                }
+            } else {
+                filteredData.append(todo)
             }
         }
-        return filteredData.sorted { $0 > $1}
+
+
+        return filteredData.sorted {
+            $0 > $1
+        }
     }
 
     func getSearchFilteredTodo(searchItem: SearchFilter, type: SearchFilter.OrderType) -> [Todo] {
-        print(searchItem.attribute)
-        //print(todos)
-        let searchedTodos = todoTable.get().filter {
+
+        let searchedTodos = todoTable.get(parentId: searchItem.parentId).filter {
             $0.title.lowercased().contains(searchItem.attribute.lowercased())
         }
         var filteredTodos = [Todo]()

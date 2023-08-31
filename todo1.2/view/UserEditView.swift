@@ -5,7 +5,7 @@
 import SwiftUI
 
 struct UserEditView: View {
-    @State var userId:String
+    @State var userId:Int64
     @State var userName:String
     @State var description:String
     @Environment(\.presentationMode) var presentation

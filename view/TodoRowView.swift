@@ -30,6 +30,7 @@ struct TodoRowView: View {
                     .padding(.trailing, 30)
                     .padding(5)
 
+
         }
                 .font(.title2)
                 .padding(.vertical, 10)

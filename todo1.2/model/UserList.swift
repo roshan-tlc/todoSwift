@@ -9,13 +9,13 @@ class UserList : ObservableObject{
     private let userTable =  UserTable.shared
     private var id = 1
 
-    func addUser(id: String, name:String, description:String) {
+    func addUser(id: Int64, name:String, description:String) {
         if userTable.get().contains(where: { $0.id == id }){
-            userTable.update(id: Int64(id)!, name: name, description: description)
+            userTable.update(id: id, name: name, description: description)
             
         } else {
             //usersList.append(User(id: String(id), name: name, description: description))
-            userTable.insert(user: User(id: String(id), name: name, description: description))
+            userTable.insert(user: User(id: id, name: name, description: description))
             
             print(usersList)
         }
@@ -28,12 +28,12 @@ class UserList : ObservableObject{
         userTable.remove(id: id)
     }
     
-    func get(id:String) -> User {
+    func get(id:Int64) -> User {
 //        if let index = usersList.firstIndex(where :{ $0.id == id}) {
 //            return usersList[index]
 //        }
         
-        return userTable.get(id:Int64(id)!)
+        return userTable.get(id:id)
     }
     
     func get() -> [User] {

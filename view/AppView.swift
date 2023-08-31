@@ -10,14 +10,7 @@ import SwiftUI
 struct AppView: View {
     @EnvironmentObject var listView: ProjectList
     @State private var showMenu : Bool = false
-    @State var userId : Int64 = 1
     
-    
-    init() {
-        UserTable.shared.createTable()
-        ProjectTable.shared.createTable()
-        TodoTable.shared.createTable()
-    }
     
     var body: some View {
         NavigationView {
@@ -31,7 +24,7 @@ struct AppView: View {
                 
                 GeometryReader{ _ in
                     HStack {
-                        MenuView(userId: userId)
+                        MenuView()
                             .offset(x:showMenu ? 0 : UIScreen.main.bounds.width)
                     }
                 }

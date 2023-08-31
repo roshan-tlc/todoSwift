@@ -22,7 +22,6 @@ class TodoTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            
             try db.run("CREATE TABLE IF NOT EXISTS Todos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status BOOLEAN, parentId TEXT FOREIGN_KEY)")
         } catch {
             print("Error creating table: \(error)")
@@ -40,25 +39,31 @@ class TodoTable : ObservableObject {
         }
     }
     
-//    func onCheckBoxChange(id:String) {
-//        guard let db = db else {return }
-//
-//        let query = "UPDATE Todos SET "
-//
-//    }
+    func onCheckBoxChange(id:Int64) {
+        guard let db = db else {return }
 
-    func get() -> [Todo] {
+        let query = "UPDATE Todos SET status = NOT status WHERE id = ?"
+        
+        do {
+            try db.run(query,id)
+        } catch {
+            print("Error inserting data: \(error)")
+        }
+
+    }
+
+    func get(parentId:String) -> [Todo] {
         guard let db = db else { return [] }
 
         var todos: [Todo] = []
         
         do {
-            let query = "SELECT * FROM Todos"
-            for row in try db.prepare(query) {
+            let query = "SELECT * FROM Todos WHERE parentId = ?"
+            for row in try db.prepare(query, parentId) {
                 if let id = row[0] as? Int64,
                    let title = row[1] as? String,
                    let parentId = row[3] as? String {
-                    todos.append(Todo(id: String(id), title: title, isCompleted: false, parentId: parentId))
+                    todos.append(Todo(id: id, title: title, isCompleted: false, parentId: parentId))
                 } else {
                     print("Error converting values for row: \(row)")
                 }
@@ -70,9 +75,29 @@ class TodoTable : ObservableObject {
         print(todos)
         return todos
     }
-
     
-    func remove(id:String) {
+    func searchFilter(searchFilter:SearchFilter) -> [Todo] {
+        guard let db = db else {return []}
+        
+        var todos: [Todo] = []
+        let query = "SELECT * FROM TODO WHERE parentID = ? AND title = ? LIMIT = ? OFFSET = ?"
+        
+        do {
+            for row in try db.run(query, searchFilter.getParentId(), searchFilter.getAttribute(),searchFilter.getSelectedLimit(), searchFilter.getSkip()) {
+                if let id = row[0] as? Int64,
+                   let title = row[1] as? String,
+                   let parentId = row[3] as? String {
+                    todos.append(Todo(id: id, title: title, isCompleted: false, parentId: parentId))
+                } else {
+                    print("Error converting values for row: \(row)")
+                }
+            }
+                    
+            
+        }
+    }
+    
+    func remove(id:Int64) {
         guard let db = db else { return }
         
         do {

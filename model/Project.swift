@@ -8,19 +8,15 @@
 import Foundation
 
 struct Project : Identifiable{
-    let id : Int64
+    let id : String
     let title : String
-    let userId : String
-    let order: SearchFilter.OrderType
     
-    init(id:Int64, title:String, userId:String, order:SearchFilter.OrderType) {
+    init(id:String, title:String) {
         self.id = id
         self.title = title
-        self.userId = userId
-        self.order = order
     }
     
-    func getId() -> Int64 {
+    func getId() -> String {
         return id
     }
     

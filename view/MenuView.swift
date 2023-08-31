@@ -10,11 +10,10 @@ import SwiftUI
 struct MenuView: View {
     
     @State var textField:String = ""
-    @State var userId:Int64 = 2
     @EnvironmentObject var listView: ProjectList
     @Environment(\.presentationMode) var presentationMode
     @State var isAddViewVisible = false
-    @State var projects:[Project] = ProjectList().get(id: 1)
+    
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
     
@@ -24,7 +23,7 @@ struct MenuView: View {
                     .font(.title)
                     .foregroundColor(.black)
             VStack {
-                UserView(id: userId)
+                UserView(id:"1")
             }
             VStack {
 
@@ -46,7 +45,7 @@ struct MenuView: View {
                         .cornerRadius(10)
                     
                     Button(
-                        action: addProject
+                        action: addTodo
                         , label: {
                             Text("Add Project")
                                 .font(.headline)
@@ -57,15 +56,12 @@ struct MenuView: View {
                 }
             }
             List {
-                ForEach(projects) { item in
-                    NavigationLink(destination: TodoView(project: item)) {
+                ForEach(listView.projects) { item in
+                    NavigationLink(destination: TodoView(parentId: item.id, parentTitle: item.title)) {
                         ListRowView(project: item)
                     }
                 }
-                .onMove(perform: moveTodo)
             }
-
-            
             Spacer()
             
         }.frame(width: 300)
@@ -75,16 +71,9 @@ struct MenuView: View {
             .navigationBarBackButtonHidden(true)
     }
     
-    func moveTodo(from source: IndexSet, to destination: Int) {
-        projects.move(fromOffsets: source, toOffset: destination)
-        
-        
-    }
-    
-    func addProject() {
+    func addTodo() {
         if textIsAppropriate() {
-            userId = listView.getLastId()
-            listView.addProject(title: textField, userId: String(userId), order: SearchFilter.OrderType.DSC)
+            listView.addProject(title: textField)
             textField = ""
             presentationMode.wrappedValue.dismiss()
         }
@@ -92,7 +81,7 @@ struct MenuView: View {
     
     func textIsAppropriate() -> Bool {
         if textField.isEmpty {
-            alertTitle = "Enter a valid todo1.2"
+            alertTitle = "Enter a valid todo"
             showAlert.toggle()
             return false
         }
@@ -107,7 +96,7 @@ struct MenuView: View {
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            AppView()
+            MenuView()
                 .environmentObject(ProjectList())
         }
     }

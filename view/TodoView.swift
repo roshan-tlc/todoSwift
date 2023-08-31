@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TodoView: View {
     @EnvironmentObject var todoView: TodoList
-    @State var project: Project
     @State var parentId : String
     @State var parentTitle : String
     @State private var searchText = ""
@@ -19,18 +18,15 @@ struct TodoView: View {
     @State var isSearchEnable = false
     @State var selectedStatus:SearchFilter.Status = SearchFilter.Status.ALL
     @State var isAddView = false
-    @State var selectedLimit : SearchFilter.Limit = SearchFilter.Limit.FIVE
+    @State var selectedLimit : Int = 5
     @State var currentIndex = 0
     @State var currentViewState = 1
     @State var searchType: SearchFilter.OrderType
-    let filter:Filter = Filter()
-    let searchFilter : SearchFilter = SearchFilter()
     
-    init( project:Project) {
-        self.project = project
-        self.parentId = String(project.id)
-        self.parentTitle = project.title
-        self.searchType = project.order
+    init( parentId:String, parentTitle:String, searchType: SearchFilter.OrderType = SearchFilter.OrderType.DSC, selectedStatus:SearchFilter.Status = SearchFilter.Status.COMPLETED , searchText:String = "") {
+        self.parentId = parentId
+        self.parentTitle = parentTitle
+        self.searchType = searchType
     }
     
     var body: some View {
@@ -89,23 +85,19 @@ struct TodoView: View {
                             .padding(.horizontal)
                             
                             Picker(selection: $selectedLimit) {
-                                Text("5").tag(SearchFilter.Limit.FIVE)
-                                Text("10").tag(SearchFilter.Limit.TEN)
-                                Text("15").tag(SearchFilter.Limit.FIFTEEN)
+                                Text("5").tag(5)
+                                Text("10").tag(10)
+                                Text("15").tag(15)
                             } label: {
                                 HStack{
                                     Text("limit")
                                     Text("selectedLimit")
-                                            .font(.headline)
-                                            .foregroundColor(.white)
+                                        .font(.headline)
+                                        .foregroundColor(.white)
                                 }
                             }
                             .pickerStyle(MenuPickerStyle())
                             .padding(.horizontal)
-                                    .onChange(of: selectedLimit) { newValue in
-                                        currentIndex = 0
-                                    }
-
                         }
                     }
                     if isAddViewVisible {
@@ -115,7 +107,6 @@ struct TodoView: View {
                         ForEach(paginatedTodo) { todo in
                             TodoRowView(todo: todo)
                         }
-                        
                     }
                     .navigationBarBackButtonHidden(true)
                     .padding()
@@ -128,7 +119,7 @@ struct TodoView: View {
                         if currentPages > 1 {
                             Button("Previous") {
                                 if currentIndex > 0 {
-                                    currentIndex -= selectedLimit.rawValue
+                                    currentIndex -= selectedLimit
                                 }
                             }
                             .padding(.horizontal)
@@ -147,7 +138,7 @@ struct TodoView: View {
                         
                         if currentPages < totalPages {
                             Button ("Next") {
-                                currentIndex += selectedLimit.rawValue
+                                currentIndex += selectedLimit
                             }
                             .padding(.horizontal)
                         }
@@ -158,12 +149,12 @@ struct TodoView: View {
             
             var totalPages: Int {
                 let totalCount = searchResults.count
-                let pages = (totalCount + selectedLimit.rawValue - 1)  / selectedLimit.rawValue
+                let pages = (totalCount + selectedLimit - 1)  / selectedLimit
                 return max(pages, 1)
             }
 
             var currentPages:Int {
-                var page = currentIndex/selectedLimit.rawValue + 1
+                var page = currentIndex/selectedLimit + 1
                 if page > totalPages  {
                     page = totalPages
                 }
@@ -171,11 +162,12 @@ struct TodoView: View {
             }
             
             var searchResults: [Todo] {
-
+                let filter:Filter = Filter()
+                let searchFilter : SearchFilter = SearchFilter()
                 searchFilter.setAttribute(attribute: searchText)
                 searchFilter.setSelectedStatus(status: selectedStatus)
                 searchFilter.setParentId(parentId: parentId)
-                searchFilter.setLimit(limit: selectedLimit)
+                //searchFilter.setLimit(limit: selectedLimit)
                 searchFilter.setSkip(skip: 0)
                 filter.setSearchFilter(searchItem: searchFilter, type: searchType)
 
@@ -186,7 +178,7 @@ struct TodoView: View {
             
             var paginatedTodo: [Todo] {
                 let startIndex = max(currentIndex, 0)
-                let endIndex = min(startIndex + selectedLimit.rawValue, searchResults.count)
+                let endIndex = min(startIndex + selectedLimit, searchResults.count)
                 
                 if startIndex <= endIndex {
                     return Array(searchResults[startIndex..<endIndex])
@@ -202,7 +194,7 @@ struct TodoView: View {
     }
 
     func setCurrentPage() {
-        currentIndex -= selectedLimit.rawValue
+        currentIndex -= selectedLimit
     }
 
     func setSearchFalse(completion: (Bool) -> Void) {

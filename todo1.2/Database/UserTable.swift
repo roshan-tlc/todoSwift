@@ -61,7 +61,7 @@ class UserTable : ObservableObject {
                 let id = row[0] as! Int64
                 let name = row[1] as! String
                 let description = row[2] as! String
-                users.append(User(id: String(id), name: name, description: description))
+                users.append(User(id: id, name: name, description: description))
             }
         } catch {
             print("Error retrieving data: \(error)")
@@ -71,7 +71,7 @@ class UserTable : ObservableObject {
     }
     
     func get(id:Int64) -> User {
-        guard let db = db else { return User(id: "", name: "", description: "")}
+        guard let db = db else { return User(id: 1, name: "", description: "")}
         let query = "SELECT * FROM User WHERE id = ?"
         
         do {
@@ -79,13 +79,13 @@ class UserTable : ObservableObject {
                 let id = row[0] as! Int64
                 let name = row[1] as! String
                 let description = row[2] as! String
-                return User(id: String(id), name: name, description: description)
+                return User(id: id, name: name, description: description)
             }
         } catch {
             print("Error retrieving data: \(error)")
         }
         
-        return User(id: "", name: "", description: "")
+        return User(id: 1, name: "", description: "")
     }
     
     func remove(id:String) {

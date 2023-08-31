@@ -8,21 +8,21 @@
 import Foundation
 
 class User : Identifiable {
-    var id:Int64
+    var id:String
     var name:String
     var description:String
 
-    init(id: Int64, name: String, description: String) {
+    init(id: String, name: String, description: String) {
         self.id = id
         self.name = name
         self.description = description
     }
 
-    func getId() -> Int64 {
+    func getId() -> String {
         id
     }
 
-    func setId(id:Int64) {
+    func setId(id:String) {
         self.id = id
     }
 

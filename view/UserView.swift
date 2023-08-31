@@ -5,12 +5,8 @@
 import SwiftUI
 
 struct UserView : View {
-    
-    @State var user:User
-    
-    init (id:Int64) {
-        user = UserList().get(id: id)
-    }
+    @State var userName:String = "User"
+    @State var description:String = "Description"
 
     var body : some View {
         VStack {
@@ -20,26 +16,25 @@ struct UserView : View {
                             .foregroundColor(.blue)
                             .frame(width: 80, height: 80)
 
-                    Text(user.name.prefix(1).uppercased())
+                    Text(userName.prefix(1).uppercased())
                             .font(.title)
                             .foregroundColor(.white)
                 }
                         .padding(.leading,80)
 
-                NavigationLink(destination: UserEditView(userId: user.id, userName: user.name, description: user.description)) {
+                NavigationLink(destination: UserEditView(userName: $userName, userDescription: $description )) {
                     Image(systemName: "pencil.circle.fill")
                             .font(.title)
                             .foregroundColor(.blue)
                             .padding(.leading, 30)
                 }
-                .onAppear {reLoad()}
             }
-            Text(user.name)
+            Text(userName)
                     .font(.headline)
                     .foregroundColor(.black)
                     .padding(5)
 
-            Text(user.description)
+            Text(description)
                     .font(.subheadline)
                     .foregroundColor(.black)
                     .padding(5)
@@ -47,9 +42,5 @@ struct UserView : View {
             Divider()
 
         }
-    }
-    
-    func reLoad() {
-        user = UserList().get(id: user.id)
     }
 }

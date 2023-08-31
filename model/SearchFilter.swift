@@ -14,8 +14,8 @@ class SearchFilter : ObservableObject {
     var status:Status = Status.ALL
     var isSearchEnable:Bool = false
     var parentId:String = ""
-    var skip:Int = 0
-    var limit:Limit = Limit.FIVE
+    @Published var skip:Int = 0
+    @Published var limit:Limit = Limit.FIVE
     
     enum OrderType {
         case ASC
