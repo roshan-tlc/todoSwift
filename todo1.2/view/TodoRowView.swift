@@ -49,7 +49,6 @@ struct CheckBox: View {
         VStack {
             Image(systemName: isChecked.rawValue == 1 ? "checkmark.square" : "square")
                     .onTapGesture {
-                        //isChecked.toggle()
                         todo.onCheckBoxClick()
                         todoView.onCheckBoxClick(todo: todo)
                     }
