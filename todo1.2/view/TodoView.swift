@@ -10,7 +10,7 @@ import SwiftUI
 struct TodoView: View {
     @EnvironmentObject var todoView: TodoList
     @State var project: Project
-    @State var parentId : String
+    @State var parentId : Int64
     @State var parentTitle : String
     @State private var searchText = ""
     @State var isSearchBarVisible = false
@@ -22,15 +22,13 @@ struct TodoView: View {
     @State var selectedLimit : SearchFilter.Limit = SearchFilter.Limit.FIVE
     @State var currentIndex = 0
     @State var currentViewState = 1
-    @State var searchType: SearchFilter.OrderType
     let filter:Filter = Filter()
     let searchFilter : SearchFilter = SearchFilter()
     
     init( project:Project) {
         self.project = project
-        self.parentId = String(project.id)
-        self.parentTitle = project.title
-        self.searchType = project.order
+        parentId = project.id
+        parentTitle = project.getTitle()
     }
     
     var body: some View {
@@ -172,16 +170,17 @@ struct TodoView: View {
             
             var searchResults: [Todo] {
 
-                searchFilter.setAttribute(attribute: searchText)
-                searchFilter.setSelectedStatus(status: selectedStatus)
-                searchFilter.setParentId(parentId: parentId)
-                searchFilter.setLimit(limit: selectedLimit)
-                searchFilter.setSkip(skip: 0)
-                filter.setSearchFilter(searchItem: searchFilter, type: searchType)
+                if isSearchEnable {
+                    searchFilter.setAttribute(attribute: searchText)
+                    searchFilter.setSelectedStatus(status: selectedStatus)
+                    searchFilter.setParentId(parentId: parentId)
+                    searchFilter.setLimit(limit: selectedLimit)
+                    searchFilter.setSkip(skip: 0)
+                    filter.setSearchFilter(searchItem: searchFilter)
 
-                let todos = isSearchEnable ? Filter().getSearchFilter() : TodoList().getTodos(status: selectedStatus, parentId: parentId)
-
-                return todos
+                    return Filter().getSearchFilter()
+                }
+                return TodoList().getTodos(status: selectedStatus, parentId: parentId)
             }
             
             var paginatedTodo: [Todo] {

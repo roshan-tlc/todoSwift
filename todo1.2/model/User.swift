@@ -8,9 +8,9 @@
 import Foundation
 
 class User : Identifiable {
-    var id:Int64
-    var name:String
-    var description:String
+    internal var id:Int64
+    private var name:String
+    private var description:String
 
     init(id: Int64, name: String, description: String) {
         self.id = id
@@ -27,7 +27,7 @@ class User : Identifiable {
     }
 
     func getName() -> String {
-        return name
+         name
     }
     
     func setName(name:String) {
@@ -35,7 +35,7 @@ class User : Identifiable {
     }
     
     func getDescription() -> String {
-        return description
+         description
     }
     
     func setDescription(description:String) {

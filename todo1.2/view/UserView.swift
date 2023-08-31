@@ -20,13 +20,13 @@ struct UserView : View {
                             .foregroundColor(.blue)
                             .frame(width: 80, height: 80)
 
-                    Text(user.name.prefix(1).uppercased())
+                    Text(user.getName().prefix(1).uppercased())
                             .font(.title)
                             .foregroundColor(.white)
                 }
                         .padding(.leading,80)
 
-                NavigationLink(destination: UserEditView(userId: user.id, userName: user.name, description: user.description)) {
+                NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName(), description: user.getDescription())) {
                     Image(systemName: "pencil.circle.fill")
                             .font(.title)
                             .foregroundColor(.blue)
@@ -34,18 +34,17 @@ struct UserView : View {
                 }
                 .onAppear {reLoad()}
             }
-            Text(user.name)
+            Text(user.getName())
                     .font(.headline)
                     .foregroundColor(.black)
                     .padding(5)
 
-            Text(user.description)
+            Text(user.getDescription())
                     .font(.subheadline)
                     .foregroundColor(.black)
                     .padding(5)
 
             Divider()
-
         }
     }
     

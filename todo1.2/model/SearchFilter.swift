@@ -10,17 +10,16 @@ import Foundation
 class SearchFilter : ObservableObject {
     
     var attribute:String = ""
-    var type: OrderType = OrderType.DSC
     var status:Status = Status.ALL
     var isSearchEnable:Bool = false
-    var parentId:String = ""
+    var parentId:Int64 = 0
     var skip:Int = 0
     var limit:Limit = Limit.FIVE
     
-    enum OrderType {
-        case ASC
-        case DSC
-    }
+//    enum OrderType {
+//        case ASC
+//        case DSC
+//    }
     
     enum Status {
         case ALL
@@ -42,14 +41,13 @@ class SearchFilter : ObservableObject {
         self.status = status
     }
 
-    func setParentId(parentId:String) {
+    func setParentId(parentId:Int64) {
         self.parentId = parentId
     }
 
-    func getParentId() -> String {
+    func getParentId() -> Int64 {
         parentId
     }
-
 
     func setLimit(limit:SearchFilter.Limit) {
         self.limit = limit
@@ -67,11 +65,11 @@ class SearchFilter : ObservableObject {
          status
     }
 
-    func getSelectedLimit() -> Limit {
-        return limit
+    func getSelectedLimit() -> Int {
+        limit.rawValue
     }
 
     func getSkip() -> Int {
-        return skip
+        skip
     }
 }

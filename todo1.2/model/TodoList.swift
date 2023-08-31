@@ -8,80 +8,72 @@
 import Foundation
 
 class TodoList: ObservableObject {
-    //@Published var todos = [Todo]()
+    @Published var todos = [Todo]()
     private let filter = Filter()
     private let todoTable = TodoTable.shared
     var id: Int64 = 1
 
-    func removeTodo(id: Int64) {
-//        if let index = TodoList.todos.firstIndex(where: { $0.id == id }) {
-//            TodoList.todos.remove(at: index)
-//        }
+    func removeTodo(id: Int64, userId: Int64) {
         todoTable.remove(id: id)
+        todos = todoTable.get(parentId: id)
     }
 
-    func addTodo(title: String, parentId: String) {
-        // TodoList.todos.append(Todo(id: String(id), title: title, isCompleted: false, parentId: parentId))
-        todoTable.insert(todo: Todo(id: id, title: title, isCompleted: false, parentId: parentId))
-        //print(TodoList.todos)
+    func addTodo(title: String, parentId: Int64) {
+        todoTable.insert(todo: Todo(id: id, title: title, isCompleted: Todo.TodoStatus.unCompleted, parentId: parentId))
+        todos = todoTable.get(parentId: parentId)
         id += 1
     }
 
     func onCheckBoxClick(todo: Todo) {
-//        if let index = todos.firstIndex(where: { $0.id == todo.id }) {
-//            todos[index] = todo
-//        }
         todoTable.onCheckBoxChange(id: todo.getId())
+        todos = todoTable.get(parentId: todo.getParentId())
 
     }
 
-    func getTodos(status: SearchFilter.Status, parentId: String) -> [Todo] {
+    func getTodos(status: SearchFilter.Status, parentId: Int64) -> [Todo] {
         var filteredData = [Todo]()
 
         for todo in todoTable.get(parentId: parentId) {
             if (status == SearchFilter.Status.COMPLETED) {
-                if (todo.isCompleted == true) {
+                if (todo.getStatus().rawValue == 1) {
                     filteredData.append(todo)
                 }
             } else if (status == SearchFilter.Status.UNCOMPLETED) {
-                if (todo.isCompleted == false) {
+                if (todo.getStatus().rawValue == 0) {
                     filteredData.append(todo)
                 }
             } else {
                 filteredData.append(todo)
             }
         }
-
-
-        return filteredData.sorted {
+        todos = filteredData.sorted {
             $0 > $1
         }
+        return todos
     }
 
-    func getSearchFilteredTodo(searchItem: SearchFilter, type: SearchFilter.OrderType) -> [Todo] {
+    func getSearchFilteredTodo(searchItem: SearchFilter) -> [Todo] {
 
         let searchedTodos = todoTable.get(parentId: searchItem.parentId).filter {
-            $0.title.lowercased().contains(searchItem.attribute.lowercased())
+            $0.getTitle().lowercased().contains(searchItem.attribute.lowercased())
         }
         var filteredTodos = [Todo]()
 
         if searchItem.status == SearchFilter.Status.COMPLETED {
             filteredTodos = searchedTodos.filter {
-                $0.isCompleted == true
+                $0.getStatus().rawValue == 1
             }
         } else if searchItem.status == SearchFilter.Status.UNCOMPLETED {
             filteredTodos = searchedTodos.filter {
-                $0.isCompleted == false
+                $0.getStatus().rawValue == 0
             }
         } else {
             filteredTodos = searchedTodos
         }
 
-        if searchItem.type == SearchFilter.OrderType.DSC {
-            return filteredTodos.sorted {
-                $0 > $1
-            }
+        return filteredTodos.sorted {
+            $0 > $1
         }
-        return filteredTodos
+        //return todoTable.searchFilter(searchFilter: searchItem)
     }
 }

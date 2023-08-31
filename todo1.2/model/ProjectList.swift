@@ -8,21 +8,20 @@
 import Foundation
 
 class ProjectList : ObservableObject {
-    @Published var projects :[Project] = []
+    @Published var projects :[Project] = ProjectTable.shared.get()
     private let projectTable = ProjectTable.shared
-    var id:Int64  = 1
+    private var id:Int64  = 1
     
-    func addProject(title:String, userId:String, order:SearchFilter.OrderType) {
-       // projects.append(Project(id: String (id), title: title, userId: userId, order: order ))
+    func addProject(title:String, userId:Int64, order:Int) {
         projectTable.insert(project: Project(id: id, title: title, userId: userId, order: order ))
+        projects = projectTable.get(id: userId)
+        print(projects)
         id += 1
     }
     
-    func removeProject(id:Int64) {
-//        if let index = projects.firstIndex(where: {$0.id == id}) {
-//            projects.remove(at: index)
-//        }
+    func removeProject(id:Int64, userId:Int64) {
         projectTable.remove(id: id)
+        projects = projectTable.get(id: userId)
     }
     
     func getLastId() -> Int64 {
@@ -35,6 +34,10 @@ class ProjectList : ObservableObject {
     
     func get(id:Int64) -> [Project]{
         projectTable.get(id: id)
+    }
+
+    func getOrder() -> Int {
+         projects.count + 1
     }
     
 }

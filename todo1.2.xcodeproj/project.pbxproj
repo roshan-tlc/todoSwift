@@ -26,11 +26,11 @@
 		6BD2273F2A9DFE73002D5914 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D31B42A1E18C13C826D84E8 /* SQLite.framework */; };
 		6BD2274B2A9E1269002D5914 /* UserTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD2274A2A9E1269002D5914 /* UserTable.swift */; };
 		6BD2274D2A9E1835002D5914 /* ProjectTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD2274C2A9E1835002D5914 /* ProjectTable.swift */; };
-		6BD2274F2A9E4634002D5914 /* InitDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD2274E2A9E4634002D5914 /* InitDatabase.swift */; };
 		6BF9B47C2A96033800B63876 /* Filter .swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF9B47B2A96033800B63876 /* Filter .swift */; };
 		6BFAAD132A94773D003D7624 /* AddTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFAAD122A94773D003D7624 /* AddTodoView.swift */; };
 		9D31B01704651CD7156DB89D /* UserList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BA2BAE8CBEC0A0B7227D /* UserList.swift */; };
 		9D31B4AFDDB770FA5D3A68B1 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B93E87882433273F43DC /* UserView.swift */; };
+		9D31B5E672BA24B7E9568574 /* InitDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BAD3687FE267952D243A /* InitDatabase.swift */; };
 		9D31BAEF9C78B5450AFD182A /* TodoTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BADACBF1919BAC2111D0 /* TodoTable.swift */; };
 		9D31BEF9CA657851E61B4AE9 /* UserEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B83EDDF91B2F6A48C0F8 /* UserEditView.swift */; };
 /* End PBXBuildFile section */
@@ -120,12 +120,12 @@
 		6BD2273E2A9DFCD5002D5914 /* todo1-2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "todo1-2-Info.plist"; sourceTree = SOURCE_ROOT; };
 		6BD2274A2A9E1269002D5914 /* UserTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTable.swift; sourceTree = "<group>"; };
 		6BD2274C2A9E1835002D5914 /* ProjectTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTable.swift; sourceTree = "<group>"; };
-		6BD2274E2A9E4634002D5914 /* InitDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitDatabase.swift; sourceTree = "<group>"; };
 		6BF9B47B2A96033800B63876 /* Filter .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Filter .swift"; sourceTree = "<group>"; };
 		6BFAAD122A94773D003D7624 /* AddTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTodoView.swift; sourceTree = "<group>"; };
 		9D31B83EDDF91B2F6A48C0F8 /* UserEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserEditView.swift; sourceTree = "<group>"; };
 		9D31B93E87882433273F43DC /* UserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		9D31BA2BAE8CBEC0A0B7227D /* UserList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserList.swift; sourceTree = "<group>"; };
+		9D31BAD3687FE267952D243A /* InitDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitDatabase.swift; sourceTree = "<group>"; };
 		9D31BADACBF1919BAC2111D0 /* TodoTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoTable.swift; sourceTree = "<group>"; };
 		9D31BC385DAD5C2D6597A886 /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = "todo1.2/SQLite.swift-master/SQLite.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -170,7 +170,8 @@
 				6B7206442A8F399B00653AFE /* todo1_2App.swift */,
 				6B7206482A8F399C00653AFE /* Assets.xcassets */,
 				6B72064A2A8F399C00653AFE /* Preview Content */,
-				9D31BC05CFD43E0EC251DB88 /* Database */,
+				9D31BC05CFD43E0EC251DB88 /* service */,
+				9D31B1CAAD4EBC1C9205DDD4 /* core */,
 			);
 			path = todo1.2;
 			sourceTree = "<group>";
@@ -220,6 +221,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9D31B1CAAD4EBC1C9205DDD4 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				9D31BAD3687FE267952D243A /* InitDatabase.swift */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
 		9D31B63BFCFAABC5C91B8D3D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,15 +243,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9D31BC05CFD43E0EC251DB88 /* Database */ = {
+		9D31BC05CFD43E0EC251DB88 /* service */ = {
 			isa = PBXGroup;
 			children = (
 				9D31BADACBF1919BAC2111D0 /* TodoTable.swift */,
 				6BD2274A2A9E1269002D5914 /* UserTable.swift */,
 				6BD2274C2A9E1835002D5914 /* ProjectTable.swift */,
-				6BD2274E2A9E4634002D5914 /* InitDatabase.swift */,
 			);
-			path = Database;
+			path = service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -390,11 +398,11 @@
 				6B72BFE22A8F754E00545DC7 /* ListRowView.swift in Sources */,
 				6B72BFEA2A8FA33E00545DC7 /* Project.swift in Sources */,
 				9D31B01704651CD7156DB89D /* UserList.swift in Sources */,
-				6BD2274F2A9E4634002D5914 /* InitDatabase.swift in Sources */,
 				9D31B4AFDDB770FA5D3A68B1 /* UserView.swift in Sources */,
 				9D31BEF9CA657851E61B4AE9 /* UserEditView.swift in Sources */,
 				6BD2274B2A9E1269002D5914 /* UserTable.swift in Sources */,
 				9D31BAEF9C78B5450AFD182A /* TodoTable.swift in Sources */,
+				9D31B5E672BA24B7E9568574 /* InitDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

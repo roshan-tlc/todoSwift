@@ -19,8 +19,8 @@ struct TodoRowView: View {
                     .padding(5)
 
 
-            Text(todo.title)
-                    .foregroundColor(todo.isCompleted ? Color.gray : Color.black)
+            Text(todo.getTitle())
+                .foregroundColor(todo.getStatus().rawValue == 1 ? Color.gray : Color.black)
                     .padding(.leading, 5)
                     .frame(width: 240, height: 20)
 
@@ -36,20 +36,20 @@ struct TodoRowView: View {
     }
 
     func remove() {
-        todoView.removeTodo(id: todo.id)
+        todoView.removeTodo(id: todo.id,userId: todo.getParentId() )
     }
 }
 
 struct CheckBox: View {
-    @Binding var isChecked: Bool
+    @Binding var isChecked: Todo.TodoStatus
     @State var todo: Todo
     @EnvironmentObject var todoView: TodoList
 
     var body: some View {
         VStack {
-            Image(systemName: isChecked ? "checkmark.square" : "square")
+            Image(systemName: isChecked.rawValue == 1 ? "checkmark.square" : "square")
                     .onTapGesture {
-                        isChecked.toggle()
+                        //isChecked.toggle()
                         todo.onCheckBoxClick()
                         todoView.onCheckBoxClick(todo: todo)
                     }

@@ -703,7 +703,7 @@ public final class Connection {
         throw error
     }
 
-    fileprivate var queue = DispatchQueue(label: "SQLite.Database", attributes: [])
+    fileprivate var queue = DispatchQueue(label: "SQLite.service", attributes: [])
 
     fileprivate static let queueKey = DispatchSpecificKey<Int>()
 

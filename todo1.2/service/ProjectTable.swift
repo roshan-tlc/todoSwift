@@ -22,8 +22,8 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-           
-            try db.run("CREATE TABLE IF NOT EXISTS Project (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, userId TEXT )")
+            try db.run("DROP TABLE IF EXISTS Project")
+            try db.run("CREATE TABLE IF NOT EXISTS Project (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, userId INTEGER, projectOrder INTEGER )")
         } catch {
             print("Error creating table: \(error)")
         }
@@ -33,8 +33,8 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            let insert = "INSERT INTO Project (title, userId) VALUES ( ?, ?)"
-            try db.run(insert, project.title, project.userId)
+            let insert = "INSERT INTO Project (title, userId, projectOrder) VALUES ( ?, ?, ?)"
+            try db.run(insert, project.getTitle(), project.getUserId(), project.getOrder())
         } catch {
             print("Error inserting data: \(error)")
         }
@@ -49,14 +49,13 @@ class ProjectTable : ObservableObject {
             for row in try db.run("SELECT * FROM Project") {
                 let id = row[0] as! Int64
                 let title = row[1] as! String
-                let userId = row[2] as! String
-                projects.append(Project(id: id, title: title, userId: userId, order: SearchFilter.OrderType.DSC))
+                let userId = row[2] as! Int64
+                let order = row [3] as! Int64
+                projects.append(Project(id: id, title: title, userId: userId, order: Int(order)))
             }
         } catch {
             print("Error retrieving data: \(error)")
         }
-
-        print(projects)
         return projects
     }
     
@@ -64,27 +63,22 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return [] }
 
         var projects: [Project] = []
-        let query =  "SELECT * FROM Project WHERE userId = ?"
+        let query =  "SELECT id,title,userId,projectOrder FROM Project WHERE userId = ?"
         
         do {
-            for row in try db.run(query, id) {
+            for row in try db.prepare(query, id) {
                 let id = row[0] as! Int64
                 let title = row[1] as! String
-                let userId = row[2] as! String
-                projects.append(Project(id: id, title: title, userId: userId, order: SearchFilter.OrderType.DSC))
+                let userId = row[2] as! Int64
+                let order =  row[3] as! Int64
+                projects.append(Project(id: id, title: title, userId: userId, order: Int(order)))
             }
         } catch {
             print("Error retrieving data: \(error)")
         }
-
-        print("project",projects)
+        print(projects)
         return projects
     }
-    
-    func searchFilter(searchFilteer:SearchFilter) {
-        
-    }
-
     
     func remove(id:Int64) {
         guard let db = db else { return }

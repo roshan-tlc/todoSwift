@@ -14,7 +14,7 @@ struct MenuView: View {
     @EnvironmentObject var listView: ProjectList
     @Environment(\.presentationMode) var presentationMode
     @State var isAddViewVisible = false
-    @State var projects:[Project] = ProjectList().get(id: 1)
+
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
     
@@ -57,7 +57,7 @@ struct MenuView: View {
                 }
             }
             List {
-                ForEach(projects) { item in
+                ForEach(listView.projects) { item in
                     NavigationLink(destination: TodoView(project: item)) {
                         ListRowView(project: item)
                     }
@@ -76,15 +76,13 @@ struct MenuView: View {
     }
     
     func moveTodo(from source: IndexSet, to destination: Int) {
-        projects.move(fromOffsets: source, toOffset: destination)
-        
-        
+        listView.projects.move(fromOffsets: source, toOffset: destination)
     }
     
     func addProject() {
         if textIsAppropriate() {
-            userId = listView.getLastId()
-            listView.addProject(title: textField, userId: String(userId), order: SearchFilter.OrderType.DSC)
+            userId = 1
+            listView.addProject(title: textField, userId:userId, order: listView.getOrder())
             textField = ""
             presentationMode.wrappedValue.dismiss()
         }
@@ -100,7 +98,7 @@ struct MenuView: View {
     }
     
     func getAlert() -> Alert {
-        return Alert(title: Text(alertTitle))
+        Alert(title: Text(alertTitle))
     }
 }
 

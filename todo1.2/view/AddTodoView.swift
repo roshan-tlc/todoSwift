@@ -11,7 +11,7 @@ struct AddTodoView: View {
     @State var textField:String = ""
     @EnvironmentObject var listView: TodoList
     @Environment(\.presentationMode) var presentationMode
-    @State var parentId:String
+    @State var parentId:Int64
     @State var searchText = ""
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
@@ -52,7 +52,7 @@ struct AddTodoView: View {
     }
     
     func getAlert() -> Alert {
-        return Alert(title: Text(alertTitle))
+        Alert(title: Text(alertTitle))
     }
     
 }

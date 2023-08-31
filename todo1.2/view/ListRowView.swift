@@ -14,7 +14,7 @@ struct ListRowView : View {
     
     var body: some View {
         HStack {
-            TextView(text: project.title)
+            TextView(text: project.getTitle())
             
             Image(systemName: "minus.circle.fill")
                 .onTapGesture(perform: remove)
@@ -24,7 +24,7 @@ struct ListRowView : View {
     }
     
     func remove() {
-        listView.removeProject(id:project.id)
+        listView.removeProject(id: project.id, userId: project.getUserId())
     }
     
 }
@@ -42,8 +42,6 @@ struct TextView : View {
                 .frame(width: 240, height: 20)
         }
     }
-    
-    
 }
 
 struct ListRowView_Previews: PreviewProvider {

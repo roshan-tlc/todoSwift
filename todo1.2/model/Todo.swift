@@ -9,12 +9,12 @@ import Foundation
 import SQLite
 
 class Todo : Identifiable {
-    let id : Int64
-    let title : String
-    var isCompleted : Bool
-    let parentId : String
+    internal let id : Int64
+    private let title : String
+    internal var isCompleted : TodoStatus
+    private var parentId : Int64
     
-    init(id:Int64, title:String, isCompleted:Bool, parentId:String) {
+    init(id:Int64, title:String, isCompleted: TodoStatus, parentId:Int64) {
         self.id = id
         self.title = title
         self.isCompleted = isCompleted
@@ -22,19 +22,40 @@ class Todo : Identifiable {
     }
     
     func getId() -> Int64 {
-        return id
+        id
+    }
+
+    func getTitle() -> String {
+        title
     }
     
     func onCheckBoxClick() {
-        self.isCompleted.toggle()
+        switch isCompleted {
+        case .completed:
+            isCompleted = .unCompleted
+        case .unCompleted:
+            isCompleted = .completed
+        }
+    }
+
+    func setParentId(parentId : Int64) {
+        self.parentId = parentId
+    }
+
+    func getParentId() -> Int64 {
+        parentId
+    }
+
+    func getStatus() -> TodoStatus {
+        isCompleted
     }
     
     static func > (lsh:Todo, rhs:Todo) -> Bool {
-        return lsh.id > rhs.id
+        lsh.id > rhs.id
     }
     
-    enum todoStatus : Int {
-        case completed = 0
-        case unCompleted  = 1
+    enum TodoStatus: Int {
+        case unCompleted = 0
+        case completed  = 1
     }
 }

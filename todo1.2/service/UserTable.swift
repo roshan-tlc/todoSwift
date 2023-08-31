@@ -33,7 +33,7 @@ class UserTable : ObservableObject {
 
         do {
             let insert = "INSERT INTO User ( name, description) VALUES ( ?, ?)"
-            try db.run(insert, user.name, user.description)
+            try db.run(insert, user.getName(), user.getDescription())
         } catch {
             print("Error inserting data: \(error)")
         }
@@ -57,7 +57,7 @@ class UserTable : ObservableObject {
         var users: [User] = []
 
         do {
-            for row in try db.prepare("SELECT * FROM User") {
+            for row in try db.prepare("SELECT id, name, description FROM User") {
                 let id = row[0] as! Int64
                 let name = row[1] as! String
                 let description = row[2] as! String

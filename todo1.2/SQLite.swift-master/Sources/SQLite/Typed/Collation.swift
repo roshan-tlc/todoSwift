@@ -38,7 +38,7 @@ public enum Collation {
     case rtrim
 
     /// A custom collating sequence identified by the given string, registered
-    /// using `Database.create(collation:…)`
+    /// using `service.create(collation:…)`
     case custom(String)
 
 }

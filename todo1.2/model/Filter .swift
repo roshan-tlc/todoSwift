@@ -8,13 +8,13 @@
 import Foundation
 
 class Filter : ObservableObject {
-    
+
     static var searchFilterResult = [Todo]()
     var limit:SearchFilter.Limit = SearchFilter.Limit.FIVE
     var skip:Int = 0
     
-    func setSearchFilter(searchItem:SearchFilter, type:SearchFilter.OrderType) {
-        Filter.searchFilterResult = TodoList().getSearchFilteredTodo(searchItem: searchItem, type: type)
+    func setSearchFilter(searchItem:SearchFilter) {
+        Filter.searchFilterResult = TodoList().getSearchFilteredTodo(searchItem: searchItem)
     }
 
     func getSearchFilter() -> [Todo] {

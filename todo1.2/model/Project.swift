@@ -8,12 +8,12 @@
 import Foundation
 
 struct Project : Identifiable{
-    let id : Int64
-    let title : String
-    let userId : String
-    let order: SearchFilter.OrderType
+    internal let id : Int64
+    private let title : String
+    private let userId : Int64
+    private let order: Int
     
-    init(id:Int64, title:String, userId:String, order:SearchFilter.OrderType) {
+    init(id:Int64, title:String, userId:Int64, order:Int) {
         self.id = id
         self.title = title
         self.userId = userId
@@ -21,11 +21,22 @@ struct Project : Identifiable{
     }
     
     func getId() -> Int64 {
-        return id
+        id
     }
     
     func getTitle() -> String {
-        return title
+        title
+    }
+
+//    func setUserId(userId: Int64) {
+//        userId = userId
+//    }
+
+    func getUserId() -> Int64 {
+        userId
     }
     
+    func getOrder() -> Int {
+        order
+    }
 }

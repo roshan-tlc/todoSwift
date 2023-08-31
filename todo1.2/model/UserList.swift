@@ -14,29 +14,20 @@ class UserList : ObservableObject{
             userTable.update(id: id, name: name, description: description)
             
         } else {
-            //usersList.append(User(id: String(id), name: name, description: description))
             userTable.insert(user: User(id: id, name: name, description: description))
-            
             print(usersList)
         }
     }
 
     func removeUser(id:String) {
-//        if let id = usersList.firstIndex(where: { $0.id == id }) {
-//            usersList.remove(at: id)
-//        }
         userTable.remove(id: id)
     }
     
     func get(id:Int64) -> User {
-//        if let index = usersList.firstIndex(where :{ $0.id == id}) {
-//            return usersList[index]
-//        }
-        
-        return userTable.get(id:id)
+         userTable.get(id:id)
     }
     
     func get() -> [User] {
-        return userTable.get()
+         userTable.get()
     }
 }
