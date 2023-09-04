@@ -9,25 +9,29 @@ import Foundation
 
 class TodoList: ObservableObject {
     @Published var todos = [Todo]()
+    static let shared = TodoList()
     private let filter = Filter()
     private let todoTable = TodoTable.shared
+    private var parentId:Int64 = 0
     var id: Int64 = 1
 
+    private init() {}
+
+    func addTodo(title: String, parentId: Int64) {
+        todoTable.insert(todo: Todo(id: id, title: title, isCompleted: Todo.TodoStatus.unCompleted, parentId: parentId, order: getOrder()))
+        self.parentId = parentId
+        todos = todoTable.get(parentId: parentId)
+        id += 1
+    }
+    
     func removeTodo(id: Int64, userId: Int64) {
         todoTable.remove(id: id)
         todos = todoTable.get(parentId: id)
     }
 
-    func addTodo(title: String, parentId: Int64) {
-        todoTable.insert(todo: Todo(id: id, title: title, isCompleted: Todo.TodoStatus.unCompleted, parentId: parentId))
-        todos = todoTable.get(parentId: parentId)
-        id += 1
-    }
-
     func onCheckBoxClick(todo: Todo) {
         todoTable.onCheckBoxChange(id: todo.getId())
         todos = todoTable.get(parentId: todo.getParentId())
-
     }
 
     func getTodos(status: SearchFilter.Status, parentId: Int64) -> [Todo] {
@@ -46,10 +50,22 @@ class TodoList: ObservableObject {
                 filteredData.append(todo)
             }
         }
-        todos = filteredData.sorted {
+        
+        return filteredData.sorted {
             $0 > $1
         }
-        return todos
+    }
+    
+    func moveItem(from source:IndexSet, to destination:Int ) {
+//        guard source != destination else  { return }
+//        guard source < 15 else { return }
+        todos.move(fromOffsets: source, toOffset: destination)
+        todoTable.updateTodoTable()
+        todos = todoTable.get(parentId: parentId)
+    }
+    
+    func getOrder() -> Int64 {
+        Int64(todos.count + 1)
     }
 
     func getSearchFilteredTodo(searchItem: SearchFilter) -> [Todo] {

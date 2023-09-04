@@ -13,12 +13,14 @@ class Todo : Identifiable {
     private let title : String
     internal var isCompleted : TodoStatus
     private var parentId : Int64
+    private var order: Int64
     
-    init(id:Int64, title:String, isCompleted: TodoStatus, parentId:Int64) {
+    init(id:Int64, title:String, isCompleted: TodoStatus, parentId:Int64, order:Int64) {
         self.id = id
         self.title = title
         self.isCompleted = isCompleted
         self.parentId = parentId
+        self.order = order
     }
     
     func getId() -> Int64 {
@@ -48,6 +50,14 @@ class Todo : Identifiable {
 
     func getStatus() -> TodoStatus {
         isCompleted
+    }
+    
+    func getOrder() -> Int64 {
+         order
+    }
+    
+    func setOrder(order:Int64) {
+        self.order = order
     }
     
     static func > (lsh:Todo, rhs:Todo) -> Bool {

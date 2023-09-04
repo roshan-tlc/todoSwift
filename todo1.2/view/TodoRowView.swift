@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TodoRowView: View {
     @State var todo: Todo;
+    @State var fontSize: CGFloat  = ApplicationTheme.shared.fontSize.rawValue
+    @State var fontFamily : String =  ApplicationTheme.shared.fontFamily.rawValue
     @EnvironmentObject var todoView: TodoList
 
     var body: some View {
@@ -21,18 +23,18 @@ struct TodoRowView: View {
 
             Text(todo.getTitle())
                 .foregroundColor(todo.getStatus().rawValue == 1 ? Color.gray : Color.black)
-                    .padding(.leading, 5)
+                    .padding(.leading, -35)
                     .frame(width: 240, height: 20)
+                    .font(Font.custom(fontFamily, size : fontSize))
 
             Image(systemName: "minus.circle.fill")
                     .onTapGesture(perform: remove)
                     .frame(width: 20, height: 20)
-                    .padding(.trailing, 30)
+                    .padding(.leading, -50)
                     .padding(5)
 
         }
-                .font(.title2)
-                .padding(.vertical, 10)
+            .padding(.vertical, 10)
     }
 
     func remove() {

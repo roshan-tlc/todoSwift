@@ -7,6 +7,9 @@ import SwiftUI
 struct UserView : View {
     
     @State var user:User
+    @State var themeColor : Color = ApplicationTheme.shared.getDefaultColor()
+    @State var fontFamily:String = ApplicationTheme.shared.fontFamily.rawValue
+    @State var fontSize:CGFloat = ApplicationTheme.shared.fontSize.rawValue
     
     init (id:Int64) {
         user = UserList().get(id: id)
@@ -19,9 +22,10 @@ struct UserView : View {
                     Circle()
                             .foregroundColor(.blue)
                             .frame(width: 80, height: 80)
+                            .foregroundColor(themeColor)
 
                     Text(user.getName().prefix(1).uppercased())
-                            .font(.title)
+                            .font(Font.custom(fontFamily , size : fontSize))
                             .foregroundColor(.white)
                 }
                         .padding(.leading,80)
@@ -32,15 +36,15 @@ struct UserView : View {
                             .foregroundColor(.blue)
                             .padding(.leading, 30)
                 }
-                .onAppear {reLoad()}
+                .onAppear {reload()}
             }
             Text(user.getName())
-                    .font(.headline)
+                    .font(Font.custom(fontFamily , size : fontSize))
                     .foregroundColor(.black)
                     .padding(5)
 
             Text(user.getDescription())
-                    .font(.subheadline)
+                    .font(Font.custom(fontFamily , size : fontSize))
                     .foregroundColor(.black)
                     .padding(5)
 
@@ -48,7 +52,7 @@ struct UserView : View {
         }
     }
     
-    func reLoad() {
+    func reload() {
         user = UserList().get(id: user.id)
     }
 }

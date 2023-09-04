@@ -12,8 +12,8 @@ struct todo1_2App: App {
     var body: some Scene {
         WindowGroup {
             AppView()
-                .environmentObject(ProjectList())
-                .environmentObject(TodoList())
+                .environmentObject(ProjectList.shared)
+                .environmentObject(TodoList.shared)
         }
     }
 }

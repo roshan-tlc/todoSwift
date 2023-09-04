@@ -22,8 +22,8 @@ class TodoTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            try db.run("drop table Todos")
-            try db.run("CREATE TABLE IF NOT EXISTS Todos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, parentId INTEGER FOREIGN_KEY)")
+            
+            try db.run("CREATE TABLE IF NOT EXISTS Todos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, todoOrder INTEGER, parentId INTEGER FOREIGN_KEY )")
         } catch {
             print("Error creating table: \(error)")
         }
@@ -33,8 +33,8 @@ class TodoTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            let insert = "INSERT INTO Todos ( title, status, parentId) VALUES ( ?, ?, ?)"
-            try db.run(insert, todo.getTitle(), todo.getStatus().rawValue, todo.getParentId())
+            let insert = "INSERT INTO Todos ( title, status, parentId, todoOrder) VALUES ( ?, ?, ?, ?)"
+            try db.run(insert, todo.getTitle(), todo.getStatus().rawValue, todo.getParentId(), todo.getOrder())
         } catch {
             print("Error inserting data: \(error)")
         }
@@ -57,7 +57,7 @@ class TodoTable : ObservableObject {
         guard let db = db else { return [] }
         var todos: [Todo] = []
         
-        let query = "SELECT id, title, status, parentId FROM Todos WHERE parentId = ?"
+        let query = "SELECT id, title, status, parentId, todoOrder FROM Todos WHERE parentId = ?"
         
         do {
             let statement = try db.prepare(query)
@@ -67,10 +67,11 @@ class TodoTable : ObservableObject {
                 if let id = row[0] as? Int64,
                    let title = row[1] as? String,
                    let statusInt = row[2] as? Int64,
+                   let order = row[4] as? Int64,
                    let parentId = row[3] as? Int64,
                    let taskStatus = Todo.TodoStatus(rawValue: Int(statusInt)) {
                     
-                    let task = Todo(id: id, title: title, isCompleted: taskStatus, parentId: parentId)
+                    let task = Todo(id: id, title: title, isCompleted: taskStatus, parentId: parentId, order: order)
                     todos.append(task)
                 } else {
                     print("Invalid row data: \(row)")
@@ -83,31 +84,35 @@ class TodoTable : ObservableObject {
         return todos
     }
 
+    func updateTodoTable() {
+        guard let db = db else { return}
+        do {
+            let projectTable = Table("Todos")
+            let idColumn = Expression<Int64>("id")
+            let orderColumn = Expression<Int>("todoOrder")
 
-//    
-//    func searchFilter(searchFilter:SearchFilter) -> [Todo] {
-//        guard let db = db else {return []}
-//        
-//        var todos: [Todo] = []
-//        let query = "SELECT * FROM Todos WHERE  title LIKE ? AND parentID = ? "
-//        
-//        do {
-//            for row in try db.run(query, searchFilter.getParentId(), searchFilter.getAttribute()) {
-//                if let id = row[0] as? Int64,
-//                   let title = row[1] as? String,
-//                   let parentId = row[3] as? Int64 {
-//                    todos.append(Todo(id: id, title: title, isCompleted: false, parentId: parentId))
-//                } else {
-//                    print("Error converting values for row: \(row)")
-//                }
-//            }
-//        } catch {
-//            print("Error retrieving data: \(error)")
-//        }
-//        
-//        return todos
-//    }
+            try db.transaction {
+                for (index, todo) in TodoList.shared.todos.enumerated() {
+                    let projectToUpdate = projectTable.filter(idColumn == todo.id)
+                    try db.run(projectToUpdate.update(orderColumn <- index))
+                }
+            }
+        } catch {
+            print("Error updating ProjectTable in the database: \(error)")
+        }
+    }
     
+    func remove(parentId:Int64) {
+        guard let db = db else { return }
+
+        do {
+            let remove = "DELETE FROM Todos WHERE parentId = ?"
+            try db.run(remove, parentId)
+        } catch {
+            print("Error received :\(error)")
+        }
+    }
+
     func remove(id:Int64) {
         guard let db = db else { return }
         

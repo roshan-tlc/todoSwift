@@ -8,9 +8,13 @@
 import Foundation
 
 class ProjectList : ObservableObject {
-    @Published var projects :[Project] = ProjectTable.shared.get()
+    @Published var projects :[Project] = []
     private let projectTable = ProjectTable.shared
     private var id:Int64  = 1
+
+    static let shared = ProjectList()
+
+    private init() {}
     
     func addProject(title:String, userId:Int64, order:Int) {
         projectTable.insert(project: Project(id: id, title: title, userId: userId, order: order ))

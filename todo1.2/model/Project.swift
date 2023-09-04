@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Project : Identifiable{
+struct Project : Identifiable {
     internal let id : Int64
     private let title : String
     private let userId : Int64
@@ -27,10 +27,6 @@ struct Project : Identifiable{
     func getTitle() -> String {
         title
     }
-
-//    func setUserId(userId: Int64) {
-//        userId = userId
-//    }
 
     func getUserId() -> Int64 {
         userId

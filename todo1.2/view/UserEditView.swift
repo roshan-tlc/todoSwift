@@ -8,6 +8,8 @@ struct UserEditView: View {
     @State var userId:Int64
     @State var userName:String
     @State var description:String
+    @State var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
+    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
     @Environment(\.presentationMode) var presentation
     
     var body: some View {
@@ -20,11 +22,12 @@ struct UserEditView: View {
                         .padding()
                     
                     Text(userName.prefix(1).uppercased())
-                        .font(.title)
+                        .font(Font.custom(fontFamily, size : fontSize))
                         .foregroundColor(.white)
                         .padding()
                 }
                 TextField("New Name", text: $userName)
+                    .font(Font.custom(fontFamily, size : fontSize))
                     .frame(alignment: .center)
                     .padding(.leading, 100)
                     .padding()
@@ -43,17 +46,20 @@ struct UserEditView: View {
                         }) {
                             Text("Save")
                         }
-                        .frame(width: 40)
+                        .frame(width: 60)
+                        .font(Font.custom(fontFamily, size : fontSize))
                         .padding()
                         
                         Button(action: {
 
                             presentation.wrappedValue.dismiss()
                         }) {
-                            Text("Cancle")
+                            Text("Cancel")
                         } .frame(width: 60)
+                            .font(Font.custom(fontFamily, size : fontSize))
                             .padding()
                     }
+                Spacer()    
             }
         }
     }

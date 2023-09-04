@@ -32,7 +32,7 @@ class UserTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            let insert = "INSERT INTO User ( name, description) VALUES ( ?, ?)"
+            let insert = "INSERT INTO User ( name, description) VALUES (?, ?)"
             try db.run(insert, user.getName(), user.getDescription())
         } catch {
             print("Error inserting data: \(error)")

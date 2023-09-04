@@ -14,17 +14,14 @@ class Filter : ObservableObject {
     var skip:Int = 0
     
     func setSearchFilter(searchItem:SearchFilter) {
-        Filter.searchFilterResult = TodoList().getSearchFilteredTodo(searchItem: searchItem)
+        Filter.searchFilterResult = TodoList.shared.getSearchFilteredTodo(searchItem: searchItem)
     }
 
     func getSearchFilter() -> [Todo] {
         print("search filter out")
         print(Filter.searchFilterResult)
 
-        let filteredSequence = Filter.searchFilterResult.lazy
-                .dropFirst(skip)
-                .prefix(limit.rawValue)
-
+        let filteredSequence = Filter.searchFilterResult
         return Array(filteredSequence)
     }
 }

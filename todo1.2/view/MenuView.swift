@@ -10,19 +10,21 @@ import SwiftUI
 struct MenuView: View {
     
     @State var textField:String = ""
-    @State var userId:Int64 = 2
+    @State var userId:Int64 
     @EnvironmentObject var listView: ProjectList
     @Environment(\.presentationMode) var presentationMode
+    var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
+    var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
     @State var isAddViewVisible = false
-
+    var themeColor : Color = ApplicationTheme.shared.getDefaultColor()
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
     
     var body: some View {
         VStack {
             Text("Menu")
-                    .font(.title)
                     .foregroundColor(.black)
+                    .font(Font.custom(fontFamily, size: fontSize))
             VStack {
                 UserView(id: userId)
             }
@@ -32,10 +34,12 @@ struct MenuView: View {
                     .renderingMode(.original)
                     .onTapGesture {
                         isAddViewVisible.toggle()
+                        
                     }
                     .frame(width: 80, height: 50)
                     .imageScale(.large)
                     .frame(alignment: .leading)
+                    .foregroundColor(themeColor)
                     
             }
             if isAddViewVisible {
@@ -44,12 +48,13 @@ struct MenuView: View {
                         .frame(width: 250 , height: 50)
                         .background(Color.cyan)
                         .cornerRadius(10)
+                        .font(Font.custom(fontFamily, size: fontSize))
                     
                     Button(
                         action: addProject
                         , label: {
                             Text("Add Project")
-                                .font(.headline)
+                                .font(Font.custom(fontFamily, size : fontSize))
                                 .frame(height: 50)
                                 .background(Color.clear)
                         })
@@ -63,8 +68,8 @@ struct MenuView: View {
                     }
                 }
                 .onMove(perform: moveTodo)
+                .foregroundColor(themeColor)
             }
-
             
             Spacer()
             
@@ -76,12 +81,14 @@ struct MenuView: View {
     }
     
     func moveTodo(from source: IndexSet, to destination: Int) {
+        
         listView.projects.move(fromOffsets: source, toOffset: destination)
+        ProjectTable.shared.updateProjectTable()
+       // listView.projects = ProjectTable.shared.get(id: userId)
     }
     
     func addProject() {
         if textIsAppropriate() {
-            userId = 1
             listView.addProject(title: textField, userId:userId, order: listView.getOrder())
             textField = ""
             presentationMode.wrappedValue.dismiss()
@@ -106,7 +113,7 @@ struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             AppView()
-                .environmentObject(ProjectList())
+                .environmentObject(ProjectList.shared)
         }
     }
 }

@@ -22,8 +22,8 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            try db.run("DROP TABLE IF EXISTS Project")
-            try db.run("CREATE TABLE IF NOT EXISTS Project (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, userId INTEGER, projectOrder INTEGER )")
+//            try db.run("drop table Project")
+            try db.run("CREATE TABLE IF NOT EXISTS Project (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, userId INTEGER, projectOrder INTEGER DEFAULT 0)")
         } catch {
             print("Error creating table: \(error)")
         }
@@ -63,7 +63,7 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return [] }
 
         var projects: [Project] = []
-        let query =  "SELECT id,title,userId,projectOrder FROM Project WHERE userId = ?"
+        let query =  "SELECT id,title,userId,projectOrder FROM Project WHERE userId = ? ORDER BY projectOrder"
         
         do {
             for row in try db.prepare(query, id) {
@@ -76,10 +76,29 @@ class ProjectTable : ObservableObject {
         } catch {
             print("Error retrieving data: \(error)")
         }
-        print(projects)
+
         return projects
     }
-    
+
+
+    func updateProjectTable() {
+        guard let db = db else { return}
+        do {
+            let projectTable = Table("Project")
+            let idColumn = Expression<Int64>("id")
+            let orderColumn = Expression<Int>("projectOrder")
+
+            try db.transaction {
+                for (index, project) in ProjectList.shared.projects.enumerated() {
+                    let projectToUpdate = projectTable.filter(idColumn == project.id)
+                    try db.run(projectToUpdate.update(orderColumn <- index))
+                }
+            }
+        } catch {
+            print("Error updating ProjectTable in the database: \(error)")
+        }
+    }
+
     func remove(id:Int64) {
         guard let db = db else { return }
         

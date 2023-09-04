@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B1739E02AA1F33F0063678D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1739DF2AA1F33F0063678D /* Theme.swift */; };
+		6B1739EB2AA2049E0063678D /* ApplicationTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1739EA2AA2049E0063678D /* ApplicationTheme.swift */; };
 		6B5010882A97CF61006D6486 /* SearchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5010872A97CF61006D6486 /* SearchFilter.swift */; };
 		6B7206452A8F399B00653AFE /* todo1_2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7206442A8F399B00653AFE /* todo1_2App.swift */; };
 		6B7206472A8F399B00653AFE /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7206462A8F399B00653AFE /* AppView.swift */; };
@@ -21,6 +23,7 @@
 		6B72BFEE2A8FA59000545DC7 /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72BFED2A8FA59000545DC7 /* TodoView.swift */; };
 		6B72BFF02A8FA6FF00545DC7 /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72BFEF2A8FA6FF00545DC7 /* TodoRowView.swift */; };
 		6BAA06C92A98B32600BD67EE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BAA06C82A98B32600BD67EE /* User.swift */; };
+		6BBEF2E52AA590D3000A0358 /* ThemeTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBEF2E42AA590D3000A0358 /* ThemeTable.swift */; };
 		6BD2273B2A9DFCC2002D5914 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D31B42A1E18C13C826D84E8 /* SQLite.framework */; };
 		6BD2273C2A9DFCC2002D5914 /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9D31B42A1E18C13C826D84E8 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6BD2273F2A9DFE73002D5914 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D31B42A1E18C13C826D84E8 /* SQLite.framework */; };
@@ -29,6 +32,7 @@
 		6BF9B47C2A96033800B63876 /* Filter .swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF9B47B2A96033800B63876 /* Filter .swift */; };
 		6BFAAD132A94773D003D7624 /* AddTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFAAD122A94773D003D7624 /* AddTodoView.swift */; };
 		9D31B01704651CD7156DB89D /* UserList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BA2BAE8CBEC0A0B7227D /* UserList.swift */; };
+		9D31B181C1471446C497B4F8 /* App.property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B722E237BBBF4062BF6B /* App.property.swift */; };
 		9D31B4AFDDB770FA5D3A68B1 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B93E87882433273F43DC /* UserView.swift */; };
 		9D31B5E672BA24B7E9568574 /* InitDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BAD3687FE267952D243A /* InitDatabase.swift */; };
 		9D31BAEF9C78B5450AFD182A /* TodoTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BADACBF1919BAC2111D0 /* TodoTable.swift */; };
@@ -102,6 +106,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6B1739DF2AA1F33F0063678D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		6B1739EA2AA2049E0063678D /* ApplicationTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationTheme.swift; sourceTree = "<group>"; };
 		6B5010872A97CF61006D6486 /* SearchFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilter.swift; sourceTree = "<group>"; };
 		6B7206412A8F399B00653AFE /* todo1.2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = todo1.2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B7206442A8F399B00653AFE /* todo1_2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = todo1_2App.swift; sourceTree = "<group>"; };
@@ -117,11 +123,13 @@
 		6B72BFED2A8FA59000545DC7 /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		6B72BFEF2A8FA6FF00545DC7 /* TodoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
 		6BAA06C82A98B32600BD67EE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		6BBEF2E42AA590D3000A0358 /* ThemeTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTable.swift; sourceTree = "<group>"; };
 		6BD2273E2A9DFCD5002D5914 /* todo1-2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "todo1-2-Info.plist"; sourceTree = SOURCE_ROOT; };
 		6BD2274A2A9E1269002D5914 /* UserTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTable.swift; sourceTree = "<group>"; };
 		6BD2274C2A9E1835002D5914 /* ProjectTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTable.swift; sourceTree = "<group>"; };
 		6BF9B47B2A96033800B63876 /* Filter .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Filter .swift"; sourceTree = "<group>"; };
 		6BFAAD122A94773D003D7624 /* AddTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTodoView.swift; sourceTree = "<group>"; };
+		9D31B722E237BBBF4062BF6B /* App.property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.property.swift; sourceTree = "<group>"; };
 		9D31B83EDDF91B2F6A48C0F8 /* UserEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserEditView.swift; sourceTree = "<group>"; };
 		9D31B93E87882433273F43DC /* UserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		9D31BA2BAE8CBEC0A0B7227D /* UserList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserList.swift; sourceTree = "<group>"; };
@@ -188,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				6B7206462A8F399B00653AFE /* AppView.swift */,
+				6B1739DF2AA1F33F0063678D /* Theme.swift */,
 				6B7206542A8F4DC600653AFE /* MenuView.swift */,
 				6B72BFED2A8FA59000545DC7 /* TodoView.swift */,
 				6B72BFE12A8F754E00545DC7 /* ListRowView.swift */,
@@ -210,6 +219,7 @@
 				6B5010872A97CF61006D6486 /* SearchFilter.swift */,
 				6BAA06C82A98B32600BD67EE /* User.swift */,
 				9D31BA2BAE8CBEC0A0B7227D /* UserList.swift */,
+				6B1739EA2AA2049E0063678D /* ApplicationTheme.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -225,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				9D31BAD3687FE267952D243A /* InitDatabase.swift */,
+				9D31B722E237BBBF4062BF6B /* App.property.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -249,6 +260,7 @@
 				9D31BADACBF1919BAC2111D0 /* TodoTable.swift */,
 				6BD2274A2A9E1269002D5914 /* UserTable.swift */,
 				6BD2274C2A9E1835002D5914 /* ProjectTable.swift */,
+				6BBEF2E42AA590D3000A0358 /* ThemeTable.swift */,
 			);
 			path = service;
 			sourceTree = "<group>";
@@ -394,15 +406,19 @@
 				6B72BFE62A8F9D4D00545DC7 /* TodoList.swift in Sources */,
 				6B72BFEE2A8FA59000545DC7 /* TodoView.swift in Sources */,
 				6B5010882A97CF61006D6486 /* SearchFilter.swift in Sources */,
+				6BBEF2E52AA590D3000A0358 /* ThemeTable.swift in Sources */,
 				6B72BFF02A8FA6FF00545DC7 /* TodoRowView.swift in Sources */,
 				6B72BFE22A8F754E00545DC7 /* ListRowView.swift in Sources */,
 				6B72BFEA2A8FA33E00545DC7 /* Project.swift in Sources */,
 				9D31B01704651CD7156DB89D /* UserList.swift in Sources */,
+				6B1739EB2AA2049E0063678D /* ApplicationTheme.swift in Sources */,
 				9D31B4AFDDB770FA5D3A68B1 /* UserView.swift in Sources */,
 				9D31BEF9CA657851E61B4AE9 /* UserEditView.swift in Sources */,
 				6BD2274B2A9E1269002D5914 /* UserTable.swift in Sources */,
 				9D31BAEF9C78B5450AFD182A /* TodoTable.swift in Sources */,
 				9D31B5E672BA24B7E9568574 /* InitDatabase.swift in Sources */,
+				6B1739E02AA1F33F0063678D /* Theme.swift in Sources */,
+				9D31B181C1471446C497B4F8 /* App.property.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
