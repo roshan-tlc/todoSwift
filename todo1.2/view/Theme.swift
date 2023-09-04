@@ -34,6 +34,7 @@ struct Theme : View {
                 .padding(.horizontal)
                         .onChange(of: fontFamily) { newValue in
                             ApplicationTheme.shared.setFontFamily(fontFamily: fontFamily.rawValue)
+                            ApplicationTheme.shared.fontFamily = fontFamily
                         }
             }
         }
@@ -61,6 +62,7 @@ struct Theme : View {
 
             .onChange(of: fontSize) { newValue in
                 ApplicationTheme.shared.setFontSize(fontSize: fontSize)
+                ApplicationTheme.shared.fontSize = fontSize
             }
             
         }
@@ -87,6 +89,7 @@ struct Theme : View {
             
             .onChange(of: defaultColor) { newValue in
                 ApplicationTheme.shared.setDefaultColor(color: defaultColor)
+                ApplicationTheme.shared.defaultColor = defaultColor
             }
 
         }

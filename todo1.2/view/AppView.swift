@@ -48,26 +48,26 @@ struct AppView: View {
                         Button {
                             self.showMenu.toggle()
                             listView.projects = ProjectTable.shared.get(id: userId)
-                            ThemeTable.shared.get()
+                            
                         } label : {
                             Image(systemName: showMenu ? "xmark" :"text.justify")
                                 .renderingMode(.original)
                         }
                         .foregroundColor(defaultColor.color)
-                    }
-                }
-                
-                VStack {
-                   
-                    NavigationLink(destination: Theme()) {
-                        HStack {
-                            Image(systemName: "wand.and.stars")
+                        
+                        Button {
+                            self.showMenu.toggle()
+                            listView.projects = ProjectTable.shared.get(id: userId)
+                            
+                        } label : {
+                            Image(systemName: showMenu ? "xmark" :"text.justify")
                                 .renderingMode(.original)
-                                .foregroundColor(defaultColor.color)
-                                .frame(alignment: .topTrailing)
+                                .frame(alignment: .trailing)
                         }
+                        .foregroundColor(defaultColor.color)
+                        
+                        Spacer()
                     }
-                    Spacer()
                 }
             }
         }

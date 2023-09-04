@@ -91,8 +91,8 @@ class ThemeTable {
         return ApplicationTheme.shared
     }
     
-    func getColor() -> String {
-        guard let db = db else { return "" }
+    func getColor() -> Color {
+        guard let db = db else { return Color.white}
         
         let table = Table("Theme")
         let color = Expression<String>("color")
@@ -100,13 +100,15 @@ class ThemeTable {
         do {
             if let row = try db.pluck(table) {
                 let color = row[color]
-                return color
+                
+                let selectedColor = ApplicationTheme.shared.setColorValue(color)
+                return selectedColor.color
             }
         } catch {
             print("Error fetching color from the database: \(error)")
         }
         
-        return ""
+        return Color.white
     }
     
     func getFontSize() -> Double {

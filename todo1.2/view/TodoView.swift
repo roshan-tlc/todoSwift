@@ -169,7 +169,7 @@ struct TodoView: View {
                             TodoRowView(todo: todo)
                         }
                         .onMove(perform: { indices, newOffset in
-                            todoView.moveItem(from: indices, to: newOffset)
+                            todoView.moveItem(from: indices.first!, to: newOffset)
                         })
                     }
                     .navigationBarBackButtonHidden(true)
@@ -237,11 +237,11 @@ struct TodoView: View {
         self.isSearchEnable.toggle()
     }
     
-//    func moveTodo(from source: IndexSet, to destination: Int) {
-//        todoView.todos.move(fromOffsets: source, toOffset: destination)
-//        TodoTable.shared.updateTodoTable()
-//        todoView.todos = TodoTable.shared.get(parentId: parentId)
-//    }
+    func moveTodo(from source: IndexSet, to destination: Int) {
+        todoView.todos.move(fromOffsets: source, toOffset: destination)
+        TodoTable.shared.updateTodoTable()
+        todoView.todos = TodoTable.shared.get(parentId: parentId)
+    }
 }
 
 struct SearchBar: View {

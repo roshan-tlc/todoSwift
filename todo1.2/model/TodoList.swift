@@ -56,12 +56,13 @@ class TodoList: ObservableObject {
         }
     }
     
-    func moveItem(from source:IndexSet, to destination:Int ) {
-//        guard source != destination else  { return }
-//        guard source < 15 else { return }
-        todos.move(fromOffsets: source, toOffset: destination)
+    func moveItem(from source:Int, to destination:Int ) {
+        guard source != destination else  { return }
+        guard source > 5 else { return }
+        let moveItem = todos.remove(at: source)
+        todos.insert(moveItem, at: destination)
         todoTable.updateTodoTable()
-        todos = todoTable.get(parentId: parentId)
+       // todos = todoTable.get(parentId: parentId)
     }
     
     func getOrder() -> Int64 {

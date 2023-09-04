@@ -12,7 +12,7 @@ class ApplicationTheme : ObservableObject {
     
     @Published var fontFamily :FontFamily = .CURSIVE
     @Published var fontSize : FontSize = .medium
-    @Published var defaultColor : DefaultColor = .blue
+    @Published var defaultColor : DefaultColor = .light
     @State var theme = ThemeTable.shared
     
     static var shared = ApplicationTheme()
@@ -27,15 +27,6 @@ class ApplicationTheme : ObservableObject {
         case BOLD = "HelveticaNeue-Bold"
         case TIMES_NEW_ROMAN = "TimesNewRoman"
         
-        static func setValue( value: String) -> FontFamily {
-            if value == "Cursive"{
-                return .CURSIVE
-            } else if value == "HelveticaNeue-Bold" {
-                return .BOLD
-            } else {
-                return .TIMES_NEW_ROMAN
-            }
-        }
     }
 
     enum FontSize : CGFloat {
@@ -43,15 +34,6 @@ class ApplicationTheme : ObservableObject {
         case medium = 18
         case large = 22
         
-        static func setValue( value: CGFloat) -> FontSize {
-                if value == FontSize.small.rawValue {
-                    return .small
-                } else if value == FontSize.medium.rawValue {
-                    return .medium
-                } else {
-                    return .large
-                }
-            }
     }
 
     enum DefaultColor: String {
@@ -72,39 +54,45 @@ class ApplicationTheme : ObservableObject {
                 return Color.black
             }
         }
-        
-        func setValue(_ value : String) -> DefaultColor {
-            if let color = DefaultColor(rawValue: value) {
-                return color
-            } else {
-                print("invalid color")
-            }
-            return DefaultColor.light
+    }
+    
+    func setFontFamily( value: String) -> FontFamily {
+        if value == "Cursive"{
+            return .CURSIVE
+        } else if value == "HelveticaNeue-Bold" {
+            return .BOLD
+        } else {
+            return .TIMES_NEW_ROMAN
         }
-        
-//        func toHex() -> String {
-//            let uiColor = UIColor(ApplicationTheme.shared.getDefaultColor())
-//
-//              guard let components = uiColor.cgColor.components else {
-//                  return ""
-//              }
-//
-//              let red = Int(components[0] * 255.0)
-//              let green = Int(components[1] * 255.0)
-//              let blue = Int(components[2] * 255.0)
-//
-//              return String(format: "#%02X%02X%02X", red, green, blue)
-//          }
+    }
+    
+    func setFontValue( value: CGFloat) -> FontSize {
+            if value == FontSize.small.rawValue {
+                return .small
+            } else if value == FontSize.medium.rawValue {
+                return .medium
+            } else {
+                return .large
+            }
+        }
+    
+    func setColorValue(_ value : String) -> DefaultColor {
+        if let color = DefaultColor(rawValue: value) {
+            return color
+        } else {
+            print("invalid color")
+        }
+        return DefaultColor.light
     }
     
     func setFontFamily(fontFamily:String) {
         theme.updateFontFamily(fontFamily: fontFamily)
-        self.fontFamily = FontFamily.setValue(value: theme.getFontFamily() ?? "")
+        self.fontFamily = setFontFamily(value: fontFamily)
     }
     
     func setFontSize(fontSize:ApplicationTheme.FontSize) {
         theme.updateFontSize(fontSize: fontSize.rawValue)
-        self.fontSize = FontSize.setValue(value: theme.getFontSize())
+        self.fontSize = fontSize
     }
     
     func setDefaultColor(color: ApplicationTheme.DefaultColor) {
@@ -124,10 +112,10 @@ class ApplicationTheme : ObservableObject {
         fontFamily
     }
     
-    func update(withColor color: DefaultColor, fontSize: CGFloat, fontFamily: String) {
-        self.defaultColor = color
-        self.fontSize = FontSize.setValue(value: fontSize)
-        self.fontFamily = FontFamily.setValue(value: fontFamily)
-    }
+//    func update(withColor color: DefaultColor, fontSize: CGFloat, fontFamily: String) {
+//        self.defaultColor = color
+//        self.fontSize = FontSize.setValue(value: fontSize)
+//        self.fontFamily = FontFamily.setValue(value: fontFamily)
+//    }
     
 }

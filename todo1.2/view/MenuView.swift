@@ -22,9 +22,20 @@ struct MenuView: View {
     
     var body: some View {
         VStack {
-            Text("Menu")
-                    .foregroundColor(.black)
+            VStack {
+                Text("Menu")
+                    .foregroundColor(themeColor)
                     .font(Font.custom(fontFamily, size: fontSize))
+                
+                NavigationLink(destination: Theme()) {
+                    HStack {
+                        Image(systemName: "wand.and.stars")
+                            .renderingMode(.original)
+                            .frame(alignment: .leading)
+                            .padding()
+                    }
+                }
+            }
             VStack {
                 UserView(id: userId)
             }
