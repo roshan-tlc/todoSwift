@@ -7,9 +7,6 @@ import SwiftUI
 struct UserView : View {
     
     @State var user:User
-    @State var themeColor : Color = ApplicationTheme.shared.getDefaultColor()
-    @State var fontFamily:String = ApplicationTheme.shared.fontFamily.rawValue
-    @State var fontSize:CGFloat = ApplicationTheme.shared.fontSize.rawValue
     
     init (id:Int64) {
         user = UserList().get(id: id)
@@ -52,7 +49,6 @@ struct UserView : View {
             Spacer()
         }
                 .frame(width: .infinity, height: 80,alignment: .top)
-                .background(ApplicationTheme.shared.defaultColor.color)
     }
     
     func reload() {

@@ -23,15 +23,6 @@ struct MenuView: View {
             VStack {
                 Text("Menu")
                     .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
-                
-                NavigationLink(destination: Theme()) {
-                    HStack {
-                        Image(systemName: "wand.and.stars")
-                            .renderingMode(.original)
-                            .frame(alignment: .leading)
-                            .padding()
-                    }
-                }
             }
             VStack {
                 UserView(id: userId)
@@ -73,8 +64,10 @@ struct MenuView: View {
                     NavigationLink(destination: TodoView(project: item)) {
                         ListRowView(project: item)
                     }
+                            .onAppear { TodoList.shared.todos = TodoTable.shared.get(parentId: item.id)}
                 }
                 .onMove(perform: moveTodo)
+
             }
             
             Spacer()
@@ -86,10 +79,9 @@ struct MenuView: View {
     }
     
     func moveTodo(from source: IndexSet, to destination: Int) {
-        
+
         listView.projects.move(fromOffsets: source, toOffset: destination)
         ProjectTable.shared.updateProjectTable()
-       // listView.projects = ProjectTable.shared.get(id: userId)
     }
     
     func addProject() {

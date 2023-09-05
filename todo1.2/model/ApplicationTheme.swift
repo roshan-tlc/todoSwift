@@ -36,14 +36,14 @@ class ApplicationTheme : ObservableObject {
     }
 
     enum DefaultColor: String {
-        case yellow = "yellow"
+        case light = "light"
         case green = "green"
         case mint = "dark"
         
         var color: Color {
             switch self {
-            case .yellow:
-                return Color.yellow
+            case .light:
+                return Color(#colorLiteral(red:0.3, green:0.5, blue: 0.8 , alpha:0.8 ))
             case .green:
                 return Color.green
             case .mint:
@@ -78,7 +78,7 @@ class ApplicationTheme : ObservableObject {
         } else {
             print("invalid color")
         }
-        return DefaultColor.yellow
+        return DefaultColor.light
     }
     
     func setFontFamily(fontFamily:String) {

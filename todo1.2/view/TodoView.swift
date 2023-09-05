@@ -19,13 +19,13 @@ struct TodoView: View {
     @State var isSearchEnable = false
     @State var result = TodoList.shared.todos
     @State var selectedStatus:SearchFilter.Status = SearchFilter.Status.ALL
-    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
-    @State var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
+    @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
+    @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
+    @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     @State var isAddView = false
     @State var selectedLimit : SearchFilter.Limit = SearchFilter.Limit.FIVE
     @State var currentIndex = 0
     @State var currentViewState = 1
-    @State var themeColor : Color = ApplicationTheme.shared.getDefaultColor()
     let filter:Filter = Filter()
     let searchFilter : SearchFilter = SearchFilter()
 
@@ -45,7 +45,7 @@ struct TodoView: View {
             return TodoList.shared.getTodos(status: selectedStatus, parentId: parentId)
         }
         set(newSearchResults) {
-            self.searchResults = newSearchResults
+            searchResults = newSearchResults
         }
     }
     
@@ -68,8 +68,7 @@ struct TodoView: View {
             searchResults = newSearchResults
         }
     }
-    
-    
+
     init( project:Project) {
         self.project = project
         parentId = project.id
@@ -91,22 +90,22 @@ struct TodoView: View {
                                 isAddViewVisible.toggle()
                             }
                             .imageScale(.large)
-                            .foregroundColor(themeColor)
+                            .foregroundColor(defaultColor.color)
                         Image(systemName: "line.3.horizontal")
                             .onTapGesture {
                                 isSearchViewVisible.toggle()
                             }
                             .frame(width: 30, height: 40)
                             .imageScale(.large)
-                            .foregroundColor(themeColor)
+                            .foregroundColor(defaultColor.color)
                     }
                     if isSearchViewVisible {
                         HStack {
                             Spacer()
                             if isSearchBarVisible {
                                 SearchBar(text: $searchText)
-                                    .frame(maxWidth: .infinity)
-                                    .font(Font.custom(fontFamily, size : fontSize))
+                                    .frame(width: .infinity)
+                                    .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                                     .padding(.horizontal)
                                     .onTapGesture {
                                         isSearchEnable.toggle()
@@ -119,7 +118,7 @@ struct TodoView: View {
                                 }
                                 .padding(.trailing, 10)
                                 .frame(width: 90)
-                                .foregroundColor(themeColor)
+                                .foregroundColor(defaultColor.color)
                             }
                             Picker(selection: $selectedStatus) {
                                 Text("status").tag(SearchFilter.Status.ALL)
@@ -129,13 +128,13 @@ struct TodoView: View {
                                 HStack{
                                     Text("picker")
                                     Text("selectedStatus")
-                                        .font(Font.custom(fontFamily, size : fontSize))
+                                        .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                                         .foregroundColor(.white)
                                 }
                             }
-                            .pickerStyle(MenuPickerStyle()).accentColor(ApplicationTheme.shared.defaultColor.color)
+                            .pickerStyle(MenuPickerStyle()).accentColor(defaultColor.color)
                             .padding(.horizontal)
-                            .foregroundColor(themeColor)
+
                             
                             Picker(selection: $selectedLimit) {
                                 Text("5").tag(SearchFilter.Limit.FIVE)
@@ -145,13 +144,12 @@ struct TodoView: View {
                                 HStack{
                                     Text("limit")
                                     Text("selectedLimit")
-                                        .font(Font.custom(fontFamily, size: 18))
+                                        .font(Font.custom(fontFamily.rawValue, size: fontSize.rawValue))
                                         .foregroundColor(.white)
                                 }
                             }
-                            .pickerStyle(MenuPickerStyle()).accentColor(ApplicationTheme.shared.defaultColor.color)
+                            .pickerStyle(MenuPickerStyle()).accentColor(defaultColor.color)
                             .padding(.horizontal)
-                            .foregroundColor(themeColor)
                             
                             .onChange(of: selectedLimit) { newValue in
                                 currentIndex = 0
@@ -167,11 +165,12 @@ struct TodoView: View {
                         ForEach(paginatedTodo) { todo in
                             TodoRowView(todo: todo)
                         }
-                        .onMove(perform: { indices, newOffset in
-                            moveItem(from: indices.first!, to: newOffset)
-                        })
+                                //                        .onMove(perform: { indices, newOffset in
+                                //                            moveItem(from: indices.first!, to: newOffset)
+                                //                        })
+                                .onMove(perform: moveTodo)
                     }
-                    .navigationBarBackButtonHidden(false).foregroundColor(ApplicationTheme.shared.defaultColor.color)
+                    .navigationBarBackButtonHidden(false).foregroundColor(defaultColor.color)
                     .padding()
                     
                     HStack {
@@ -183,14 +182,14 @@ struct TodoView: View {
                                 }
                             }
                             .padding(.horizontal)
-                            .font(Font.custom(fontFamily, size : fontSize))
+                            .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                         }
                         
                         if totalPages > 0 {
                             Text("\(currentPages)/\(totalPages)")
                                 .font(.headline)
                                 .padding(.horizontal)
-                                .font(Font.custom(fontFamily, size : fontSize))
+                                .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                                 .onChange(of: currentPages > totalPages || currentIndex >= currentPages * selectedLimit.rawValue ) { conditionMet in
                                     if conditionMet {
                                         setCurrentPage()
@@ -203,10 +202,10 @@ struct TodoView: View {
                                 currentIndex += selectedLimit.rawValue
                             }
                             .padding(.horizontal)
-                            .font(Font.custom(fontFamily, size : fontSize))
+                            .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                         }
                     }
-                    .foregroundColor(themeColor)
+                    .foregroundColor(defaultColor.color)
                 }
             }
             Spacer()
@@ -227,16 +226,26 @@ struct TodoView: View {
         }
     }
 
-    func moveItem(from source:Int, to destination:Int ) {
-        
-        todoView.todos = TodoTable.shared.get(parentId: parentId)
-        let moveItem = todoView.todos.remove(at: source)
-        todoView.todos.insert(moveItem, at: destination)
+//    func moveItem(from source:Int, to destination:Int ) {
+//
+//        todoView.todos = TodoTable.shared.get(parentId: parentId)
+//        let moveItem = todoView.todos.remove(at: source)
+//        todoView.todos.insert(moveItem, at: destination)
+//
+//        TodoTable.shared.updateTodoTable()
+//        todoView.todos = TodoTable.shared.get(parentId: parentId)
+//    }
 
+
+    func moveTodo(from source: IndexSet, to destination: Int) {
+        //todoView.todos = TodoTable.shared.get(parentId: 1)
+        print(todoView.todos)
+        todoView.todos.move(fromOffsets: source, toOffset: destination)
         TodoTable.shared.updateTodoTable()
+        print(parentId)
         todoView.todos = TodoTable.shared.get(parentId: parentId)
     }
-    
+
     func setCurrentPage() {
         currentIndex -= selectedLimit.rawValue
     }
@@ -244,8 +253,7 @@ struct TodoView: View {
     func setSearchFalse(completion: (Bool) -> Void) {
         self.isSearchEnable.toggle()
     }
-    
-    
+
 }
 
 struct SearchBar: View {

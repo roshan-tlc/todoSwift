@@ -12,7 +12,6 @@ struct Theme : View {
     @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
     @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
     @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
-    @State var showAppView = false
 
     var body: some View {
         VStack {
@@ -76,7 +75,7 @@ struct Theme : View {
                     .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                     .foregroundColor(defaultColor.color)
             Picker(selection: $defaultColor) {
-                Text("light").tag(ApplicationTheme.DefaultColor.yellow)
+                Text("light").tag(ApplicationTheme.DefaultColor.light)
                 Text("green").tag(ApplicationTheme.DefaultColor.green)
                 Text("mint").tag(ApplicationTheme.DefaultColor.mint)
             } label: {

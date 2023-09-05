@@ -8,8 +8,9 @@ struct UserEditView: View {
     @State var userId:Int64
     @State var userName:String
     @State var description:String
-    @State var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
-    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
+    @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
+    @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
+    @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     @Environment(\.presentationMode) var presentation
     
     var body: some View {
@@ -22,12 +23,12 @@ struct UserEditView: View {
                             .padding()
 
                     Text(userName.prefix(1).uppercased())
-                            .font(Font.custom(fontFamily, size : fontSize))
+                            .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                             .foregroundColor(.white)
                             .padding()
                 }
                 TextField("New Name", text: $userName)
-                        .font(Font.custom(fontFamily, size : fontSize))
+                        .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                         .frame(alignment: .center)
                         .padding(.leading, 100)
                         .padding()
@@ -46,8 +47,8 @@ struct UserEditView: View {
                     }) {
                         Text("Save")
                     }
-                            .frame(width: 60)
-                            .font(Font.custom(fontFamily, size : fontSize))
+                            .frame(width: 80)
+                            .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                             .padding()
 
                     Button(action: {
@@ -55,8 +56,8 @@ struct UserEditView: View {
                         presentation.wrappedValue.dismiss()
                     }) {
                         Text("Cancel")
-                    } .frame(width: 60)
-                            .font(Font.custom(fontFamily, size : fontSize))
+                    } .frame(width: 80)
+                            .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                             .padding()
                 }
                 Spacer()

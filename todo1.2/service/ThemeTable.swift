@@ -64,7 +64,7 @@ class ThemeTable {
     func updateFontFamily(fontFamily: String) {
         guard let db = db else { return }
         
-        let query = "UPDATE Theme SET color = ?"
+        let query = "UPDATE Theme SET fontFamily = ?"
         
         do {
             try db.run(query, fontFamily)

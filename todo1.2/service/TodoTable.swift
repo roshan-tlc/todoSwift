@@ -57,7 +57,7 @@ class TodoTable : ObservableObject {
         guard let db = db else { return [] }
         var todos: [Todo] = []
         
-        let query = "SELECT id, title, status, parentId, todoOrder FROM Todos WHERE parentId = ?"
+        let query = "SELECT id, title, status, parentId, todoOrder FROM Todos WHERE parentId = ? ORDER BY todoOrder"
         
         do {
             let statement = try db.prepare(query)

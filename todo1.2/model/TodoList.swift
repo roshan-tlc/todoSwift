@@ -50,10 +50,8 @@ class TodoList: ObservableObject {
                 filteredData.append(todo)
             }
         }
-        
-        return filteredData.sorted {
-            $0 > $1
-        }
+
+        return filteredData
     }
 
     func getOrder() -> Int64 {

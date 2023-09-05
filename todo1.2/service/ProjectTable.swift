@@ -63,7 +63,7 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return [] }
 
         var projects: [Project] = []
-        let query =  "SELECT id,title,userId,projectOrder FROM Project WHERE userId = ? ORDER BY projectOrder"
+        let query =  "SELECT id, title, userId, projectOrder FROM Project WHERE userId = ? ORDER BY projectOrder"
         
         do {
             for row in try db.prepare(query, id) {
