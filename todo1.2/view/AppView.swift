@@ -9,9 +9,6 @@ import SwiftUI
 
 struct AppView: View {
     @EnvironmentObject var listView: ProjectList
-    @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
-    @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
-    @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     @State private var showMenu : Bool = false
     @State var userId : Int64 = 1
     
@@ -24,51 +21,43 @@ struct AppView: View {
         if ThemeTable.shared.getFirstId() == 0 {
             ThemeTable.shared.insert(theme: ApplicationTheme.shared)
         }
+
+        ApplicationTheme.shared.defaultColor = ThemeTable.shared.getColor()
+        ApplicationTheme.shared.fontSize = ThemeTable.shared.getFontSize()
+        ApplicationTheme.shared.fontFamily = ThemeTable.shared.getFontFamily()
        
     }
     
     var body: some View {
         NavigationView {
             ZStack{
-                Color.white
-                    .ignoresSafeArea()
-                VStack {
-                    Spacer()
-                }
-                
-                GeometryReader{ _ in
-                    HStack {
-                        MenuView(userId: userId)
-                            .offset(x:showMenu ? 0 : UIScreen.main.bounds.width)
-                    }
-                }
-                
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading){
-                        Button {
-                            self.showMenu.toggle()
-                            listView.projects = ProjectTable.shared.get(id: userId)
-                            
-                        } label : {
-                            Image(systemName: showMenu ? "xmark" :"text.justify")
-                                .renderingMode(.original)
+                ApplicationTheme.shared.defaultColor.color
+                        .ignoresSafeArea()
+                    VStack {
+                            Spacer()
                         }
-                        .foregroundColor(defaultColor.color)
-                        
-                        Button {
-                            self.showMenu.toggle()
-                            listView.projects = ProjectTable.shared.get(id: userId)
-                            
-                        } label : {
-                            Image(systemName: showMenu ? "xmark" :"text.justify")
-                                .renderingMode(.original)
-                                .frame(alignment: .trailing)
+
+                    GeometryReader { geometry  in
+                        HStack {
+                            MenuView(userId: userId)
+                                    .offset(x: showMenu ? 0 : UIScreen.main.bounds.width)
                         }
-                        .foregroundColor(defaultColor.color)
-                        
-                        Spacer()
                     }
-                }
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button {
+                                        self.showMenu.toggle()
+                                        listView.projects = ProjectTable.shared.get(id: userId)
+
+                                    } label: {
+                                        Image(systemName: showMenu ? "xmark" : "text.justify")
+                                                .renderingMode(.original)
+                                    }
+                                            .foregroundColor(Color.primary)
+                                    Spacer()
+                                }
+                            }
+
             }
         }
     }

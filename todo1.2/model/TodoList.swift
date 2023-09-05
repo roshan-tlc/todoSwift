@@ -55,16 +55,7 @@ class TodoList: ObservableObject {
             $0 > $1
         }
     }
-    
-    func moveItem(from source:Int, to destination:Int ) {
-        guard source != destination else  { return }
-        guard source > 5 else { return }
-        let moveItem = todos.remove(at: source)
-        todos.insert(moveItem, at: destination)
-        todoTable.updateTodoTable()
-       // todos = todoTable.get(parentId: parentId)
-    }
-    
+
     func getOrder() -> Int64 {
         Int64(todos.count + 1)
     }
@@ -91,6 +82,5 @@ class TodoList: ObservableObject {
         return filteredTodos.sorted {
             $0 > $1
         }
-        //return todoTable.searchFilter(searchFilter: searchItem)
     }
 }

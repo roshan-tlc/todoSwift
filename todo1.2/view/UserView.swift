@@ -16,40 +16,43 @@ struct UserView : View {
     }
 
     var body : some View {
-        VStack {
+        HStack {
             HStack {
                 ZStack {
                     Circle()
                             .foregroundColor(.blue)
-                            .frame(width: 80, height: 80)
-                            .foregroundColor(themeColor)
+                            .frame(width: 90, height: 60)
+                            
 
                     Text(user.getName().prefix(1).uppercased())
-                            .font(Font.custom(fontFamily , size : fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
                             .foregroundColor(.white)
                 }
-                        .padding(.leading,80)
-
-                NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName(), description: user.getDescription())) {
-                    Image(systemName: "pencil.circle.fill")
-                            .font(.title)
-                            .foregroundColor(.blue)
-                            .padding(.leading, 30)
-                }
-                .onAppear {reload()}
+                        .padding(.leading, 10)
             }
-            Text(user.getName())
-                    .font(Font.custom(fontFamily , size : fontSize))
-                    .foregroundColor(.black)
-                    .padding(5)
 
-            Text(user.getDescription())
-                    .font(Font.custom(fontFamily , size : fontSize))
-                    .foregroundColor(.black)
-                    .padding(5)
+            VStack {
+                Text(user.getName())
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
+                        .foregroundColor(.black)
+                        .padding(5)
 
-            Divider()
+                Text(user.getDescription())
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
+                        .foregroundColor(.black)
+                        .padding(5)
+            }
+                    .frame(width: 100)
+            NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName(), description: user.getDescription())) {
+                Image(systemName: "pencil.circle.fill")
+                        .foregroundColor(.blue)
+                        .padding(.leading, 30)
+            }
+                    .onAppear { reload() }
+            Spacer()
         }
+                .frame(width: .infinity, height: 80,alignment: .top)
+                .background(ApplicationTheme.shared.defaultColor.color)
     }
     
     func reload() {

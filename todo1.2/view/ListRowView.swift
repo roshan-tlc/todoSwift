@@ -9,19 +9,19 @@ import SwiftUI
 
 struct ListRowView : View {
     @State var project : Project;
-    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
-    @State var fontStyle : String = ApplicationTheme.shared.fontFamily.rawValue
     @EnvironmentObject var listView:ProjectList
     
     
     var body: some View {
         HStack {
             TextView(text: project.getTitle())
-                .font(Font.custom(fontStyle, size: fontSize))
+                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
             
             Image(systemName: "minus.circle.fill")
-                .onTapGesture(perform: remove)
-                .frame(width: 20, height: 20)
+                    .onTapGesture(perform: remove)
+                    .frame(width: 20, height: 20)
+                    .padding(.trailing, 20)
+                    .foregroundColor(.primary)
         }
     }
     
@@ -38,9 +38,11 @@ struct TextView : View {
     var body: some View {
         VStack {
             Text(text)
+                
                 .padding(.trailing, 110)
                 .padding(.leading,0)
                 .frame(width: 240, height: 20)
+                    
         }
     }
 }

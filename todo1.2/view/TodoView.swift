@@ -26,10 +26,9 @@ struct TodoView: View {
     @State var currentIndex = 0
     @State var currentViewState = 1
     @State var themeColor : Color = ApplicationTheme.shared.getDefaultColor()
-   // @State private var editMode: EditMode = .inactive
-    //@State var result:[Todo] = []
     let filter:Filter = Filter()
     let searchFilter : SearchFilter = SearchFilter()
+
     
     var searchResults: [Todo] {
         get {
@@ -134,7 +133,7 @@ struct TodoView: View {
                                         .foregroundColor(.white)
                                 }
                             }
-                            .pickerStyle(MenuPickerStyle())
+                            .pickerStyle(MenuPickerStyle()).accentColor(ApplicationTheme.shared.defaultColor.color)
                             .padding(.horizontal)
                             .foregroundColor(themeColor)
                             
@@ -150,7 +149,7 @@ struct TodoView: View {
                                         .foregroundColor(.white)
                                 }
                             }
-                            .pickerStyle(MenuPickerStyle())
+                            .pickerStyle(MenuPickerStyle()).accentColor(ApplicationTheme.shared.defaultColor.color)
                             .padding(.horizontal)
                             .foregroundColor(themeColor)
                             
@@ -169,11 +168,10 @@ struct TodoView: View {
                             TodoRowView(todo: todo)
                         }
                         .onMove(perform: { indices, newOffset in
-                            todoView.moveItem(from: indices.first!, to: newOffset)
+                            moveItem(from: indices.first!, to: newOffset)
                         })
                     }
-                    .navigationBarBackButtonHidden(true)
-                    .navigationBarItems(trailing: EditButton())
+                    .navigationBarBackButtonHidden(false).foregroundColor(ApplicationTheme.shared.defaultColor.color)
                     .padding()
                     
                     HStack {
@@ -228,6 +226,16 @@ struct TodoView: View {
             }
         }
     }
+
+    func moveItem(from source:Int, to destination:Int ) {
+        
+        todoView.todos = TodoTable.shared.get(parentId: parentId)
+        let moveItem = todoView.todos.remove(at: source)
+        todoView.todos.insert(moveItem, at: destination)
+
+        TodoTable.shared.updateTodoTable()
+        todoView.todos = TodoTable.shared.get(parentId: parentId)
+    }
     
     func setCurrentPage() {
         currentIndex -= selectedLimit.rawValue
@@ -237,11 +245,7 @@ struct TodoView: View {
         self.isSearchEnable.toggle()
     }
     
-    func moveTodo(from source: IndexSet, to destination: Int) {
-        todoView.todos.move(fromOffsets: source, toOffset: destination)
-        TodoTable.shared.updateTodoTable()
-        todoView.todos = TodoTable.shared.get(parentId: parentId)
-    }
+    
 }
 
 struct SearchBar: View {

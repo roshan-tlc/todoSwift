@@ -31,9 +31,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
-            endingLineNumber = "92"
-            landmarkName = "getSearchFilteredTodo(searchItem:)"
-            landmarkType = "7">
+            endingLineNumber = "92">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -94,9 +92,9 @@
             filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
-            landmarkName = "moveTodo(from:to:)"
+            startingLineNumber = "238"
+            endingLineNumber = "238"
+            landmarkName = "moveItem(from:to:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -284,25 +282,9 @@
             filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "239"
-            endingLineNumber = "239"
-            landmarkName = "TodoView"
-            landmarkType = "14">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E2CE6480-7E68-44DE-9ACF-46677E51E5C5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "todo1.2/view/TodoView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
-            landmarkName = "moveTodo(from:to:)"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
+            landmarkName = "moveItem(from:to:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -645,64 +627,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B617B325-A00A-4BE3-B67C-70D4E96AB6C3"
+            uuid = "0AE90B60-24CB-4694-BD0C-2EA2829FBD6C"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "todo1.2/model/TodoList.swift"
+            filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
             landmarkName = "moveItem(from:to:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B617B325-A00A-4BE3-B67C-70D4E96AB6C3 - a6e96e84aa66a7f5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "todo1_2.TodoList.moveItem(from: Swift.Int, to: Swift.Int) -&gt; ()"
-                  moduleName = "todo1.2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krithikroshan/Library/Mobile%20Documents/com~apple~CloudDocs/todo1.2%20copy%202/todo1.2/model/TodoList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "63"
-                  endingLineNumber = "63"
-                  offsetFromSymbolStart = "196">
-               </Location>
-               <Location
-                  uuid = "B617B325-A00A-4BE3-B67C-70D4E96AB6C3 - c0946b4f2295f186"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "todo1_2.TodoList.moveItem(from: Foundation.IndexSet, to: Swift.Int) -&gt; ()"
-                  moduleName = "todo1.2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krithikroshan/Library/Mobile%20Documents/com~apple~CloudDocs/todo1.2%20copy%202/todo1.2/model/TodoList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "63"
-                  endingLineNumber = "63"
-                  offsetFromSymbolStart = "156">
-               </Location>
-               <Location
-                  uuid = "B617B325-A00A-4BE3-B67C-70D4E96AB6C3 - c0946b4f2295f186"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "todo1_2.TodoList.moveItem(from: Foundation.IndexSet, to: Swift.Int) -&gt; ()"
-                  moduleName = "todo1.2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krithikroshan/Library/Mobile%20Documents/com~apple~CloudDocs/todo1.2%20copy%202/todo1.2/model/TodoList.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "63"
-                  endingLineNumber = "63"
-                  offsetFromSymbolStart = "56">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B0DB452A-DE7F-4A89-B972-6E35B946A761"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "todo1.2/view/TodoView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "moveItem(from:to:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -17,50 +17,51 @@ struct UserEditView: View {
             VStack {
                 ZStack {
                     Circle()
-                        .frame(width: 120, height: 120, alignment: .centerFirstTextBaseline)
-                        .foregroundColor(.blue)
-                        .padding()
-                    
+                            .frame(width: 120, height: 120, alignment: .centerFirstTextBaseline)
+                            .foregroundColor(.blue)
+                            .padding()
+
                     Text(userName.prefix(1).uppercased())
-                        .font(Font.custom(fontFamily, size : fontSize))
-                        .foregroundColor(.white)
-                        .padding()
+                            .font(Font.custom(fontFamily, size : fontSize))
+                            .foregroundColor(.white)
+                            .padding()
                 }
                 TextField("New Name", text: $userName)
-                    .font(Font.custom(fontFamily, size : fontSize))
-                    .frame(alignment: .center)
-                    .padding(.leading, 100)
-                    .padding()
+                        .font(Font.custom(fontFamily, size : fontSize))
+                        .frame(alignment: .center)
+                        .padding(.leading, 100)
+                        .padding()
 
                 TextField("New Description", text: $description)
-                
-                    .frame(alignment: .center)
-                    .padding(.leading, 100)
-                    .padding()
-                
-                    HStack(spacing: 20) {
-                        
-                        Button(action: {
-                            UserList().addUser(id: userId, name: userName, description: description)
-                            presentation.wrappedValue.dismiss()
-                        }) {
-                            Text("Save")
-                        }
-                        .frame(width: 60)
-                        .font(Font.custom(fontFamily, size : fontSize))
-                        .padding()
-                        
-                        Button(action: {
 
-                            presentation.wrappedValue.dismiss()
-                        }) {
-                            Text("Cancel")
-                        } .frame(width: 60)
+                        .frame(alignment: .center)
+                        .padding(.leading, 100)
+                        .padding()
+
+                HStack(spacing: 20) {
+
+                    Button(action: {
+                        UserList().addUser(id: userId, name: userName, description: description)
+                        presentation.wrappedValue.dismiss()
+                    }) {
+                        Text("Save")
+                    }
+                            .frame(width: 60)
                             .font(Font.custom(fontFamily, size : fontSize))
                             .padding()
-                    }
-                Spacer()    
+
+                    Button(action: {
+
+                        presentation.wrappedValue.dismiss()
+                    }) {
+                        Text("Cancel")
+                    } .frame(width: 60)
+                            .font(Font.custom(fontFamily, size : fontSize))
+                            .padding()
+                }
+                Spacer()
             }
         }
+                .background(ApplicationTheme.shared.defaultColor.color)
     }
 }

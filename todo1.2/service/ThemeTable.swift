@@ -68,7 +68,7 @@ class ThemeTable {
         
         do {
             try db.run(query, fontFamily)
-            get()
+
         } catch {
             print("error occured : \(error)")
         }
@@ -91,8 +91,8 @@ class ThemeTable {
         return ApplicationTheme.shared
     }
     
-    func getColor() -> Color {
-        guard let db = db else { return Color.white}
+    func getColor() -> ApplicationTheme.DefaultColor {
+        guard let db = db else { return ApplicationTheme.DefaultColor.green}
         
         let table = Table("Theme")
         let color = Expression<String>("color")
@@ -102,17 +102,17 @@ class ThemeTable {
                 let color = row[color]
                 
                 let selectedColor = ApplicationTheme.shared.setColorValue(color)
-                return selectedColor.color
+                return selectedColor
             }
         } catch {
             print("Error fetching color from the database: \(error)")
         }
         
-        return Color.white
+        return ApplicationTheme.DefaultColor.green
     }
     
-    func getFontSize() -> Double {
-        guard let db = db else { return 0 }
+    func getFontSize() -> ApplicationTheme.FontSize {
+        guard let db = db else { return ApplicationTheme.FontSize.medium }
         
         let table = Table("Theme")
         let font = Expression<Double>("fontSize")
@@ -120,17 +120,18 @@ class ThemeTable {
         do {
             if let row = try db.pluck(table) {
                 let fontSize = row[font]
-                return fontSize
+                let fontValue = ApplicationTheme.shared.setFontValue(value: fontSize)
+                return fontValue
             }
         } catch {
             print("Error fetching color from the database: \(error)")
         }
         
-        return 0
+        return ApplicationTheme.FontSize.medium
     }
     
-    func getFontFamily() -> String? {
-        guard let db = db else { return nil }
+    func getFontFamily() -> ApplicationTheme.FontFamily {
+        guard let db = db else { return ApplicationTheme.FontFamily.CURSIVE }
         
         let table = Table("Theme")
         let font = Expression<String>("fontFamily")
@@ -138,16 +139,17 @@ class ThemeTable {
         do {
             if let row = try db.pluck(table) {
                 let font = row[font]
-                return font
+                let fontValue = ApplicationTheme.shared.setFontFamily(value: font)
+                return fontValue
             }
         } catch {
             print("Error fetching color from the database: \(error)")
         }
         
-        return nil
+        return ApplicationTheme.FontFamily.CURSIVE
     }
     
-    func getFirstId() -> Int64? {
+    func getFirstId() -> Int64 {
         guard let db = db else { return 0}
         
         let table = Table("Theme")

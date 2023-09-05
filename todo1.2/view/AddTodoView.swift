@@ -11,34 +11,29 @@ struct AddTodoView: View {
     @State var textField:String = ""
     @EnvironmentObject var listView: TodoList
     @Environment(\.presentationMode) var presentationMode
-    var fontFamily: String = ApplicationTheme.shared.fontFamily.rawValue
-    var fontSize : CGFloat =  ApplicationTheme.shared.fontSize.rawValue
     @State var parentId:Int64
     @State var searchText = ""
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
-    var themeColor: ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     
     var body: some View {
-        
-        TextField("Enter Your todo ", text: $textField)
-            .frame( height: 50)
-            .background(Color.mint)
-            .foregroundColor(Color.black)
-            .font(Font.custom(fontFamily,size:fontSize))
-        
-        Button(
-            action: addTodo
-            , label: {
-                Text("Add todo")
-                    .font(Font.custom(fontFamily, size : fontSize))
+        VStack {
+            TextField("Enter Your todo ", text: $textField)
                     .frame(height: 50)
-                    .background(Color.clear)
-                   
+                    .background(.clear)
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
 
+            Button(
+                    action: addTodo
+                    , label: {
+                Text("Add todo")
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                        .frame(height: 50)
+                        .foregroundColor(ApplicationTheme.shared.defaultColor.color)
             })
-        .alert(isPresented: $showAlert, content: getAlert)
-        
+                    .alert(isPresented: $showAlert, content: getAlert)
+        }
+
     }
     func addTodo() {
         if textIsAppropriate() {

@@ -22,7 +22,7 @@ struct TodoRowView: View {
 
 
             Text(todo.getTitle())
-                .foregroundColor(todo.getStatus().rawValue == 1 ? Color.gray : Color.black)
+                    .foregroundColor(todo.getStatus().rawValue == 1 ? Color.gray : Color.black)
                     .padding(.leading, -35)
                     .frame(width: 240, height: 20)
                     .font(Font.custom(fontFamily, size : fontSize))

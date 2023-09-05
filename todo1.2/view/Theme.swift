@@ -12,6 +12,7 @@ struct Theme : View {
     @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
     @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
     @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
+    @State var showAppView = false
 
     var body: some View {
         VStack {
@@ -22,15 +23,17 @@ struct Theme : View {
                         .foregroundColor(defaultColor.color)
                 Picker(selection: $fontFamily) {
                     Text("Cursive").tag(ApplicationTheme.FontFamily.CURSIVE)
-                    Text("HelveticaNeue-Bold").tag(ApplicationTheme.FontFamily.BOLD)
-                    Text("TimesNewRoman").tag(ApplicationTheme.FontFamily.TIMES_NEW_ROMAN)
+                            .background(ApplicationTheme.shared.defaultColor.color)
+                    Text("HelveticaNeue-Bold").tag(ApplicationTheme.FontFamily.BOLD).background(ApplicationTheme.shared.defaultColor.color)
+                    Text("TimesNewRoman").tag(ApplicationTheme.FontFamily.TIMES_NEW_ROMAN).background(ApplicationTheme.shared.defaultColor.color)
                 } label: {
                     HStack{
                         Text("picker")
                         Text("fontFamily")
                     }
                 }
-                .pickerStyle(MenuPickerStyle())
+                .pickerStyle(MenuPickerStyle()).accentColor(.primary)
+
                 .padding(.horizontal)
                         .onChange(of: fontFamily) { newValue in
                             ApplicationTheme.shared.setFontFamily(fontFamily: fontFamily.rawValue)
@@ -57,7 +60,7 @@ struct Theme : View {
                             .foregroundColor(defaultColor.color)
                 }
             }
-            .pickerStyle(MenuPickerStyle())
+            .pickerStyle(MenuPickerStyle()).accentColor(.primary)
             .padding(.horizontal)
 
             .onChange(of: fontSize) { newValue in
@@ -73,10 +76,9 @@ struct Theme : View {
                     .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                     .foregroundColor(defaultColor.color)
             Picker(selection: $defaultColor) {
-                Text("light").tag(ApplicationTheme.DefaultColor.light)
-                Text("blue").tag(ApplicationTheme.DefaultColor.blue)
-                Text("red").tag(ApplicationTheme.DefaultColor.red)
-                Text("black").tag(ApplicationTheme.DefaultColor.dark)
+                Text("light").tag(ApplicationTheme.DefaultColor.yellow)
+                Text("green").tag(ApplicationTheme.DefaultColor.green)
+                Text("mint").tag(ApplicationTheme.DefaultColor.mint)
             } label: {
                 HStack{
                     Text("picker")
@@ -84,14 +86,13 @@ struct Theme : View {
                         .foregroundColor(.white)
                 }
             }
-            .pickerStyle(MenuPickerStyle())
+            .pickerStyle(MenuPickerStyle()).accentColor(.primary)
             .padding(.horizontal)
             
             .onChange(of: defaultColor) { newValue in
                 ApplicationTheme.shared.setDefaultColor(color: defaultColor)
                 ApplicationTheme.shared.defaultColor = defaultColor
             }
-
         }
         Spacer()
     }

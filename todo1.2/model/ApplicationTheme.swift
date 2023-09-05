@@ -12,7 +12,7 @@ class ApplicationTheme : ObservableObject {
     
     @Published var fontFamily :FontFamily = .CURSIVE
     @Published var fontSize : FontSize = .medium
-    @Published var defaultColor : DefaultColor = .light
+    @Published var defaultColor : DefaultColor = .green
     @State var theme = ThemeTable.shared
     
     static var shared = ApplicationTheme()
@@ -20,7 +20,6 @@ class ApplicationTheme : ObservableObject {
     private init(){
         
     }
-    
 
     enum FontFamily: String {
         case CURSIVE = "Cursive"
@@ -37,21 +36,18 @@ class ApplicationTheme : ObservableObject {
     }
 
     enum DefaultColor: String {
-        case light = "light"
-        case blue = "blue"
-        case red = "red"
-        case dark = "dark"
+        case yellow = "yellow"
+        case green = "green"
+        case mint = "dark"
         
         var color: Color {
             switch self {
-            case .light:
-                return Color.secondary
-            case .blue:
-                return Color.blue
-            case .red:
-                return Color.red
-            case .dark:
-                return Color.black
+            case .yellow:
+                return Color.yellow
+            case .green:
+                return Color.green
+            case .mint:
+                return Color.mint
             }
         }
     }
@@ -82,7 +78,7 @@ class ApplicationTheme : ObservableObject {
         } else {
             print("invalid color")
         }
-        return DefaultColor.light
+        return DefaultColor.yellow
     }
     
     func setFontFamily(fontFamily:String) {
@@ -97,7 +93,7 @@ class ApplicationTheme : ObservableObject {
     
     func setDefaultColor(color: ApplicationTheme.DefaultColor) {
         theme.updateColor(color: color.rawValue)
-        self.defaultColor = color
+        defaultColor = color
     }
     
     func getDefaultColor() -> Color {
@@ -111,11 +107,5 @@ class ApplicationTheme : ObservableObject {
     func getFontFamily() -> FontFamily {
         fontFamily
     }
-    
-//    func update(withColor color: DefaultColor, fontSize: CGFloat, fontFamily: String) {
-//        self.defaultColor = color
-//        self.fontSize = FontSize.setValue(value: fontSize)
-//        self.fontFamily = FontFamily.setValue(value: fontFamily)
-//    }
     
 }

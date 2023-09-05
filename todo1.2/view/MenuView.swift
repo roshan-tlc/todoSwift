@@ -13,19 +13,16 @@ struct MenuView: View {
     @State var userId:Int64 
     @EnvironmentObject var listView: ProjectList
     @Environment(\.presentationMode) var presentationMode
-    var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
-    var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
     @State var isAddViewVisible = false
-    var themeColor : Color = ApplicationTheme.shared.getDefaultColor()
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
+
     
     var body: some View {
         VStack {
             VStack {
                 Text("Menu")
-                    .foregroundColor(themeColor)
-                    .font(Font.custom(fontFamily, size: fontSize))
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                 
                 NavigationLink(destination: Theme()) {
                     HStack {
@@ -45,29 +42,28 @@ struct MenuView: View {
                     .renderingMode(.original)
                     .onTapGesture {
                         isAddViewVisible.toggle()
-                        
+
                     }
                     .frame(width: 80, height: 50)
                     .imageScale(.large)
                     .frame(alignment: .leading)
-                    .foregroundColor(themeColor)
                     
             }
             if isAddViewVisible {
                 VStack {
                     TextField("Enter Your Project", text: $textField)
                         .frame(width: 250 , height: 50)
-                        .background(Color.cyan)
+                            .background(Color.cyan)
                         .cornerRadius(10)
-                        .font(Font.custom(fontFamily, size: fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                     
                     Button(
                         action: addProject
                         , label: {
                             Text("Add Project")
-                                .font(Font.custom(fontFamily, size : fontSize))
+                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                                 .frame(height: 50)
-                                .background(Color.clear)
+                                    .foregroundColor(.black)
                         })
                     .alert(isPresented: $showAlert, content: getAlert)
                 }
@@ -79,15 +75,13 @@ struct MenuView: View {
                     }
                 }
                 .onMove(perform: moveTodo)
-                .foregroundColor(themeColor)
             }
             
             Spacer()
             
         }.frame(width: 300)
             .edgesIgnoringSafeArea(.trailing)
-            .foregroundColor(Color.black)
-                .background(Color.secondary)
+            .background(ApplicationTheme.shared.defaultColor.color)
             .navigationBarBackButtonHidden(true)
     }
     
@@ -117,6 +111,26 @@ struct MenuView: View {
     
     func getAlert() -> Alert {
         Alert(title: Text(alertTitle))
+    }
+}
+
+struct CustomBackButton<Content: View> : View {
+    @Binding var isActive: Bool
+    var content: Content
+
+    init(isActive: Binding<Bool>, @ViewBuilder content: () -> Content) {
+        self._isActive = isActive
+        self.content = content()
+    }
+    var body: some View {
+        Button(action: {
+            self.isActive = false
+        }) {
+            Image(systemName: "arrow.left.circle.fill")
+                    .foregroundColor(.blue) // Change the color of the back button
+                    .font(.title)
+            content
+        }
     }
 }
 
