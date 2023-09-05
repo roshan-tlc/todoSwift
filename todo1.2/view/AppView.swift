@@ -34,7 +34,7 @@ struct AppView: View {
     var body: some View {
         NavigationView {
             ZStack{
-                Color.teal
+                Color.secondary
                         .ignoresSafeArea()
                 VStack {
                     Spacer()

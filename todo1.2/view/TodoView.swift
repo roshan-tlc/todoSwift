@@ -165,9 +165,6 @@ struct TodoView: View {
                         ForEach(paginatedTodo) { todo in
                             TodoRowView(todo: todo)
                         }
-                                //                        .onMove(perform: { indices, newOffset in
-                                //                            moveItem(from: indices.first!, to: newOffset)
-                                //                        })
                                 .onMove(perform: moveTodo)
                     }
                     .navigationBarBackButtonHidden(false).foregroundColor(defaultColor.color)
@@ -226,20 +223,7 @@ struct TodoView: View {
         }
     }
 
-//    func moveItem(from source:Int, to destination:Int ) {
-//
-//        todoView.todos = TodoTable.shared.get(parentId: parentId)
-//        let moveItem = todoView.todos.remove(at: source)
-//        todoView.todos.insert(moveItem, at: destination)
-//
-//        TodoTable.shared.updateTodoTable()
-//        todoView.todos = TodoTable.shared.get(parentId: parentId)
-//    }
-
-
     func moveTodo(from source: IndexSet, to destination: Int) {
-        //todoView.todos = TodoTable.shared.get(parentId: 1)
-        print(todoView.todos)
         todoView.todos.move(fromOffsets: source, toOffset: destination)
         TodoTable.shared.updateTodoTable()
         print(parentId)

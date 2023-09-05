@@ -67,7 +67,6 @@ struct MenuView: View {
                             .onAppear { TodoList.shared.todos = TodoTable.shared.get(parentId: item.id)}
                 }
                 .onMove(perform: moveTodo)
-
             }
             
             Spacer()
