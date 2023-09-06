@@ -16,13 +16,13 @@ struct MenuView: View {
     @State var isAddViewVisible = false
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
-
     
     var body: some View {
         VStack {
             VStack {
                 Text("Menu")
-                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                        .padding(.top, 20)
             }
             VStack {
                 UserView(id: userId)
@@ -30,33 +30,33 @@ struct MenuView: View {
             VStack {
 
                 Image(systemName: "plus.app")
-                    .renderingMode(.original)
-                    .onTapGesture {
-                        isAddViewVisible.toggle()
+                        .renderingMode(.original)
+                        .onTapGesture {
+                            isAddViewVisible.toggle()
 
-                    }
-                    .frame(width: 80, height: 50)
-                    .imageScale(.large)
-                    .frame(alignment: .leading)
-                    
+                        }
+                        .frame(width: 80, height: 50)
+                        .imageScale(.large)
+                        .frame(alignment: .leading)
+
             }
             if isAddViewVisible {
                 VStack {
                     TextField("Enter Your Project", text: $textField)
-                        .frame(width: 250 , height: 50)
+                            .frame(width: 250 , height: 50)
                             .background(Color.cyan)
-                        .cornerRadius(10)
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
-                    
+                            .cornerRadius(10)
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+
                     Button(
-                        action: addProject
-                        , label: {
-                            Text("Add Project")
+                            action: addProject
+                            , label: {
+                        Text("Add Project")
                                 .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                                 .frame(height: 50)
-                                    .foregroundColor(.black)
-                        })
-                    .alert(isPresented: $showAlert, content: getAlert)
+                                .foregroundColor(.black)
+                    })
+                            .alert(isPresented: $showAlert, content: getAlert)
                 }
             }
             List {
@@ -66,19 +66,21 @@ struct MenuView: View {
                     }
                             .onAppear { TodoList.shared.todos = TodoTable.shared.get(parentId: item.id)}
                 }
-                .onMove(perform: moveTodo)
+                        .onMove(perform: moveTodo)
             }
-            
+
             Spacer()
-            
+
+
         }.frame(width: 300)
-            .edgesIgnoringSafeArea(.trailing)
+                .padding(.top, 50)
+                .border(Color.black, width: 0.2)
+                .edgesIgnoringSafeArea(.vertical)
             .background(ApplicationTheme.shared.defaultColor.color)
             .navigationBarBackButtonHidden(true)
     }
     
     func moveTodo(from source: IndexSet, to destination: Int) {
-
         listView.projects.move(fromOffsets: source, toOffset: destination)
         ProjectTable.shared.updateProjectTable()
     }
@@ -118,7 +120,7 @@ struct CustomBackButton<Content: View> : View {
             self.isActive = false
         }) {
             Image(systemName: "arrow.left.circle.fill")
-                    .foregroundColor(.blue) // Change the color of the back button
+                    .foregroundColor(.blue)
                     .font(.title)
             content
         }

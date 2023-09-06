@@ -4,7 +4,6 @@
 
 import Foundation
 
-
 import SwiftUI
 import SQLite
 
@@ -22,8 +21,8 @@ class TodoTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            
-            try db.run("CREATE TABLE IF NOT EXISTS Todos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, todoOrder INTEGER, parentId INTEGER FOREIGN_KEY )")
+            try db.run("DROP TABLE Todos")
+            try db.run("CREATE TABLE IF NOT EXISTS Todos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, position INTEGER, parentId INTEGER FOREIGN_KEY )")
         } catch {
             print("Error creating table: \(error)")
         }
@@ -33,7 +32,7 @@ class TodoTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            let insert = "INSERT INTO Todos ( title, status, parentId, todoOrder) VALUES ( ?, ?, ?, ?)"
+            let insert = "INSERT INTO Todos ( title, status, parentId, position) VALUES ( ?, ?, ?, ?)"
             try db.run(insert, todo.getTitle(), todo.getStatus().rawValue, todo.getParentId(), todo.getOrder())
         } catch {
             print("Error inserting data: \(error)")
@@ -57,7 +56,7 @@ class TodoTable : ObservableObject {
         guard let db = db else { return [] }
         var todos: [Todo] = []
         
-        let query = "SELECT id, title, status, parentId, todoOrder FROM Todos WHERE parentId = ? ORDER BY todoOrder"
+        let query = "SELECT id, title, status, parentId, position FROM Todos WHERE parentId = ? ORDER BY position"
         
         do {
             let statement = try db.prepare(query)
@@ -89,7 +88,7 @@ class TodoTable : ObservableObject {
         do {
             let projectTable = Table("Todos")
             let idColumn = Expression<Int64>("id")
-            let orderColumn = Expression<Int>("todoOrder")
+            let orderColumn = Expression<Int>("position")
 
             try db.transaction {
                 for (index, todo) in TodoList.shared.todos.enumerated() {

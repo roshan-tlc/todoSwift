@@ -60,7 +60,6 @@ struct UserEditView: View {
                             .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                             .padding()
                 }
-                Spacer()
             }
         }
                 .background(ApplicationTheme.shared.defaultColor.color)

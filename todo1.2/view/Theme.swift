@@ -1,101 +1,87 @@
-//
-//  AppTheme.swift
-//  todo1.2
-//
-//  Created by Krithik Roshan on 01/09/23.
-//
-
 import SwiftUI
 
-struct Theme : View {
-    @EnvironmentObject var appTheme : ApplicationTheme
-    @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
-    @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
-    @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
+struct Theme: View {
+    @EnvironmentObject var appTheme: ApplicationTheme
+    @State var fontSize: ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
+    @State var fontFamily: ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
+    @State var defaultColor: ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
 
     var body: some View {
         VStack {
-            HStack{
-                Text("Font Family")
-                    .padding()
-                    .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
-                        .foregroundColor(defaultColor.color)
-                Picker(selection: $fontFamily) {
-                    Text("Cursive").tag(ApplicationTheme.FontFamily.CURSIVE)
-                            .background(ApplicationTheme.shared.defaultColor.color)
-                    Text("HelveticaNeue-Bold").tag(ApplicationTheme.FontFamily.BOLD).background(ApplicationTheme.shared.defaultColor.color)
-                    Text("TimesNewRoman").tag(ApplicationTheme.FontFamily.TIMES_NEW_ROMAN).background(ApplicationTheme.shared.defaultColor.color)
-                } label: {
-                    HStack{
-                        Text("picker")
-                        Text("fontFamily")
+            NavigationView {
+                Form {
+                    Section {
+                        Section {
+                            HStack {
+                                Text("Font Family")
+                                        .padding()
+                                        .font(Font.custom(fontFamily.rawValue, size: fontSize.rawValue))
+                                        .foregroundColor(defaultColor.color)
+
+                                Picker("", selection: $fontFamily) {
+                                    Text("Cursive").tag(ApplicationTheme.FontFamily.CURSIVE)
+                                    Text("HelveticaNeue-Bold").tag(ApplicationTheme.FontFamily.BOLD)
+                                    Text("Times New Roman").tag(ApplicationTheme.FontFamily.TIMES_NEW_ROMAN)
+                                }
+
+                                        .pickerStyle(MenuPickerStyle())
+                                        .accentColor(.primary)
+                                        .padding()
+                                        .onChange(of: fontFamily) { newValue in
+                                            ApplicationTheme.shared.setFontFamily(fontFamily: fontFamily.rawValue)
+                                            ApplicationTheme.shared.fontFamily = fontFamily
+                                        }
+                            }
+                        }
+                                .frame(width: .Magnitude.infinity,height: 40)
+                        Section {
+                            HStack {
+                                Text("Font Size")
+                                        .padding()
+                                        .font(Font.custom(fontFamily.rawValue, size: fontSize.rawValue))
+                                        .foregroundColor(defaultColor.color)
+
+                                Picker("", selection: $fontSize) {
+                                    Text("small").tag(ApplicationTheme.FontSize.small)
+                                    Text("medium").tag(ApplicationTheme.FontSize.medium)
+                                    Text("large").tag(ApplicationTheme.FontSize.large)
+                                }
+                                        .pickerStyle(MenuPickerStyle())
+                                        .accentColor(.primary)
+                                        .padding(.horizontal)
+                                        .onChange(of: fontSize) { newValue in
+                                            ApplicationTheme.shared.setFontSize(fontSize: fontSize)
+                                            ApplicationTheme.shared.fontSize = fontSize
+                                        }
+                            }
+                        }
+                                .frame(width: .infinity,height: 40)
+
+                        Section {
+                            HStack {
+                                Text("Color")
+                                        .padding()
+                                        .font(Font.custom(fontFamily.rawValue, size: fontSize.rawValue))
+                                        .foregroundColor(defaultColor.color)
+
+                                Picker("", selection: $defaultColor) {
+                                    Text("light").tag(ApplicationTheme.DefaultColor.light)
+                                    Text("green").tag(ApplicationTheme.DefaultColor.green)
+                                    Text("mint").tag(ApplicationTheme.DefaultColor.mint)
+                                }
+                                        .pickerStyle(MenuPickerStyle())
+                                        .accentColor(.primary)
+                                        .padding(.horizontal)
+                                        .onChange(of: defaultColor) { newValue in
+                                            ApplicationTheme.shared.setDefaultColor(color: defaultColor)
+                                            ApplicationTheme.shared.defaultColor = defaultColor
+                                        }
+                            }
+                        }
+                                .frame(width: .infinity,height: 40)
                     }
                 }
-                .pickerStyle(MenuPickerStyle()).accentColor(.primary)
-
-                .padding(.horizontal)
-                        .onChange(of: fontFamily) { newValue in
-                            ApplicationTheme.shared.setFontFamily(fontFamily: fontFamily.rawValue)
-                            ApplicationTheme.shared.fontFamily = fontFamily
-                        }
             }
         }
-        
-        HStack{
-            Text("Font Size")
-                .padding()
-                .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
-                    .foregroundColor(defaultColor.color)
-            Picker(selection: $fontSize) {
-                Text("small").tag(ApplicationTheme.FontSize.small)
-                Text("medium").tag(ApplicationTheme.FontSize.medium)
-                Text("large").tag(ApplicationTheme.FontSize.large)
-            } label: {
-                HStack{
-                    Text("picker")
-                    Text("fontSize")
-
-                            .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
-                            .foregroundColor(defaultColor.color)
-                }
-            }
-            .pickerStyle(MenuPickerStyle()).accentColor(.primary)
-            .padding(.horizontal)
-
-            .onChange(of: fontSize) { newValue in
-                ApplicationTheme.shared.setFontSize(fontSize: fontSize)
-                ApplicationTheme.shared.fontSize = fontSize
-            }
-            
-        }
-        
-        HStack{
-            Text("Default Color")
-                .padding()
-                    .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
-                    .foregroundColor(defaultColor.color)
-            Picker(selection: $defaultColor) {
-                Text("light").tag(ApplicationTheme.DefaultColor.light)
-                Text("green").tag(ApplicationTheme.DefaultColor.green)
-                Text("mint").tag(ApplicationTheme.DefaultColor.mint)
-            } label: {
-                HStack{
-                    Text("picker")
-                    Text("color")
-                        .foregroundColor(.white)
-                }
-            }
-            .pickerStyle(MenuPickerStyle()).accentColor(.primary)
-            .padding(.horizontal)
-            
-            .onChange(of: defaultColor) { newValue in
-                ApplicationTheme.shared.setDefaultColor(color: defaultColor)
-                ApplicationTheme.shared.defaultColor = defaultColor
-            }
-        }
-        Spacer()
     }
 }
-
-
-

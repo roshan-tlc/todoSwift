@@ -83,14 +83,16 @@ struct TodoView: View {
                     HStack {
                         Text(parentTitle)
                             .padding(.horizontal)
+                                .padding()
                             .foregroundColor(.cyan)
-                        
+                        Spacer()
                         Image(systemName: "plus.app")
                             .onTapGesture {
                                 isAddViewVisible.toggle()
                             }
                             .imageScale(.large)
                             .foregroundColor(defaultColor.color)
+                        Spacer()
                         Image(systemName: "line.3.horizontal")
                             .onTapGesture {
                                 isSearchViewVisible.toggle()
@@ -98,6 +100,14 @@ struct TodoView: View {
                             .frame(width: 30, height: 40)
                             .imageScale(.large)
                             .foregroundColor(defaultColor.color)
+                                .padding()
+                                .onChange(of: searchText) { text in
+                                    if text.isEmpty {
+                                        isSearchEnable = false
+                                    } else {
+                                        isSearchEnable = true
+                                    }
+                                }
                     }
                     if isSearchViewVisible {
                         HStack {
@@ -165,14 +175,22 @@ struct TodoView: View {
                         ForEach(paginatedTodo) { todo in
                             TodoRowView(todo: todo)
                         }
-                                .onMove(perform: moveTodo)
+                                .onMove { sourceIndices, destination in
+                                    let source = sourceIndices.map {$0 + (currentPage - 1) * selectedLimit.rawValue }
+                                    let destinationIndex = destination + (currentPage - 1) * selectedLimit.rawValue
+                                    let itemDestination = min(max(destinationIndex,0), todoView.todos.count)
+
+                                    todoView.todos.move(fromOffsets: IndexSet(source), toOffset: itemDestination )
+                                    TodoTable.shared.updateTodoTable()
+                                    todoView.todos = TodoTable.shared.get(parentId: parentId)
+                                }
                     }
                     .navigationBarBackButtonHidden(false).foregroundColor(defaultColor.color)
                     .padding()
                     
                     HStack {
                         
-                        if currentPages > 1 {
+                        if currentPage > 1 {
                             Button("Previous") {
                                 if currentIndex > 0 {
                                     currentIndex -= selectedLimit.rawValue
@@ -183,18 +201,18 @@ struct TodoView: View {
                         }
                         
                         if totalPages > 0 {
-                            Text("\(currentPages)/\(totalPages)")
+                            Text("\(currentPage)/\(totalPages)")
                                 .font(.headline)
                                 .padding(.horizontal)
                                 .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
-                                .onChange(of: currentPages > totalPages || currentIndex >= currentPages * selectedLimit.rawValue ) { conditionMet in
+                                .onChange(of: currentPage > totalPages || currentIndex >= currentPage * selectedLimit.rawValue ) { conditionMet in
                                     if conditionMet {
                                         setCurrentPage()
                                     }
                                 }
                         }
                         
-                        if currentPages < totalPages {
+                        if currentPage < totalPages {
                             Button ("Next") {
                                 currentIndex += selectedLimit.rawValue
                             }
@@ -213,7 +231,7 @@ struct TodoView: View {
                 return max(pages, 1)
             }
             
-            var currentPages:Int {
+            var currentPage:Int {
                 var page = currentIndex/selectedLimit.rawValue + 1
                 if page > totalPages  {
                     page = totalPages
@@ -221,13 +239,6 @@ struct TodoView: View {
                 return max(page, 1)
             }
         }
-    }
-
-    func moveTodo(from source: IndexSet, to destination: Int) {
-        todoView.todos.move(fromOffsets: source, toOffset: destination)
-        TodoTable.shared.updateTodoTable()
-        print(parentId)
-        todoView.todos = TodoTable.shared.get(parentId: parentId)
     }
 
     func setCurrentPage() {
@@ -253,6 +264,7 @@ struct SearchBar: View {
             TextField("Search", text: $text)
                 .textFieldStyle(RoundedBorderTextFieldStyle()).frame(maxWidth: .infinity)
                 .font(Font.custom(fontFamily, size : fontSize))
+
             
             Spacer()
         }
