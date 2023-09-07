@@ -83,7 +83,6 @@ struct MenuView: View {
                 .border(Color.black, width: 0.2)
                 .edgesIgnoringSafeArea(.vertical)
                 .background(ApplicationTheme.shared.defaultColor.color)
-                .navigationBarBackButtonHidden(true)
     }
 
     func moveTodo(from source: IndexSet, to destination: Int) {

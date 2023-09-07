@@ -79,5 +79,6 @@ struct ForgotPasswordView : View {
                 Spacer()
             }
         }
+                .navigationBarBackButtonHidden(true)
     }
 }

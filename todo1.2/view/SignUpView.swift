@@ -15,6 +15,7 @@ struct SignUpView : View {
     @State var isToastVisible = false
     @State var message = ""
     @Environment(\.presentationMode) var presentation
+
     private var isNotEmpty: Bool {
         !name.isEmpty
     }
@@ -31,13 +32,13 @@ struct SignUpView : View {
                         .padding(.bottom, 50)
                 VStack(spacing: 30) {
 
-                        TextField("  Name", text: $name)
-                                .accessibility(hint: Text("Text is not empty"))
-                                .padding()
-                                .background(.white)
-                                .cornerRadius(10)
-                                .foregroundColor(.black)
-                                .frame(width: .infinity, height: 50)
+                    TextField("  Name", text: $name)
+                            .accessibility(hint: Text("Text is not empty"))
+                            .padding()
+                            .background(.white)
+                            .cornerRadius(10)
+                            .foregroundColor(.black)
+                            .frame(width: .infinity, height: 50)
 
                     TextField("  Email", text: $email)
                             .padding()
@@ -51,17 +52,23 @@ struct SignUpView : View {
 
                     HStack {
 
-                        NavigationLink("", destination:LoginView(), isActive: $showLogin)
-                                .navigationBarBackButtonHidden(true)
+                        NavigationLink("", destination:LoginView(), isActive: $showLogin) //
+
+
                         Button(action: {
 
+                            let emails = CredentialTable.shared.getAllEmail()
                             if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) {
                                 UserList.shared.add(name: name, description: "", email: email, password: password)
                                 showLogin.toggle()
-                            }
-                            else {
-                                message = "Enter a valid details"
-                                isToastVisible.toggle()
+                            } else {
+                                if !email.isEmpty && emails.contains(emails) {
+                                    message = "The email is already exists"
+                                    isToastVisible.toggle()
+                                } else {
+                                    message = "Enter a valid details"
+                                    isToastVisible.toggle()
+                                }
                             }
                         }) {
                             Text("Sign Up")
@@ -91,14 +98,14 @@ struct SignUpView : View {
                                 .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                                 .padding()
                                 .foregroundColor(.blue)
-                                .navigationBarBackButtonHidden(true)
+
                     }
                     Spacer()
                     Spacer()
                 }
             }
         }
-
+                //.navigationBarBackButtonHidden(true)
     }
 }
 
@@ -141,6 +148,4 @@ struct PasswordView : View {
                 .cornerRadius(10)
 
     }
-
-
 }

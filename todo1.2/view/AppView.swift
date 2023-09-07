@@ -56,6 +56,7 @@ struct AppView: View {
                             }
                         }
             }
+                    .navigationBarBackButtonHidden(true)//
         }
     }
 

@@ -22,7 +22,7 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            //try db.run("drop table Project")
+            try db.run("drop table Project")
             try db.run("CREATE TABLE IF NOT EXISTS Project (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, userId INTEGER, projectOrder INTEGER DEFAULT 0)")
         } catch {
             print("Error creating project table: \(error)")

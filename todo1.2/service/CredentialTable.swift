@@ -17,7 +17,7 @@ class CredentialTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            try db.run("Drop table Credential")
+            //try db.run("Drop table Credential")
             try db.run("CREATE TABLE IF NOT EXISTS Credential (id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL)")
         } catch {
             print("Error while creating credential table \(error)")

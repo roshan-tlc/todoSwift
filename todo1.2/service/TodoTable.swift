@@ -21,7 +21,7 @@ class TodoTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            //try db.run("Drop table Todos")
+            try db.run("Drop table Todos")
             try db.run("CREATE TABLE IF NOT EXISTS Todos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, position INTEGER, parentId INTEGER FOREIGN_KEY )")
         } catch {
             print("Error creating todo table: \(error)")
