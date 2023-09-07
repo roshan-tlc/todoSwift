@@ -12,7 +12,7 @@ class ApplicationTheme : ObservableObject {
     
     @Published var fontFamily :FontFamily = .CURSIVE
     @Published var fontSize : FontSize = .medium
-    @Published var defaultColor : DefaultColor = .green
+    @Published var defaultColor : DefaultColor = .blue
     @State var theme = ThemeTable.shared
     
     static var shared = ApplicationTheme()

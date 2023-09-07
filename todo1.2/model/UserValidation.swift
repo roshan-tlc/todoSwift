@@ -40,7 +40,7 @@ class UserValidation : Identifiable {
     func validateUserDetails(name:String, email:String, password:String, reEnteredPassword:String) -> Bool {
 
         if UserValidation.shared.validateName(name:name) && UserValidation.shared.validateEmail(email: email)
-                   && UserValidation.shared.validatePassword(password: password) {
+                   && UserValidation.shared.validatePassword(password: password) && password == reEnteredPassword {
             return true
         }
         return false

@@ -18,7 +18,7 @@ class ThemeTable {
         
         
         do {
-             try db.run("DROP TABLE Theme")
+            // try db.run("DROP TABLE Theme")
             try db.run("CREATE TABLE IF NOT EXISTS Theme (id INTEGER PRIMARY KEY AUTOINCREMENT, color TEXT, fontSize DOUBLE,fontFamily TEXT)")
             
         } catch {

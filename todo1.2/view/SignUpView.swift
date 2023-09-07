@@ -58,7 +58,8 @@ struct SignUpView : View {
                         Button(action: {
 
                             let emails = CredentialTable.shared.getAllEmail()
-                            if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) {
+                            
+                            if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) && !emails.contains(email) {
                                 UserList.shared.add(name: name, description: "", email: email, password: password)
                                 showLogin.toggle()
                             } else {
@@ -105,7 +106,6 @@ struct SignUpView : View {
                 }
             }
         }
-                //.navigationBarBackButtonHidden(true)
     }
 }
 

@@ -23,9 +23,8 @@ struct MenuView: View {
             HStack {
                 Text("Menu")
                         .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
-
             }
-                    .padding(.vertical, 40)
+                    .padding(.vertical, 20)
             VStack {
 
                 UserView(id: userId)
@@ -94,7 +93,7 @@ struct MenuView: View {
         if textIsAppropriate() {
             listView.addProject(title: textField, userId: userId, order: listView.getOrder())
             textField = ""
-            presentationMode.wrappedValue.dismiss()
+            //presentationMode.wrappedValue.dismiss()
         }
     }
 
@@ -134,6 +133,15 @@ struct CustomBackButton<Content: View>: View {
     }
 }
 
+struct Logout: View {
+    var body: some View {
+        NavigationLink(destination: LoginView()) {
+            Image(systemName: "person.circle")
+                    .frame(width: 6,height: 6)
+        }
+    }
+}
+
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
@@ -142,5 +150,7 @@ struct MenuView_Previews: PreviewProvider {
         }
     }
 }
+
+
 
 
