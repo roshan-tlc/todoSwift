@@ -13,26 +13,11 @@ struct AppView: View {
     @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
     @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     @State private var showMenu : Bool = false
-    @State var userId : Int64 = 1
-    
-    
-    init() {
-        UserTable.shared.createTable()
-        ProjectTable.shared.createTable()
-        TodoTable.shared.createTable()
-        ThemeTable.shared.createTable()
+    @State var userId : Int64
 
-        if ThemeTable.shared.getFirstId() == 0 {
-            ThemeTable.shared.insert(theme: ApplicationTheme.shared)
-        }
-        ApplicationTheme.shared.defaultColor = ThemeTable.shared.getColor()
-        ApplicationTheme.shared.fontSize = ThemeTable.shared.getFontSize()
-        ApplicationTheme.shared.fontFamily = ThemeTable.shared.getFontFamily()
-       
-    }
-    
+
     var body: some View {
-        NavigationView {
+
             ZStack{
                 ApplicationTheme.shared.defaultColor.color
                         .ignoresSafeArea()
@@ -72,14 +57,13 @@ struct AppView: View {
                         }
             }
         }
-
     }
-}
+
 
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        AppView()
+        LoginView()
             .environmentObject(ProjectList.shared)
     }
 }

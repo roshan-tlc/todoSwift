@@ -63,6 +63,6 @@ struct CheckBox: View {
 
 struct TodoRowView_Previews: PreviewProvider {
     static var previews: some View {
-        AppView()
+        LoginView()
     }
 }

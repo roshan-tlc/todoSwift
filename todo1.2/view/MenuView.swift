@@ -8,23 +8,26 @@
 import SwiftUI
 
 struct MenuView: View {
-    
-    @State var textField:String = ""
-    @State var userId:Int64 
+
+    @State var textField: String = ""
+    @State var userId: Int64
     @EnvironmentObject var listView: ProjectList
     @Environment(\.presentationMode) var presentationMode
     @State var isAddViewVisible = false
-    @State var alertTitle : String = ""
+    @State var alertTitle: String = ""
     @State var showAlert: Bool = false
-    
+    @State var returnToMenu = false
+
     var body: some View {
         VStack {
-            VStack {
+            HStack {
                 Text("Menu")
                         .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
-                        .padding(.top, 20)
+
             }
+                    .padding(.vertical, 40)
             VStack {
+
                 UserView(id: userId)
             }
             VStack {
@@ -43,7 +46,7 @@ struct MenuView: View {
             if isAddViewVisible {
                 VStack {
                     TextField("Enter Your Project", text: $textField)
-                            .frame(width: 250 , height: 50)
+                            .frame(width: 250, height: 50)
                             .background(Color.cyan)
                             .cornerRadius(10)
                             .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
@@ -52,7 +55,7 @@ struct MenuView: View {
                             action: addProject
                             , label: {
                         Text("Add Project")
-                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
+                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                                 .frame(height: 50)
                                 .foregroundColor(.black)
                     })
@@ -64,50 +67,54 @@ struct MenuView: View {
                     NavigationLink(destination: TodoView(project: item)) {
                         ListRowView(project: item)
                     }
-                            .onAppear { TodoList.shared.todos = TodoTable.shared.get(parentId: item.id)}
+                            .onAppear {
+                                TodoList.shared.todos = TodoTable.shared.get(parentId: item.id)
+                            }
                 }
                         .onMove(perform: moveTodo)
+
             }
 
             Spacer()
 
-
-        }.frame(width: 300)
+        }
+                .frame(width: 300)
                 .padding(.top, 50)
                 .border(Color.black, width: 0.2)
                 .edgesIgnoringSafeArea(.vertical)
-            .background(ApplicationTheme.shared.defaultColor.color)
-            .navigationBarBackButtonHidden(true)
+                .background(ApplicationTheme.shared.defaultColor.color)
+                .navigationBarBackButtonHidden(true)
     }
-    
+
     func moveTodo(from source: IndexSet, to destination: Int) {
         listView.projects.move(fromOffsets: source, toOffset: destination)
         ProjectTable.shared.updateProjectTable()
     }
-    
+
     func addProject() {
         if textIsAppropriate() {
-            listView.addProject(title: textField, userId:userId, order: listView.getOrder())
+            listView.addProject(title: textField, userId: userId, order: listView.getOrder())
             textField = ""
             presentationMode.wrappedValue.dismiss()
         }
     }
-    
+
     func textIsAppropriate() -> Bool {
         if textField.isEmpty {
-            alertTitle = "Enter a valid todo1.2"
+            alertTitle = "Enter a valid todo"
             showAlert.toggle()
             return false
         }
         return true
     }
-    
+
     func getAlert() -> Alert {
         Alert(title: Text(alertTitle))
     }
 }
 
-struct CustomBackButton<Content: View> : View {
+
+struct CustomBackButton<Content: View>: View {
     @Binding var isActive: Bool
     var content: Content
 
@@ -115,6 +122,7 @@ struct CustomBackButton<Content: View> : View {
         self._isActive = isActive
         self.content = content()
     }
+
     var body: some View {
         Button(action: {
             self.isActive = false
@@ -130,8 +138,8 @@ struct CustomBackButton<Content: View> : View {
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            AppView()
-                .environmentObject(ProjectList.shared)
+            LoginView()
+                    .environmentObject(ProjectList.shared)
         }
     }
 }

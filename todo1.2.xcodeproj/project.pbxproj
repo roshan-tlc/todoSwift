@@ -32,10 +32,16 @@
 		6BF9B47C2A96033800B63876 /* Filter .swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF9B47B2A96033800B63876 /* Filter .swift */; };
 		6BFAAD132A94773D003D7624 /* AddTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFAAD122A94773D003D7624 /* AddTodoView.swift */; };
 		9D31B01704651CD7156DB89D /* UserList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BA2BAE8CBEC0A0B7227D /* UserList.swift */; };
+		9D31B10377C1C1A54941EF13 /* Credential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B57116EE0EA4D2A4AC71 /* Credential.swift */; };
 		9D31B181C1471446C497B4F8 /* App.property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B722E237BBBF4062BF6B /* App.property.swift */; };
+		9D31B38035FAF48A4B386596 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B6E10897CE509606AC9B /* ForgotPasswordView.swift */; };
 		9D31B4AFDDB770FA5D3A68B1 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B93E87882433273F43DC /* UserView.swift */; };
+		9D31B50703BB08FF905ED2CB /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BEF4BD630F094B59243B /* LoginView.swift */; };
+		9D31B52C3A3327B46C7CA9CC /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B241885C29412DD1DFEC /* SignUpView.swift */; };
 		9D31B5E672BA24B7E9568574 /* InitDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BAD3687FE267952D243A /* InitDatabase.swift */; };
 		9D31BAEF9C78B5450AFD182A /* TodoTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31BADACBF1919BAC2111D0 /* TodoTable.swift */; };
+		9D31BDF6B090B92CB0551D32 /* CredentialTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B80CD6A5E9756E2049F5 /* CredentialTable.swift */; };
+		9D31BE47A5B64DBFFEA05976 /* UserValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B46CAD837310838EBA59 /* UserValidation.swift */; };
 		9D31BEF9CA657851E61B4AE9 /* UserEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D31B83EDDF91B2F6A48C0F8 /* UserEditView.swift */; };
 /* End PBXBuildFile section */
 
@@ -129,13 +135,19 @@
 		6BD2274C2A9E1835002D5914 /* ProjectTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTable.swift; sourceTree = "<group>"; };
 		6BF9B47B2A96033800B63876 /* Filter .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Filter .swift"; sourceTree = "<group>"; };
 		6BFAAD122A94773D003D7624 /* AddTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTodoView.swift; sourceTree = "<group>"; };
+		9D31B241885C29412DD1DFEC /* SignUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		9D31B46CAD837310838EBA59 /* UserValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserValidation.swift; sourceTree = "<group>"; };
+		9D31B57116EE0EA4D2A4AC71 /* Credential.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Credential.swift; sourceTree = "<group>"; };
+		9D31B6E10897CE509606AC9B /* ForgotPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		9D31B722E237BBBF4062BF6B /* App.property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.property.swift; sourceTree = "<group>"; };
+		9D31B80CD6A5E9756E2049F5 /* CredentialTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialTable.swift; sourceTree = "<group>"; };
 		9D31B83EDDF91B2F6A48C0F8 /* UserEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserEditView.swift; sourceTree = "<group>"; };
 		9D31B93E87882433273F43DC /* UserView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		9D31BA2BAE8CBEC0A0B7227D /* UserList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserList.swift; sourceTree = "<group>"; };
 		9D31BAD3687FE267952D243A /* InitDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitDatabase.swift; sourceTree = "<group>"; };
 		9D31BADACBF1919BAC2111D0 /* TodoTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoTable.swift; sourceTree = "<group>"; };
 		9D31BC385DAD5C2D6597A886 /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = "todo1.2/SQLite.swift-master/SQLite.xcodeproj"; sourceTree = "<group>"; };
+		9D31BEF4BD630F094B59243B /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +216,9 @@
 				6BFAAD122A94773D003D7624 /* AddTodoView.swift */,
 				9D31B93E87882433273F43DC /* UserView.swift */,
 				9D31B83EDDF91B2F6A48C0F8 /* UserEditView.swift */,
+				9D31BEF4BD630F094B59243B /* LoginView.swift */,
+				9D31B241885C29412DD1DFEC /* SignUpView.swift */,
+				9D31B6E10897CE509606AC9B /* ForgotPasswordView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -220,6 +235,8 @@
 				6BAA06C82A98B32600BD67EE /* User.swift */,
 				9D31BA2BAE8CBEC0A0B7227D /* UserList.swift */,
 				6B1739EA2AA2049E0063678D /* ApplicationTheme.swift */,
+				9D31B57116EE0EA4D2A4AC71 /* Credential.swift */,
+				9D31B46CAD837310838EBA59 /* UserValidation.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -261,6 +278,7 @@
 				6BD2274A2A9E1269002D5914 /* UserTable.swift */,
 				6BD2274C2A9E1835002D5914 /* ProjectTable.swift */,
 				6BBEF2E42AA590D3000A0358 /* ThemeTable.swift */,
+				9D31B80CD6A5E9756E2049F5 /* CredentialTable.swift */,
 			);
 			path = service;
 			sourceTree = "<group>";
@@ -419,6 +437,12 @@
 				9D31B5E672BA24B7E9568574 /* InitDatabase.swift in Sources */,
 				6B1739E02AA1F33F0063678D /* Theme.swift in Sources */,
 				9D31B181C1471446C497B4F8 /* App.property.swift in Sources */,
+				9D31B50703BB08FF905ED2CB /* LoginView.swift in Sources */,
+				9D31B52C3A3327B46C7CA9CC /* SignUpView.swift in Sources */,
+				9D31B38035FAF48A4B386596 /* ForgotPasswordView.swift in Sources */,
+				9D31B10377C1C1A54941EF13 /* Credential.swift in Sources */,
+				9D31BDF6B090B92CB0551D32 /* CredentialTable.swift in Sources */,
+				9D31BE47A5B64DBFFEA05976 /* UserValidation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

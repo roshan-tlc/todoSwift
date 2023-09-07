@@ -22,7 +22,7 @@ class ThemeTable {
             try db.run("CREATE TABLE IF NOT EXISTS Theme (id INTEGER PRIMARY KEY AUTOINCREMENT, color TEXT, fontSize DOUBLE,fontFamily TEXT)")
             
         } catch {
-            print("Error creating table: \(error)")
+            print("Error on creating table theme : \(error)")
         }
     }
     
@@ -33,7 +33,7 @@ class ThemeTable {
         do {
             try db.run(query, theme.defaultColor.rawValue, Double(theme.fontSize.rawValue), theme.fontFamily.rawValue )
         } catch {
-            print("error occured in inset query  \(error)")
+            print("error occurred in inset query in theme table : \(error)")
         }
     }
     
@@ -45,7 +45,7 @@ class ThemeTable {
         do {
             try db.run(query, color)
         } catch {
-            print("error occured : \(error)")
+            print("error occurred in update color in theme table : \(error)")
         }
     }
     
@@ -57,7 +57,7 @@ class ThemeTable {
         do {
             try db.run(query, fontSize)
         } catch {
-            print("error occured : \(error)")
+            print("error occurred in updating fontsize in theme table : \(error)")
         }
     }
     
@@ -70,7 +70,7 @@ class ThemeTable {
             try db.run(query, fontFamily)
 
         } catch {
-            print("error occured : \(error)")
+            print("error occurred in updating font family in theme table : \(error)")
         }
     }
     
@@ -86,7 +86,7 @@ class ThemeTable {
                 print(id, color,fontSize, fontFamily)
             }
         }catch {
-            
+            print("error occurred in get application theme in theme table")
         }
         return ApplicationTheme.shared
     }
@@ -105,7 +105,7 @@ class ThemeTable {
                 return selectedColor
             }
         } catch {
-            print("Error fetching color from the database: \(error)")
+            print("Error fetching color from the theme database: \(error)")
         }
         
         return ApplicationTheme.DefaultColor.green
@@ -124,7 +124,7 @@ class ThemeTable {
                 return fontValue
             }
         } catch {
-            print("Error fetching color from the database: \(error)")
+            print("Error fetching fontsize from the theme database: \(error)")
         }
         
         return ApplicationTheme.FontSize.medium
@@ -143,7 +143,7 @@ class ThemeTable {
                 return fontValue
             }
         } catch {
-            print("Error fetching color from the database: \(error)")
+            print("Error fetching font family from the theme database: \(error)")
         }
         
         return ApplicationTheme.FontFamily.CURSIVE
@@ -161,7 +161,7 @@ class ThemeTable {
                 return id
             }
         } catch {
-            print ("Error occured : \(error)")
+            print ("Error occurred on get first id in theme table : \(error)")
         }
         return 0
     }

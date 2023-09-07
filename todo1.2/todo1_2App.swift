@@ -11,7 +11,7 @@ import SwiftUI
 struct todo1_2App: App {
     var body: some Scene {
         WindowGroup {
-            AppView()
+            LoginView()
                 .environmentObject(ProjectList.shared)
                 .environmentObject(TodoList.shared)
         }

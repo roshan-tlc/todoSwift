@@ -60,6 +60,6 @@ struct AddTodoView: View {
 
 struct AddTodoView_Previews: PreviewProvider {
     static var previews: some View {
-        AppView()
+        LoginView()
     }
 }

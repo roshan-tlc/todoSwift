@@ -296,7 +296,7 @@ struct BackButton: View {
 struct TodoView_Previews: PreviewProvider {
     var parentId:String
     static var previews: some View {
-        AppView()
+        LoginView()
             .environmentObject(TodoList.shared)
     }
 }

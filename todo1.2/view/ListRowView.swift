@@ -10,8 +10,7 @@ import SwiftUI
 struct ListRowView : View {
     @State var project : Project;
     @EnvironmentObject var listView:ProjectList
-    
-    
+
     var body: some View {
         HStack {
             TextView(text: project.getTitle())
@@ -28,7 +27,6 @@ struct ListRowView : View {
     func remove() {
         listView.removeProject(id: project.id, userId: project.getUserId())
     }
-    
 }
 
 struct TextView : View {
@@ -38,7 +36,6 @@ struct TextView : View {
     var body: some View {
         VStack {
             Text(text)
-                
                 .padding(.trailing, 110)
                 .padding(.leading,0)
                 .frame(width: 240, height: 20)
@@ -49,7 +46,7 @@ struct TextView : View {
 
 struct ListRowView_Previews: PreviewProvider {
     static var previews: some View {
-        AppView()
+        LoginView()
             .environmentObject(ProjectList.shared)
     }
 }

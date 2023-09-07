@@ -22,10 +22,10 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-//            try db.run("drop table Project")
+            //try db.run("drop table Project")
             try db.run("CREATE TABLE IF NOT EXISTS Project (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, userId INTEGER, projectOrder INTEGER DEFAULT 0)")
         } catch {
-            print("Error creating table: \(error)")
+            print("Error creating project table: \(error)")
         }
     }
 
@@ -36,7 +36,7 @@ class ProjectTable : ObservableObject {
             let insert = "INSERT INTO Project (title, userId, projectOrder) VALUES ( ?, ?, ?)"
             try db.run(insert, project.getTitle(), project.getUserId(), project.getOrder())
         } catch {
-            print("Error inserting data: \(error)")
+            print("Error inserting data in project table: \(error)")
         }
     }
 
@@ -54,7 +54,7 @@ class ProjectTable : ObservableObject {
                 projects.append(Project(id: id, title: title, userId: userId, order: Int(order)))
             }
         } catch {
-            print("Error retrieving data: \(error)")
+            print("Error retrieving data in project table: \(error)")
         }
         return projects
     }
@@ -74,7 +74,7 @@ class ProjectTable : ObservableObject {
                 projects.append(Project(id: id, title: title, userId: userId, order: Int(order)))
             }
         } catch {
-            print("Error retrieving data: \(error)")
+            print("Error retrieving data in project table : \(error)")
         }
 
         return projects
@@ -106,7 +106,7 @@ class ProjectTable : ObservableObject {
             let remove = "DELETE FROM Project WHERE id = ?"
             try db.run(remove, id)
         } catch {
-            print("Error received :\(error)")
+            print("Error received on remove project in project table :\(error)")
         }
     }
 }

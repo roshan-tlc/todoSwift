@@ -21,10 +21,10 @@ class TodoTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            try db.run("DROP TABLE Todos")
+            //try db.run("Drop table Todos")
             try db.run("CREATE TABLE IF NOT EXISTS Todos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, position INTEGER, parentId INTEGER FOREIGN_KEY )")
         } catch {
-            print("Error creating table: \(error)")
+            print("Error creating todo table: \(error)")
         }
     }
 
@@ -35,7 +35,7 @@ class TodoTable : ObservableObject {
             let insert = "INSERT INTO Todos ( title, status, parentId, position) VALUES ( ?, ?, ?, ?)"
             try db.run(insert, todo.getTitle(), todo.getStatus().rawValue, todo.getParentId(), todo.getOrder())
         } catch {
-            print("Error inserting data: \(error)")
+            print("Error on inserting data in todo table : \(error)")
         }
     }
     
@@ -47,7 +47,7 @@ class TodoTable : ObservableObject {
         do {
             try db.run(query,id)
         } catch {
-            print("Error inserting data: \(error)")
+            print("Error on inserting data in onCheckbox state change  : \(error)")
         }
 
     }
@@ -73,11 +73,11 @@ class TodoTable : ObservableObject {
                     let task = Todo(id: id, title: title, isCompleted: taskStatus, parentId: parentId, order: order)
                     todos.append(task)
                 } else {
-                    print("Invalid row data: \(row)")
+                    print("Invalid row data return form todo table : \(row)")
                 }
             }
         } catch {
-            print("Error retrieving data: \(error)")
+            print("Error retrieving data from todo table : \(error)")
         }
         
         return todos
@@ -97,7 +97,7 @@ class TodoTable : ObservableObject {
                 }
             }
         } catch {
-            print("Error updating ProjectTable in the database: \(error)")
+            print("Error on updating todo list to Table in the database: \(error)")
         }
     }
     
@@ -108,7 +108,7 @@ class TodoTable : ObservableObject {
             let remove = "DELETE FROM Todos WHERE parentId = ?"
             try db.run(remove, parentId)
         } catch {
-            print("Error received :\(error)")
+            print("Error received on removing todos using parent id on todo table :\(error)")
         }
     }
 
@@ -119,7 +119,7 @@ class TodoTable : ObservableObject {
             let remove = "DELETE FROM Todos WHERE id = ?"
             try db.run(remove, id)
         } catch {
-            print("Error received :\(error)")
+            print("Error received on remove todo in todo table  :\(error)")
         }
     }
 }

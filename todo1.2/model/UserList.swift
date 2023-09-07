@@ -7,20 +7,38 @@ import Foundation
 class UserList : ObservableObject{
     @Published var usersList = [User]()
     private let userTable =  UserTable.shared
-    private var id = 1
+    private let credentialTable = CredentialTable.shared
+    private var id:Int64 = 1
+    static var shared = UserList()
 
-    func addUser(id: Int64, name:String, description:String) {
-        if userTable.get().contains(where: { $0.id == id }){
-            userTable.update(id: id, name: name, description: description)
-            
-        } else {
-            userTable.insert(user: User(id: id, name: name, description: description))
-            print(usersList)
-        }
+    private init () {}
+
+    func add (name:String, description:String, email:String, password:String) {
+        userTable.insert(user: User(id: id, name: name, description: description, email: email))
+        credentialTable.insert(id:userTable.getId(email: email), email: email, password: password)
+        id += 1
     }
 
-    func removeUser(id:String) {
+    func update (id: Int64, name:String, description:String, email:String) {
+        userTable.update(id: id, name: name, description: description, email : email)
+    }
+
+    func userValidation(email:String, password:String) -> Bool {
+         credentialTable.validation(email: email, password: password)
+    }
+
+    func updatePassword(email:String, password:String) {
+        credentialTable.updatePassword(email: email, password: password)
+        print(email, password)
+    }
+
+    func getId(email:String) -> Int64 {
+        userTable.getId(email: email)
+    }
+
+    func remove(id:Int64) {
         userTable.remove(id: id)
+        credentialTable.remove(id: id)
     }
     
     func get(id:Int64) -> User {

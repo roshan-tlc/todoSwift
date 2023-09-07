@@ -27,6 +27,6 @@ class InitDataBase : Identifiable {
     }
     
     func getDb() -> Connection? {
-        return db
+        db
     }
 }

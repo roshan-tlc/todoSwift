@@ -30,22 +30,22 @@ class ApplicationTheme : ObservableObject {
 
     enum FontSize : CGFloat {
         case small = 14
-        case medium = 18
-        case large = 22
+        case medium = 17
+        case large = 20
         
     }
 
     enum DefaultColor: String {
-        case light = "light"
+        case blue = "blue"
         case green = "green"
         case mint = "dark"
         
         var color: Color {
             switch self {
-            case .light:
-                return Color(#colorLiteral(red:0.3, green:0.5, blue: 0.8 , alpha:0.8 ))
+            case .blue:
+                return Color(#colorLiteral(red: 0.5, green: 0.8, blue: 0.9, alpha: 1.0))
             case .green:
-                return Color.green
+                return Color(#colorLiteral(red: 0.5, green: 0.8, blue: 0.5, alpha: 1.0))
             case .mint:
                 return Color.mint
             }
@@ -78,7 +78,7 @@ class ApplicationTheme : ObservableObject {
         } else {
             print("invalid color")
         }
-        return DefaultColor.light
+        return DefaultColor.blue
     }
     
     func setFontFamily(fontFamily:String) {

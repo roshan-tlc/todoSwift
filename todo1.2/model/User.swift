@@ -11,11 +11,13 @@ class User : Identifiable {
     internal var id:Int64
     private var name:String
     private var description:String
+    private var email: String
 
-    init(id: Int64, name: String, description: String) {
+    init(id: Int64, name: String, description: String, email: String) {
         self.id = id
         self.name = name
         self.description = description
+        self.email = email
     }
 
     func getId() -> Int64 {
@@ -24,6 +26,14 @@ class User : Identifiable {
 
     func setId(id:Int64) {
         self.id = id
+    }
+
+    func getEmail() -> String {
+        email
+    }
+
+    func setEmail(email:String) {
+        self.email = email
     }
 
     func getName() -> String {

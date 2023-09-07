@@ -8,6 +8,7 @@ struct UserEditView: View {
     @State var userId:Int64
     @State var userName:String
     @State var description:String
+    @State var email:String
     @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
     @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
     @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
@@ -39,10 +40,16 @@ struct UserEditView: View {
                         .padding(.leading, 100)
                         .padding()
 
+                TextField("email", text: $email)
+
+                        .frame(alignment: .center)
+                        .padding(.leading, 100)
+                        .padding()
+
                 HStack(spacing: 20) {
 
                     Button(action: {
-                        UserList().addUser(id: userId, name: userName, description: description)
+                        UserList.shared.update(id: userId, name: userName, description: description, email: " " )
                         presentation.wrappedValue.dismiss()
                     }) {
                         Text("Save")

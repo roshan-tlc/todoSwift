@@ -5,6 +5,7 @@ struct Theme: View {
     @State var fontSize: ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
     @State var fontFamily: ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
     @State var defaultColor: ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
+    @State var isLogout = false
 
     var body: some View {
         VStack {
@@ -33,7 +34,7 @@ struct Theme: View {
                                         }
                             }
                         }
-                                .frame(width: .Magnitude.infinity,height: 40)
+
                         Section {
                             HStack {
                                 Text("Font Size")
@@ -65,7 +66,7 @@ struct Theme: View {
                                         .foregroundColor(defaultColor.color)
 
                                 Picker("", selection: $defaultColor) {
-                                    Text("light").tag(ApplicationTheme.DefaultColor.light)
+                                    Text("blue").tag(ApplicationTheme.DefaultColor.blue)
                                     Text("green").tag(ApplicationTheme.DefaultColor.green)
                                     Text("mint").tag(ApplicationTheme.DefaultColor.mint)
                                 }
@@ -79,6 +80,7 @@ struct Theme: View {
                             }
                         }
                                 .frame(width: .infinity,height: 40)
+
                     }
                 }
             }
