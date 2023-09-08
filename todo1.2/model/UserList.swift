@@ -23,7 +23,7 @@ class UserList : ObservableObject{
         userTable.update(id: id, name: name, description: description, email : email)
     }
 
-    func userValidation(email:String, password:String) -> Bool {
+    func userValidation(email:String, password:String) -> Int64 {
          credentialTable.validation(email: email, password: password)
     }
 

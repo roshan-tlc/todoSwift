@@ -58,11 +58,20 @@ struct SignUpView : View {
                         Button(action: {
 
                             let emails = CredentialTable.shared.getAllEmail()
+                            password = UserValidation.shared.encryptPassword(password)
+                            reEnteredPassword = UserValidation.shared.encryptPassword(reEnteredPassword)
+                            print(password , "password")
+                            print(reEnteredPassword, "reentered password")
                             
                             if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) && !emails.contains(email) {
                                 UserList.shared.add(name: name, description: "", email: email, password: password)
+                                print(password, "    ", reEnteredPassword)
                                 showLogin.toggle()
                             } else {
+                                if password != reEnteredPassword {
+                                    message = "password is not matched"
+                                    isToastVisible.toggle()
+                                }
                                 if !email.isEmpty && emails.contains(emails) {
                                     message = "The email is already exists"
                                     isToastVisible.toggle()

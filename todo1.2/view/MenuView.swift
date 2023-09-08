@@ -24,7 +24,8 @@ struct MenuView: View {
                 Text("Menu")
                         .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
             }
-                    .padding(.vertical, 20)
+                    .padding(.top, 20)
+                    .padding(.bottom, 10)
             VStack {
 
                 UserView(id: userId)

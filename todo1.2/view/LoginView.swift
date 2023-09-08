@@ -66,12 +66,12 @@ struct LoginView : View {
                         }
 
                         HStack {
-
-                            NavigationLink("", destination : AppView(userId:UserList.shared.getId(email: email)), isActive: $showLogin)
-                                    .navigationBarBackButtonHidden(true)
+                            let userId = UserList.shared.userValidation(email: email, password: UserValidation.shared.encryptPassword(password))
+                            NavigationLink("", destination : AppView(userId: userId), isActive: $showLogin)
 
                             Button(action: {
-                                if UserList.shared.userValidation(email: email, password: password) {
+
+                                if  userId != 0  {
                                     showLogin.toggle()
                                 } else {
                                     if email.isEmpty {

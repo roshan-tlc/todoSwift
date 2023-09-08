@@ -4,7 +4,6 @@
 
 import Foundation
 
-
 import SwiftUI
 import SQLite
 
@@ -22,7 +21,7 @@ class UserTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            //try db.run("drop table User")
+           // try db.run("drop table User")
             try db.run("CREATE TABLE IF NOT EXISTS User (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, email TEXT)")
         } catch {
             print("Error on creating table user : \(error)")
@@ -65,7 +64,7 @@ class UserTable : ObservableObject {
         do {
             try db.run(update, name, description, email, id)
         } catch {
-            print("Error in update data in user tabel : \(error)")
+            print("Error in update data in user table : \(error)")
         }
     }
 
@@ -91,7 +90,7 @@ class UserTable : ObservableObject {
     }
     
     func get(id:Int64) -> User {
-        guard let db = db else { return User(id: 1, name: "", description: "", email: "")}
+        guard let db = db else { return User(id: 0, name: "", description: "", email: "")}
         let query = "SELECT id, name, description, email FROM User WHERE id = ?"
         
         do {
@@ -106,7 +105,26 @@ class UserTable : ObservableObject {
             print("Error retrieving data get user in user table : \(error)")
         }
         
-        return User(id: 1, name: "", description: "", email: "")
+        return User(id: 0, name: "", description: "", email: "")
+    }
+
+    func get(email:String) -> User {
+        guard let db = db else { return User(id: 0, name: "", description: "", email: "")}
+        let query = "SELECT id, name, description, email FROM User WHERE email = ?"
+
+        do {
+            for row in try db.prepare(query,email) {
+                let id = row[0] as! Int64
+                let name = row[1] as! String
+                let description = row[2] as! String
+                let email = row[3] as! String
+                return User(id: id, name: name, description: description, email: email)
+            }
+        } catch {
+            print("Error retrieving data get user in user table : \(error)")
+        }
+
+        return User(id: 0, name: "", description: "", email: "")
     }
     
     func remove(id:Int64) {

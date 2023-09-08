@@ -17,7 +17,7 @@ class CredentialTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            //try db.run("Drop table Credential")
+           // try db.run("Drop table Credential")
             try db.run("CREATE TABLE IF NOT EXISTS Credential (id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL)")
         } catch {
             print("Error while creating credential table \(error)")
@@ -38,9 +38,9 @@ class CredentialTable : ObservableObject {
         }
     }
 
-    func validation(email:String, password:String) -> Bool {
+    func validation(email:String, password:String) -> Int64 {
 
-        guard let db = db else { return false}
+        guard let db = db else { return 0}
         print(email, password)
         let query = " SELECT id from Credential WHERE email = ? and password = ? "
 
@@ -48,13 +48,13 @@ class CredentialTable : ObservableObject {
             for row in try db.prepare(query,email, password) {
                 let id = row[0] as! Int64
                 if id > 0 {
-                    return true
+                    return id
                 }
             }
         } catch {
             print("Error on validating user in credential \(error)")
         }
-        return false
+        return 0
     }
 
     func updatePassword(email:String, password:String) {
@@ -112,6 +112,4 @@ class CredentialTable : ObservableObject {
             print("error on remove user from credential table : \(error)")
         }
     }
-
-
 }

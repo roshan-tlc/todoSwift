@@ -42,7 +42,7 @@ struct ForgotPasswordView : View {
                                 .navigationBarBackButtonHidden(true)
 
                         Button(action: {
-                            if !email.isEmpty && !password.isEmpty && !reEnteredPassword.isEmpty {
+                            if !email.isEmpty && !password.isEmpty && !reEnteredPassword.isEmpty && password == reEnteredPassword {
                                 UserList.shared.updatePassword(email: email, password: password)
                                 print(email, password)
                                 showLogin.toggle()
