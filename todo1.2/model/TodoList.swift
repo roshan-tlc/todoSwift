@@ -17,68 +17,82 @@ class TodoList: ObservableObject {
 
     private init() {}
 
-    func addTodo(title: String, parentId: Int64) {
-        todoTable.insert(todo: Todo(id: id, title: title, isCompleted: Todo.TodoStatus.unCompleted, parentId: parentId, order: getOrder()))
-        self.parentId = parentId
-        todos = todoTable.get(parentId: parentId)
-        id += 1
+    func addTodo(title: String, parentId: Int64) throws {
+        do {
+            try todoTable.insert(todo: Todo(id: id, title: title, isCompleted: Todo.TodoStatus.unCompleted, parentId: parentId, order: getOrder()))
+            self.parentId = parentId
+            try todos = todoTable.get(parentId: parentId)
+            id += 1
+        } catch {
+            throw error
+        }
     }
     
-    func removeTodo(id: Int64, userId: Int64) {
-        todoTable.remove(id: id)
-        todos = todoTable.get(parentId: id)
-    }
-
-    func onCheckBoxClick(todo: Todo) {
-        todoTable.onCheckBoxChange(id: todo.getId())
-        todos = todoTable.get(parentId: todo.getParentId())
-    }
-
-    func getTodos(status: SearchFilter.Status, parentId: Int64) -> [Todo] {
-        var filteredData = [Todo]()
-
-        for todo in todoTable.get(parentId: parentId) {
-            if (status == SearchFilter.Status.COMPLETED) {
-                if (todo.getStatus().rawValue == 1) {
-                    filteredData.append(todo)
-                }
-            } else if (status == SearchFilter.Status.UNCOMPLETED) {
-                if (todo.getStatus().rawValue == 0) {
-                    filteredData.append(todo)
-                }
-            } else {
-                filteredData.append(todo)
-            }
+    func removeTodo(id: Int64, userId: Int64) throws {
+        do {
+            try todoTable.remove(id: id)
+            try todos = todoTable.get(parentId: id)
+        } catch {
+            throw error
         }
+    }
 
-        return filteredData
+    func onCheckBoxClick(todo: Todo) throws {
+        do {
+            try todoTable.onCheckBoxChange(id: todo.getId())
+            try todos = todoTable.get(parentId: todo.getParentId())
+        } catch {
+            throw error
+        }
+    }
+
+    func getTodos(status: SearchFilter.Status, parentId: Int64) throws -> [Todo] {
+        var filteredData = [Todo]()
+        do {
+            for todo in try todoTable.get(parentId: parentId) {
+                if (status == SearchFilter.Status.COMPLETED) {
+                    if (todo.getStatus().rawValue == 1) {
+                        filteredData.append(todo)
+                    }
+                } else if (status == SearchFilter.Status.UNCOMPLETED) {
+                    if (todo.getStatus().rawValue == 0) {
+                        filteredData.append(todo)
+                    }
+                } else {
+                    filteredData.append(todo)
+                }
+            }
+            return filteredData
+        } catch {
+            throw error
+        }
     }
 
     func getOrder() -> Int64 {
         Int64(todos.count + 1)
     }
 
-    func getSearchFilteredTodo(searchItem: SearchFilter) -> [Todo] {
-
-        let searchedTodos = todoTable.get(parentId: searchItem.parentId).filter {
-            $0.getTitle().lowercased().contains(searchItem.attribute.lowercased())
-        }
-        var filteredTodos = [Todo]()
-
-        if searchItem.status == SearchFilter.Status.COMPLETED {
-            filteredTodos = searchedTodos.filter {
-                $0.getStatus().rawValue == 1
+    func getSearchFilteredTodo(searchItem: SearchFilter) throws -> [Todo] {
+        do {
+            let searchedTodos = try todoTable.get(parentId: searchItem.parentId).filter {
+                $0.getTitle().lowercased().contains(searchItem.attribute.lowercased())
             }
-        } else if searchItem.status == SearchFilter.Status.UNCOMPLETED {
-            filteredTodos = searchedTodos.filter {
-                $0.getStatus().rawValue == 0
-            }
-        } else {
-            filteredTodos = searchedTodos
-        }
+            var filteredTodos = [Todo]()
 
-        return filteredTodos.sorted {
-            $0 > $1
+            if searchItem.status == SearchFilter.Status.COMPLETED {
+                filteredTodos = searchedTodos.filter {
+                    $0.getStatus().rawValue == 1
+                }
+            } else if searchItem.status == SearchFilter.Status.UNCOMPLETED {
+                filteredTodos = searchedTodos.filter {
+                    $0.getStatus().rawValue == 0
+                }
+            } else {
+                filteredTodos = searchedTodos
+            }
+            return filteredTodos
+        } catch {
+            throw  error
         }
     }
 }

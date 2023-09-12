@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct AddTodoView: View {
+
     @State var textField:String = ""
     @EnvironmentObject var listView: TodoList
     @Environment(\.presentationMode) var presentationMode
     @State var parentId:Int64
     @State var searchText = ""
+    @State var toastMessage = ""
+    @State var isToastVisible = false
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
     
@@ -20,7 +23,7 @@ struct AddTodoView: View {
         VStack {
             TextField("Enter Your todo ", text: $textField)
                     .frame(height: 50)
-                    .background(.clear)
+                    .background(ApplicationTheme.shared.defaultColor.color).opacity(0.8)
                     .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
 
             Button(
@@ -32,12 +35,18 @@ struct AddTodoView: View {
                         .foregroundColor(ApplicationTheme.shared.defaultColor.color)
             })
                     .alert(isPresented: $showAlert, content: getAlert)
+                    .toast(isPresented: $isToastVisible, message: $toastMessage)
         }
 
     }
     func addTodo() {
-        if textIsAppropriate() {
-            listView.addTodo(title: textField, parentId: parentId)
+        if textIsAppropriate()  {
+            do {
+                try listView.addTodo(title: textField, parentId: parentId)
+            } catch {
+                toastMessage = "\(error)"
+                isToastVisible.toggle()
+            }
             textField = ""
             
         }

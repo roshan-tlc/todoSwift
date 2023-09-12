@@ -9,6 +9,8 @@ struct UserEditView: View {
     @State var userName:String
     @State var description:String
     @State var email:String
+    @State var toastMessage = ""
+    @State var isToastVisible = false
     @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
     @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
     @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
@@ -49,7 +51,12 @@ struct UserEditView: View {
                 HStack(spacing: 20) {
 
                     Button(action: {
-                        UserList.shared.update(id: userId, name: userName, description: description, email: " " )
+                        do {
+                            try UserList.shared.update(id: userId, name: userName, description: description, email: " ")
+                        } catch {
+                            toastMessage = "\(error)"
+                            isToastVisible.toggle()
+                        }
                         presentation.wrappedValue.dismiss()
                     }) {
                         Text("Save")
@@ -70,5 +77,6 @@ struct UserEditView: View {
             }
         }
                 .background(ApplicationTheme.shared.defaultColor.color)
+                .toast(isPresented: $isToastVisible, message: $toastMessage)
     }
 }

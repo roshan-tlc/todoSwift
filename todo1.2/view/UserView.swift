@@ -6,11 +6,21 @@ import SwiftUI
 
 struct UserView : View {
 
-    @State var user:User
+    @State private var user:User
+    @State private var toastMessage = ""
+    @State private var isToastVisible = false
 
-    init (id:Int64) {
-        user = UserList.shared.get(id: id)
+    init(id: Int64) {
+        let result: User
+        do {
+            result = try UserList.shared.get(id: id)
+        } catch {
+            toastMessage = "\(error)"
+            result = User(id: 0, name: "", description: "", email: "")
+        }
+        user = result
     }
+
 
     var body : some View {
         HStack {
@@ -18,42 +28,42 @@ struct UserView : View {
                 ZStack {
                     Circle()
                             .foregroundColor(.blue)
-                            .frame(width: 90, height: 60)
+                            .frame(width: 80, height: 60)
 
                     Text(user.getName().prefix(1).uppercased())
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
                             .foregroundColor(.white)
                 }
                         .padding(.leading, 10)
             }
 
             VStack {
-                Text(user.getName())
-                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
+                Text(user.getName() )
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
                         .foregroundColor(.black)
                         .padding(5)
 
-                Text(user.getDescription())
-                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
+                Text(user.getDescription() )
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
                         .foregroundColor(.black)
                         .padding(.bottom, 10)
                         .padding(5)
             }
-                    .frame(width: 100)
+                    .frame(width: 140)
 
             VStack {
                 NavigationLink(destination: LoginView()) {
                     Image(systemName: "rectangle.portrait.and.arrow.forward.fill")
                             .frame(width: 6, height: 6)
                             .foregroundColor(.blue)
-                            .padding(.leading, 30)
+                            .padding(.leading, 5)
                             .padding(.bottom, 10)
                 }
 
-                NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName(), description: user.getDescription(), email: user.getEmail())) {
+                NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName() , description: user.getDescription(), email: user.getEmail())) {
                     Image(systemName: "pencil.circle.fill")
                             .foregroundColor(.blue)
-                            .padding(.leading, 30)
+                            .padding(.leading, 5)
                             .padding()
                 }
                         .onAppear {
@@ -62,10 +72,25 @@ struct UserView : View {
             }
             Spacer()
         }
+                .toast(isPresented: $isToastVisible, message: $toastMessage)
                 .frame(width: .infinity, height: 80,alignment: .top)
+    }
+
+    func getUser(userId:Int64) -> User {
+        do {
+            return try UserList.shared.get(id: userId)
+        } catch {
+            toastMessage = "\(error)"
+            return User(id: 0, name: "", description: "", email: "")
+        }
     }
     
     func reload() {
-        user = UserList.shared.get(id: user.id)
+        do {
+            user = getUser(userId: user.getId() )
+        } catch {
+            toastMessage = "\(error)"
+            isToastVisible.toggle()
+        }
     }
 }

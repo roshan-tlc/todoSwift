@@ -18,29 +18,29 @@ class ProjectTable : ObservableObject {
         
     }
 
-    func createTable() {
+    func createTable() throws  {
         guard let db = db else { return }
 
         do {
             //try db.run("drop table Project")
             try db.run("CREATE TABLE IF NOT EXISTS Project (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, userId INTEGER, projectOrder INTEGER DEFAULT 0)")
         } catch {
-            print("Error creating project table: \(error)")
+            throw error
         }
     }
 
-    func insert(project:Project) {
+    func insert(project:Project) throws {
         guard let db = db else { return }
 
         do {
             let insert = "INSERT INTO Project (title, userId, projectOrder) VALUES ( ?, ?, ?)"
             try db.run(insert, project.getTitle(), project.getUserId(), project.getOrder())
         } catch {
-            print("Error inserting data in project table: \(error)")
+            throw error
         }
     }
 
-    func get() -> [Project] {
+    func get() throws -> [Project] {
         guard let db = db else { return [] }
 
         var projects: [Project] = []
@@ -54,12 +54,12 @@ class ProjectTable : ObservableObject {
                 projects.append(Project(id: id, title: title, userId: userId, order: Int(order)))
             }
         } catch {
-            print("Error retrieving data in project table: \(error)")
+            throw error
         }
         return projects
     }
     
-    func get(id:Int64) -> [Project] {
+    func get(id:Int64) throws -> [Project] {
         guard let db = db else { return [] }
 
         var projects: [Project] = []
@@ -74,14 +74,14 @@ class ProjectTable : ObservableObject {
                 projects.append(Project(id: id, title: title, userId: userId, order: Int(order)))
             }
         } catch {
-            print("Error retrieving data in project table : \(error)")
+            throw error
         }
 
         return projects
     }
 
 
-    func updateProjectTable() {
+    func updateProjectTable() throws  {
         guard let db = db else { return}
         do {
             let projectTable = Table("Project")
@@ -95,18 +95,18 @@ class ProjectTable : ObservableObject {
                 }
             }
         } catch {
-            print("Error updating ProjectTable in the database: \(error)")
+            throw error
         }
     }
 
-    func remove(id:Int64) {
+    func remove(id:Int64) throws {
         guard let db = db else { return }
         
         do {
             let remove = "DELETE FROM Project WHERE id = ?"
             try db.run(remove, id)
         } catch {
-            print("Error received on remove project in project table :\(error)")
+            throw error
         }
     }
 }

@@ -12,10 +12,11 @@ struct MenuView: View {
     @State var textField: String = ""
     @State var userId: Int64
     @EnvironmentObject var listView: ProjectList
-    @Environment(\.presentationMode) var presentationMode
     @State var isAddViewVisible = false
     @State var alertTitle: String = ""
     @State var showAlert: Bool = false
+    @State var toastMessage = ""
+    @State var isToastVisible = false
     @State var returnToMenu = false
 
     var body: some View {
@@ -49,6 +50,7 @@ struct MenuView: View {
                             .frame(width: 250, height: 50)
                             .background(Color.cyan)
                             .cornerRadius(10)
+                            .multilineTextAlignment(.center)
                             .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
 
                     Button(
@@ -56,29 +58,34 @@ struct MenuView: View {
                             , label: {
                         Text("Add Project")
                                 .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
-                                .frame(height: 50)
+                                .frame(width: 150, height: 50)
                                 .foregroundColor(.black)
+                                .background(.secondary).opacity(0.5)
+                                .multilineTextAlignment(.center)
+                                .cornerRadius(10)
                     })
                             .alert(isPresented: $showAlert, content: getAlert)
                 }
             }
             List {
                 ForEach(listView.projects) { item in
-                    NavigationLink(destination: TodoView(project: item)) {
+                    NavigationLink(destination: AppView(project: item, showProject: true, userId: userId)) {
                         ListRowView(project: item)
                     }
                             .onAppear {
-                                TodoList.shared.todos = TodoTable.shared.get(parentId: item.id)
+                                do {
+                                    TodoList.shared.todos = try TodoTable.shared.get(parentId: item.id)
+                                } catch {
+                                    toastMessage = "\(error)"
+                                    isToastVisible.toggle()
+                                }
                             }
                 }
                         .onMove(perform: moveTodo)
-
             }
-
             Spacer()
-
         }
-                .frame(width: 300)
+                .frame(width: 280)
                 .padding(.top, 50)
                 .border(Color.black, width: 0.2)
                 .edgesIgnoringSafeArea(.vertical)
@@ -87,14 +94,23 @@ struct MenuView: View {
 
     func moveTodo(from source: IndexSet, to destination: Int) {
         listView.projects.move(fromOffsets: source, toOffset: destination)
-        ProjectTable.shared.updateProjectTable()
+        do {
+            try ProjectTable.shared.updateProjectTable()
+        } catch {
+            toastMessage = "\(error)"
+            isToastVisible.toggle()
+        }
     }
 
     func addProject() {
         if textIsAppropriate() {
-            listView.addProject(title: textField, userId: userId, order: listView.getOrder())
+            do {
+                try listView.addProject(title: textField, userId: userId, order: listView.getOrder())
+            } catch {
+                toastMessage = "\(error)"
+                isToastVisible.toggle()
+            }
             textField = ""
-            //presentationMode.wrappedValue.dismiss()
         }
     }
 
@@ -130,15 +146,6 @@ struct CustomBackButton<Content: View>: View {
                     .foregroundColor(.blue)
                     .font(.title)
             content
-        }
-    }
-}
-
-struct Logout: View {
-    var body: some View {
-        NavigationLink(destination: LoginView()) {
-            Image(systemName: "person.circle")
-                    .frame(width: 6,height: 6)
         }
     }
 }

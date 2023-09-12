@@ -13,7 +13,7 @@ class ThemeTable {
         db = InitDataBase().getDb()
     }
     
-    func createTable() {
+    func createTable() throws {
         guard let db = db else { return }
         
         
@@ -22,22 +22,22 @@ class ThemeTable {
             try db.run("CREATE TABLE IF NOT EXISTS Theme (id INTEGER PRIMARY KEY AUTOINCREMENT, color TEXT, fontSize DOUBLE,fontFamily TEXT)")
             
         } catch {
-            print("Error on creating table theme : \(error)")
+            throw error
         }
     }
     
-    func insert(theme: ApplicationTheme){
+    func insert(theme: ApplicationTheme) throws {
         guard let db = db else { return }
         let query = "INSERT INTO Theme (color, fontSize, fontFamily) values (?, ?, ?)"
         
         do {
             try db.run(query, theme.defaultColor.rawValue, Double(theme.fontSize.rawValue), theme.fontFamily.rawValue )
         } catch {
-            print("error occurred in inset query in theme table : \(error)")
+            throw error
         }
     }
     
-    func updateColor(color:String) {
+    func updateColor(color:String) throws {
         guard let db = db else { return }
         
         let query = "UPDATE Theme SET color = ?"
@@ -45,11 +45,11 @@ class ThemeTable {
         do {
             try db.run(query, color)
         } catch {
-            print("error occurred in update color in theme table : \(error)")
+            throw error
         }
     }
     
-    func updateFontSize(fontSize : Double) {
+    func updateFontSize(fontSize : Double) throws {
         guard let db = db else { return }
         
         let query = "UPDATE Theme SET fontSize = ?"
@@ -57,11 +57,11 @@ class ThemeTable {
         do {
             try db.run(query, fontSize)
         } catch {
-            print("error occurred in updating fontsize in theme table : \(error)")
+            throw error
         }
     }
     
-    func updateFontFamily(fontFamily: String) {
+    func updateFontFamily(fontFamily: String) throws {
         guard let db = db else { return }
         
         let query = "UPDATE Theme SET fontFamily = ?"
@@ -70,11 +70,11 @@ class ThemeTable {
             try db.run(query, fontFamily)
 
         } catch {
-            print("error occurred in updating font family in theme table : \(error)")
+            throw error
         }
     }
     
-    func get() -> ApplicationTheme {
+    func get() throws -> ApplicationTheme  {
         guard let db = db else { return ApplicationTheme.shared }
         
         do {
@@ -85,13 +85,13 @@ class ThemeTable {
                 let fontFamily = row[3] as! String
                 print(id, color,fontSize, fontFamily)
             }
-        }catch {
-            print("error occurred in get application theme in theme table")
+        } catch {
+            throw error
         }
         return ApplicationTheme.shared
     }
     
-    func getColor() -> ApplicationTheme.DefaultColor {
+    func getColor() throws  -> ApplicationTheme.DefaultColor {
         guard let db = db else { return ApplicationTheme.DefaultColor.green}
         
         let table = Table("Theme")
@@ -105,13 +105,13 @@ class ThemeTable {
                 return selectedColor
             }
         } catch {
-            print("Error fetching color from the theme database: \(error)")
+            throw error
         }
         
         return ApplicationTheme.DefaultColor.green
     }
     
-    func getFontSize() -> ApplicationTheme.FontSize {
+    func getFontSize() throws -> ApplicationTheme.FontSize {
         guard let db = db else { return ApplicationTheme.FontSize.medium }
         
         let table = Table("Theme")
@@ -124,13 +124,13 @@ class ThemeTable {
                 return fontValue
             }
         } catch {
-            print("Error fetching fontsize from the theme database: \(error)")
+            throw error
         }
         
         return ApplicationTheme.FontSize.medium
     }
     
-    func getFontFamily() -> ApplicationTheme.FontFamily {
+    func getFontFamily() throws -> ApplicationTheme.FontFamily {
         guard let db = db else { return ApplicationTheme.FontFamily.CURSIVE }
         
         let table = Table("Theme")
@@ -143,13 +143,13 @@ class ThemeTable {
                 return fontValue
             }
         } catch {
-            print("Error fetching font family from the theme database: \(error)")
+            throw error
         }
         
         return ApplicationTheme.FontFamily.CURSIVE
     }
     
-    func getFirstId() -> Int64 {
+    func getFirstId() throws  -> Int64 {
         guard let db = db else { return 0}
         
         let table = Table("Theme")
@@ -161,7 +161,7 @@ class ThemeTable {
                 return id
             }
         } catch {
-            print ("Error occurred on get first id in theme table : \(error)")
+            throw error
         }
         return 0
     }

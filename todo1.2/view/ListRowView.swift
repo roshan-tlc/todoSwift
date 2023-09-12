@@ -10,6 +10,8 @@ import SwiftUI
 struct ListRowView : View {
     @State var project : Project;
     @EnvironmentObject var listView:ProjectList
+    @State var message = ""
+    @State var isToastVisible = false
 
     var body: some View {
         HStack {
@@ -25,7 +27,12 @@ struct ListRowView : View {
     }
     
     func remove() {
-        listView.removeProject(id: project.id, userId: project.getUserId())
+        do {
+            try listView.removeProject(id: project.id, userId: project.getUserId())
+        } catch {
+            message = "\(error)"
+            isToastVisible.toggle()
+        }
     }
 }
 

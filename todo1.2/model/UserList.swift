@@ -13,39 +13,70 @@ class UserList : ObservableObject{
 
     private init () {}
 
-    func add (name:String, description:String, email:String, password:String) {
-        userTable.insert(user: User(id: id, name: name, description: description, email: email))
-        credentialTable.insert(id:userTable.getId(email: email), email: email, password: password)
-        id += 1
+    func add (name:String, description:String, email:String, password:String) throws {
+        do {
+            try userTable.insert(user: User(id: id, name: name, description: description, email: email))
+            try credentialTable.insert(id: userTable.getId(email: email), email: email, password: password)
+            id += 1
+        } catch {
+            throw error
+        }
     }
 
-    func update (id: Int64, name:String, description:String, email:String) {
-        userTable.update(id: id, name: name, description: description, email : email)
+    func update (id: Int64, name:String, description:String, email:String) throws {
+        do {
+            try userTable.update(id: id, name: name, description: description, email: email)
+        } catch {
+            throw error
+        }
     }
 
-    func userValidation(email:String, password:String) -> Int64 {
-         credentialTable.validation(email: email, password: password)
+    func userValidation(email:String, password:String) throws -> Int64 {
+        do {
+            return try credentialTable.validation(email: email, password: password)
+        } catch {
+            throw error
+        }
     }
 
-    func updatePassword(email:String, password:String) {
-        credentialTable.updatePassword(email: email, password: password)
-        print(email, password)
+    func updatePassword(email:String, password:String) throws {
+        do {
+            return try credentialTable.updatePassword(email: email, password: password)
+        } catch {
+            throw error
+        }
     }
 
-    func getId(email:String) -> Int64 {
-        userTable.getId(email: email)
+    func getId(email:String) throws -> Int64 {
+        do {
+            return try userTable.getId(email: email)
+        } catch {
+            throw error
+        }
     }
 
-    func remove(id:Int64) {
-        userTable.remove(id: id)
-        credentialTable.remove(id: id)
+    func remove(id:Int64) throws  {
+        do {
+            try userTable.remove(id: id)
+            try credentialTable.remove(id: id)
+        } catch {
+            throw error
+        }
     }
     
-    func get(id:Int64) -> User {
-         userTable.get(id:id)
+    func get(id:Int64) throws -> User {
+        do {
+            return try userTable.get(id: id)
+        } catch {
+            throw error
+        }
     }
     
-    func get() -> [User] {
-         userTable.get()
+    func get() throws -> [User] {
+        do {
+            return try userTable.get()
+        } catch {
+            throw error
+        }
     }
 }

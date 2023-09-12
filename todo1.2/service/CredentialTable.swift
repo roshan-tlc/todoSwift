@@ -12,7 +12,7 @@ class CredentialTable : ObservableObject {
 
     private init() {}
 
-    func createTable() {
+    func createTable() throws {
 
         guard let db = db else { return }
 
@@ -20,11 +20,11 @@ class CredentialTable : ObservableObject {
            // try db.run("Drop table Credential")
             try db.run("CREATE TABLE IF NOT EXISTS Credential (id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL)")
         } catch {
-            print("Error while creating credential table \(error)")
+            throw error
         }
     }
 
-    func insert(id:Int64, email:String, password:String) {
+    func insert(id:Int64, email:String, password:String) throws {
 
         guard let db = db else { return }
 
@@ -34,11 +34,11 @@ class CredentialTable : ObservableObject {
             try db.run(query, id, email, password)
 
         } catch {
-            print("error while inserting user in credential \(error)")
+            throw error
         }
     }
 
-    func validation(email:String, password:String) -> Int64 {
+    func validation(email:String, password:String) throws -> Int64 {
 
         guard let db = db else { return 0}
         print(email, password)
@@ -52,26 +52,25 @@ class CredentialTable : ObservableObject {
                 }
             }
         } catch {
-            print("Error on validating user in credential \(error)")
+            throw error
         }
         return 0
     }
 
-    func updatePassword(email:String, password:String) {
+    func updatePassword(email:String, password:String) throws {
 
         guard let db = db else { return }
 
         let query = " UPDATE Credential SET password = ? where email = ?"
 
         do {
-            print(getAllEmail(),"all")
             try db.run(query, password, email)
         } catch {
-            print("error occurred while updating the password in credential \(error)")
+            throw error
         }
     }
 
-    func getAllEmail() -> [String] {
+    func getAllEmail() throws -> [String] {
 
         guard let db = db  else {  return [] }
         var emails:[String] = []
@@ -83,12 +82,12 @@ class CredentialTable : ObservableObject {
             }
 
         } catch {
-            print("Error on retrieving emails form the credential table")
+            throw error
         }
         return emails
     }
 
-    func update(id:Int64, email:String, password:String) {
+    func update(id:Int64, email:String, password:String) throws  {
         guard let db = db else { return }
 
         let query = " UPDATE Credential SET email = ? , password = ?  WHERE id = ?"
@@ -96,11 +95,11 @@ class CredentialTable : ObservableObject {
         do {
             try db.run(query, email, password, id)
         } catch {
-            print("error while update user in credential: \(error)")
+            throw error
         }
     }
 
-    func remove(id:Int64) {
+    func remove(id:Int64) throws {
 
         guard let db = db else { return }
 
@@ -109,7 +108,7 @@ class CredentialTable : ObservableObject {
         do {
             try db.run(query,id)
         } catch {
-            print("error on remove user from credential table : \(error)")
+            throw error
         }
     }
 }

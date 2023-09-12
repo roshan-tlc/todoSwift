@@ -17,18 +17,18 @@ class UserTable : ObservableObject {
         
     }
 
-    func createTable() {
+    func createTable() throws {
         guard let db = db else { return }
 
         do {
            // try db.run("drop table User")
             try db.run("CREATE TABLE IF NOT EXISTS User (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, email TEXT)")
         } catch {
-            print("Error on creating table user : \(error)")
+            throw error
         }
     }
 
-    func insert(user:User) {
+    func insert(user:User) throws {
         guard let db = db else { return }
 
         let insert = "INSERT INTO User ( name, description, email) VALUES (?, ?, ?)"
@@ -36,11 +36,11 @@ class UserTable : ObservableObject {
         do {
             try db.run(insert, user.getName(), user.getDescription(), user.getEmail())
         } catch {
-            print("Error on inserting data in user table : \(error)")
+            throw error
         }
     }
 
-    func getId(email:String) -> Int64 {
+    func getId(email:String) throws -> Int64 {
         guard let db = db else { return 0 }
 
         let query = "SELECT id FROM User WHERE email = ?"
@@ -51,12 +51,12 @@ class UserTable : ObservableObject {
            }
 
         } catch{
-            print("Error on getting user id from User table \(error)")
+            throw error
         }
         return 0
     }
     
-    func update(id:Int64, name:String, description:String, email:String ) {
+    func update(id:Int64, name:String, description:String, email:String ) throws {
         guard let db =  db else { return }
         
         let update = "UPDATE User SET name = ? , description = ?, email = ?  WHERE id = ?"
@@ -64,12 +64,12 @@ class UserTable : ObservableObject {
         do {
             try db.run(update, name, description, email, id)
         } catch {
-            print("Error in update data in user table : \(error)")
+            throw error
         }
     }
 
 
-    func get() -> [User] {
+    func get() throws  -> [User] {
         guard let db = db else { return [] }
 
         var users: [User] = []
@@ -83,13 +83,13 @@ class UserTable : ObservableObject {
                 users.append(User(id: id, name: name, description: description, email: email))
             }
         } catch {
-            print("Error retrieving data on get all user in user table : \(error)")
+            throw error
         }
 
         return users
     }
     
-    func get(id:Int64) -> User {
+    func get(id:Int64) throws -> User {
         guard let db = db else { return User(id: 0, name: "", description: "", email: "")}
         let query = "SELECT id, name, description, email FROM User WHERE id = ?"
         
@@ -102,13 +102,13 @@ class UserTable : ObservableObject {
                 return User(id: id, name: name, description: description, email: email)
             }
         } catch {
-            print("Error retrieving data get user in user table : \(error)")
+            throw error
         }
         
         return User(id: 0, name: "", description: "", email: "")
     }
 
-    func get(email:String) -> User {
+    func get(email:String) throws -> User {
         guard let db = db else { return User(id: 0, name: "", description: "", email: "")}
         let query = "SELECT id, name, description, email FROM User WHERE email = ?"
 
@@ -121,20 +121,20 @@ class UserTable : ObservableObject {
                 return User(id: id, name: name, description: description, email: email)
             }
         } catch {
-            print("Error retrieving data get user in user table : \(error)")
+            throw error
         }
 
         return User(id: 0, name: "", description: "", email: "")
     }
     
-    func remove(id:Int64) {
+    func remove(id:Int64) throws {
         guard let db = db else { return }
         
         do {
             let remove = "DELETE FROM User WHERE id = ?"
             try db.run(remove, id)
         } catch {
-            print("Error received on remove user from user table  :\(error)")
+            throw error
         }
     }
 }

@@ -13,14 +13,15 @@ class Filter : ObservableObject {
     var limit:SearchFilter.Limit = SearchFilter.Limit.FIVE
     var skip:Int = 0
     
-    func setSearchFilter(searchItem:SearchFilter) {
-        Filter.searchFilterResult = TodoList.shared.getSearchFilteredTodo(searchItem: searchItem)
+    func setSearchFilter(searchItem:SearchFilter) throws {
+        do {
+            Filter.searchFilterResult = try TodoList.shared.getSearchFilteredTodo(searchItem: searchItem)
+        } catch {
+            throw error
+        }
     }
 
     func getSearchFilter() -> [Todo] {
-        print("search filter out")
-        print(Filter.searchFilterResult)
-
         let filteredSequence = Filter.searchFilterResult
         return Array(filteredSequence)
     }

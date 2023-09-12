@@ -6,6 +6,7 @@ import Foundation
 import SwiftUI
 
 struct ForgotPasswordView : View {
+
     @Binding var email:String
     @State var password:String = ""
     @State var reEnteredPassword = ""
@@ -21,10 +22,11 @@ struct ForgotPasswordView : View {
                     .edgesIgnoringSafeArea(.all)
 
             VStack {
-
                 Text("Forgot Password ?")
                         .font(.title2)
                         .padding(.bottom, 50)
+                        .padding(.horizontal,20)
+
                 VStack(spacing: 30) {
 
                     TextField("  Email", text: $email)
@@ -32,22 +34,35 @@ struct ForgotPasswordView : View {
                             .background(.white)
                             .cornerRadius(10)
                             .foregroundColor(.black)
-                            .frame(width: .infinity, height: 50)
+                            .frame( height: 50)
+                            .padding(.horizontal, 20)
 
                     PasswordView(isPasswordVisible: $isPasswordVisible, password: $password, text: "Enter Your Password")
+                            .padding(.horizontal, 20)
                     PasswordView(isPasswordVisible: $isPasswordVisible, password: $reEnteredPassword, text: "Re Enter Your Password")
+                            .padding(.horizontal, 20)
 
                     HStack {
-                        NavigationLink("", destination: LoginView(), isActive: $showLogin)
+                        NavigationLink( destination: LoginView(), isActive: $showLogin) {Text("")}
                                 .navigationBarBackButtonHidden(true)
 
                         Button(action: {
+                            password = UserValidation.shared.encryptPassword(password)
+                            reEnteredPassword = UserValidation.shared.encryptPassword(reEnteredPassword)
+
                             if !email.isEmpty && !password.isEmpty && !reEnteredPassword.isEmpty && password == reEnteredPassword {
-                                UserList.shared.updatePassword(email: email, password: password)
+                                do {
+                                    try UserList.shared.updatePassword(email: email, password: password)
+                                } catch {
+                                    message = "\(error)"
+                                    isToastVisible.toggle()
+                                }
                                 print(email, password)
                                 showLogin.toggle()
+                            } else if (password != reEnteredPassword ){
+                                message = "passwords are not matched"
                             } else {
-                                message = "Email is not exists"
+                                message = "email doesn't exists"
                             }
                             isToastVisible.toggle()
                         }) {
@@ -55,7 +70,7 @@ struct ForgotPasswordView : View {
                                     .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
-                                    .frame(width: UIScreen.main.bounds.width - 200)
+                                    .frame(width: UIScreen.main.bounds.width - 250)
                         }
                                 .background(.secondary)
                                 .cornerRadius(10)
@@ -69,16 +84,20 @@ struct ForgotPasswordView : View {
                                     .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
-                                    .frame(width: UIScreen.main.bounds.width - 200)
+                                    .frame(width: UIScreen.main.bounds.width - 250)
                         }
                                 .background(.secondary)
                                 .cornerRadius(10)
                                 .padding(.top, 40)
                     }
+                            .padding()
                 }
                 Spacer()
             }
+
+                    .padding(.vertical, 140)
         }
                 .navigationBarBackButtonHidden(true)
+                .toast(isPresented: $isToastVisible, message: $message)
     }
 }

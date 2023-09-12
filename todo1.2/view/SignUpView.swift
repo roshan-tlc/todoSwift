@@ -13,7 +13,7 @@ struct SignUpView : View {
     @State var showLogin = false
     @State var isPasswordVisible = false
     @State var isToastVisible = false
-    @State var message = ""
+    @State var toastMessage = ""
     @Environment(\.presentationMode) var presentation
 
     private var isNotEmpty: Bool {
@@ -56,29 +56,37 @@ struct SignUpView : View {
 
 
                         Button(action: {
+                            do {
+                                let emails = try CredentialTable.shared.getAllEmail()
+                                password = UserValidation.shared.encryptPassword(password)
+                                reEnteredPassword = UserValidation.shared.encryptPassword(reEnteredPassword)
+                                print(password, "password")
+                                print(reEnteredPassword, "reentered password")
 
-                            let emails = CredentialTable.shared.getAllEmail()
-                            password = UserValidation.shared.encryptPassword(password)
-                            reEnteredPassword = UserValidation.shared.encryptPassword(reEnteredPassword)
-                            print(password , "password")
-                            print(reEnteredPassword, "reentered password")
-                            
-                            if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) && !emails.contains(email) {
-                                UserList.shared.add(name: name, description: "", email: email, password: password)
-                                print(password, "    ", reEnteredPassword)
-                                showLogin.toggle()
-                            } else {
-                                if password != reEnteredPassword {
-                                    message = "password is not matched"
+                                if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) && !emails.contains(email) {
+                                    try UserList.shared.add(name: name, description: "", email: email, password: password)
+                                    print(password, "    ", reEnteredPassword)
+                                    toastMessage = "Sign in successful"
                                     isToastVisible.toggle()
-                                }
-                                if !email.isEmpty && emails.contains(emails) {
-                                    message = "The email is already exists"
-                                    isToastVisible.toggle()
+
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        showLogin.toggle()
+                                    }
                                 } else {
-                                    message = "Enter a valid details"
-                                    isToastVisible.toggle()
+                                    if password != reEnteredPassword {
+                                        toastMessage = "password is not matched"
+                                        isToastVisible.toggle()
+                                    }
+                                    if !email.isEmpty && emails.contains(emails) {
+                                        toastMessage = "The email is already exists"
+                                        isToastVisible.toggle()
+                                    } else {
+                                        toastMessage = "Enter a valid details"
+                                        isToastVisible.toggle()
+                                    }
                                 }
+                            } catch {
+                                toastMessage = "\(error)"
                             }
                         }) {
                             Text("Sign Up")
@@ -91,7 +99,7 @@ struct SignUpView : View {
                                 .cornerRadius(10)
                                 .padding(.top, 40)
                     }
-                            .toast(isPresented: $isToastVisible, message: $message)
+                            .toast(isPresented: $isToastVisible, message: $toastMessage)
                 }
                 Spacer()
 
@@ -114,6 +122,7 @@ struct SignUpView : View {
                     Spacer()
                 }
             }
+            .padding()
         }
     }
 }
@@ -133,7 +142,7 @@ struct PasswordView : View {
                             .padding()
                             .foregroundColor(.black)
                             .background(.white)
-                            .frame(width: .infinity, height: 50)
+                            .frame( height: 50)
                             .cornerRadius(10)
                 } else {
                     SecureField(text, text: $password)
@@ -153,7 +162,7 @@ struct PasswordView : View {
                 .padding()
                 .foregroundColor(.black)
                 .background(.white)
-                .frame(width: .infinity, height: 50)
+                .frame(height: 50)
                 .cornerRadius(10)
 
     }

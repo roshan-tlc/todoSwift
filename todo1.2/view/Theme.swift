@@ -5,6 +5,8 @@ struct Theme: View {
     @State var fontSize: ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
     @State var fontFamily: ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
     @State var defaultColor: ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
+    @State var isToastVisible = false
+    @State var toastMessage = ""
     @State var isLogout = false
 
     var body: some View {
@@ -29,7 +31,12 @@ struct Theme: View {
                                         .accentColor(.primary)
                                         .padding()
                                         .onChange(of: fontFamily) { newValue in
-                                            ApplicationTheme.shared.setFontFamily(fontFamily: fontFamily.rawValue)
+                                            do {
+                                                try ApplicationTheme.shared.setFontFamily(fontFamily: fontFamily.rawValue)
+                                            } catch {
+                                                toastMessage = "\(error)"
+                                                isToastVisible.toggle()
+                                            }
                                             ApplicationTheme.shared.fontFamily = fontFamily
                                         }
                             }
@@ -51,7 +58,12 @@ struct Theme: View {
                                         .accentColor(.primary)
                                         .padding(.horizontal)
                                         .onChange(of: fontSize) { newValue in
-                                            ApplicationTheme.shared.setFontSize(fontSize: fontSize)
+                                            do {
+                                                try ApplicationTheme.shared.setFontSize(fontSize: fontSize)
+                                            } catch {
+                                                toastMessage = "\(error)"
+                                                isToastVisible.toggle()
+                                            }
                                             ApplicationTheme.shared.fontSize = fontSize
                                         }
                             }
@@ -74,7 +86,11 @@ struct Theme: View {
                                         .accentColor(.primary)
                                         .padding(.horizontal)
                                         .onChange(of: defaultColor) { newValue in
-                                            ApplicationTheme.shared.setDefaultColor(color: defaultColor)
+                                            do {
+                                                try ApplicationTheme.shared.setDefaultColor(color: defaultColor)
+                                            } catch {
+                                                toastMessage = "\(error)"
+                                            }
                                             ApplicationTheme.shared.defaultColor = defaultColor
                                         }
                             }
@@ -84,6 +100,7 @@ struct Theme: View {
                     }
                 }
             }
+                    .toast(isPresented:$isToastVisible , message: $toastMessage)
         }
     }
 }

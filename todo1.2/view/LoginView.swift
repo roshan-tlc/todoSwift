@@ -6,34 +6,40 @@ import Foundation
 import SwiftUI
 
 
-struct LoginView : View {
-    @State private var email:String = ""
-    @State private var password:String = ""
+struct LoginView: View {
+
+    @State private var email: String = ""
+    @State private var password: String = ""
     @State private var showLogin = false
     @State private var isPasswordVisible = false
-    @State private var showToast = false
+    @State private var isToastVisible = false
     @State private var toastMessage = ""
+    @State private var userId:Int64?
 
     init() {
-        UserTable.shared.createTable()
-        ProjectTable.shared.createTable()
-        TodoTable.shared.createTable()
-        ThemeTable.shared.createTable()
-        UserTable.shared.createTable()
-        CredentialTable.shared.createTable()
+        do {
+            try UserTable.shared.createTable()
 
-        if ThemeTable.shared.getFirstId() == 0 {
-            ThemeTable.shared.insert(theme: ApplicationTheme.shared)
+            try ProjectTable.shared.createTable()
+            try TodoTable.shared.createTable()
+            try ThemeTable.shared.createTable()
+            try CredentialTable.shared.createTable()
+
+            if try ThemeTable.shared.getFirstId() == 0 {
+                try ThemeTable.shared.insert(theme: ApplicationTheme.shared)
+            }
+
+            ApplicationTheme.shared.defaultColor = try ThemeTable.shared.getColor()
+            ApplicationTheme.shared.fontSize = try ThemeTable.shared.getFontSize()
+            ApplicationTheme.shared.fontFamily = try ThemeTable.shared.getFontFamily()
+        } catch {
+            toastMessage = "Error at \(error)"
+            isToastVisible.toggle()
         }
-
-        ApplicationTheme.shared.defaultColor = ThemeTable.shared.getColor()
-        ApplicationTheme.shared.fontSize = ThemeTable.shared.getFontSize()
-        ApplicationTheme.shared.fontFamily = ThemeTable.shared.getFontFamily()
-
     }
 
-    var body : some View {
-        NavigationView {
+    var body: some View {
+        NavigationStack {
             ZStack {
                 ApplicationTheme.shared.defaultColor.color
                         .edgesIgnoringSafeArea(.all)
@@ -66,37 +72,41 @@ struct LoginView : View {
                         }
 
                         HStack {
-                            let userId = UserList.shared.userValidation(email: email, password: UserValidation.shared.encryptPassword(password))
-                            NavigationLink("", destination : AppView(userId: userId), isActive: $showLogin)
 
-                            Button(action: {
-
-                                if  userId != 0  {
-                                    showLogin.toggle()
-                                } else {
-                                    if email.isEmpty {
-                                        toastMessage.append("email is empty\n")
+                                NavigationLink("", destination: AppView(userId: userId ?? 0), isActive: $showLogin)
+                                Button(action: {
+                                    do {
+                                        userId = try UserList.shared.userValidation(email: email, password: UserValidation.shared.encryptPassword(password))
+                                    } catch {
+                                        toastMessage = "\(error)"
+                                        isToastVisible.toggle()
                                     }
-                                    if password.isEmpty {
-                                        toastMessage.append("password is empty\n")
+
+                                    if userId != 0 && userId != nil {
+                                        showLogin.toggle()
                                     } else {
-                                        toastMessage = "Sign In UnSuccessful"
+                                        if email.isEmpty {
+                                            toastMessage.append("email is empty\n")
+                                        }
+                                        if password.isEmpty {
+                                            toastMessage.append("password is empty\n")
+                                        } else {
+                                            toastMessage = "Invalid email or password \n Sign In UnSuccessful"
+                                        }
+                                        isToastVisible.toggle()
                                     }
-                                    showToast.toggle()
+                                }) {
+                                    Text("Sign In")
+                                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
+                                            .padding(.vertical)
+                                            .foregroundColor(.primary)
+                                            .frame(width: UIScreen.main.bounds.width - 50)
                                 }
-                            }) {
-                                Text("Sign In")
-                                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
-                                        .padding(.vertical)
-                                        .foregroundColor(.primary)
-                                        .frame(width: UIScreen.main.bounds.width - 50)
-                            }
-                                    .background(.secondary)
-                                    .cornerRadius(10)
-                                    .padding(.bottom, 10)
-
+                                        .background(.secondary)
+                                        .cornerRadius(10)
+                                        .padding(.bottom, 10)
                         }
-                                .toast(isPresented:$showToast, message: $toastMessage)
+                                .toast(isPresented: $isToastVisible, message: $toastMessage)
                     }
 
 
@@ -121,6 +131,7 @@ struct LoginView : View {
                             .padding(.top, 40)
 
                 }
+                        .padding()
             }
         }
                 .navigationBarBackButtonHidden(true) //
@@ -151,15 +162,14 @@ struct ToastModifier: ViewModifier {
             if isPresented {
                 ToastView(message: message)
                         .offset(y: 200)
-                        .animation(.default)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                withAnimation {
-                                    isPresented = false
-                                }
+                                isPresented = false
                             }
                         }
-                        .onDisappear { message = "" }
+                        .onDisappear {
+                            message = ""
+                        }
             }
         }
     }

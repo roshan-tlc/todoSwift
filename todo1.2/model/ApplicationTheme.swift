@@ -81,18 +81,30 @@ class ApplicationTheme : ObservableObject {
         return DefaultColor.blue
     }
     
-    func setFontFamily(fontFamily:String) {
-        theme.updateFontFamily(fontFamily: fontFamily)
+    func setFontFamily(fontFamily:String) throws {
+        do {
+            try theme.updateFontFamily(fontFamily: fontFamily)
+        } catch {
+            throw error
+        }
         self.fontFamily = setFontFamily(value: fontFamily)
     }
     
-    func setFontSize(fontSize:ApplicationTheme.FontSize) {
-        theme.updateFontSize(fontSize: fontSize.rawValue)
+    func setFontSize(fontSize:ApplicationTheme.FontSize) throws  {
+        do {
+            try theme.updateFontSize(fontSize: fontSize.rawValue)
+        } catch {
+            throw error
+        }
         self.fontSize = fontSize
     }
     
-    func setDefaultColor(color: ApplicationTheme.DefaultColor) {
-        theme.updateColor(color: color.rawValue)
+    func setDefaultColor(color: ApplicationTheme.DefaultColor) throws {
+        do {
+            try theme.updateColor(color: color.rawValue)
+        } catch {
+            throw error
+        }
         defaultColor = color
     }
     
