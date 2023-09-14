@@ -21,7 +21,7 @@ class UserTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-           // try db.run("drop table User")
+            //try db.run("drop table User")
             try db.run("CREATE TABLE IF NOT EXISTS User (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, email TEXT)")
         } catch {
             throw error

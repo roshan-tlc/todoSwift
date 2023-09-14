@@ -68,4 +68,5 @@ class Todo : Identifiable {
         case unCompleted = 0
         case completed  = 1
     }
+
 }

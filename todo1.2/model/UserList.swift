@@ -5,6 +5,7 @@
 import Foundation
 
 class UserList : ObservableObject{
+
     @Published var usersList = [User]()
     private let userTable =  UserTable.shared
     private let credentialTable = CredentialTable.shared
@@ -13,15 +14,10 @@ class UserList : ObservableObject{
 
     private init () {}
 
-    func add (name:String, description:String, email:String, password:String) throws {
-        do {
-            try userTable.insert(user: User(id: id, name: name, description: description, email: email))
-            try credentialTable.insert(id: userTable.getId(email: email), email: email, password: password)
-            id += 1
-        } catch {
-            throw error
-        }
+    func add(name: String, description: String, email: String, password: String, hint: String, completion: @escaping (Bool) -> Void) {
+
     }
+
 
     func update (id: Int64, name:String, description:String, email:String) throws {
         do {
@@ -31,9 +27,11 @@ class UserList : ObservableObject{
         }
     }
 
-    func userValidation(email:String, password:String) throws -> Int64 {
+    func userValidation(email:String, password:String)  throws -> Int64 {
         do {
+            //return try await LoginService.shared.signIn(email:email , password: password)
             return try credentialTable.validation(email: email, password: password)
+
         } catch {
             throw error
         }
@@ -79,4 +77,8 @@ class UserList : ObservableObject{
             throw error
         }
     }
+}
+
+struct Users {
+
 }

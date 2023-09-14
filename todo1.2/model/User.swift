@@ -7,7 +7,7 @@
 
 import Foundation
 
-class User : Identifiable {
+class User : Identifiable, Codable {
     internal var id:Int64
     private var name:String
     private var description:String

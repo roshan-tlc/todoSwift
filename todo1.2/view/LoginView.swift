@@ -14,6 +14,7 @@ struct LoginView: View {
     @State private var isPasswordVisible = false
     @State private var isToastVisible = false
     @State private var toastMessage = ""
+    @State private var user:User?
     @State private var userId:Int64?
 
     init() {
@@ -75,12 +76,18 @@ struct LoginView: View {
 
                                 NavigationLink("", destination: AppView(userId: userId ?? 0), isActive: $showLogin)
                                 Button(action: {
-                                    do {
-                                        userId = try UserList.shared.userValidation(email: email, password: UserValidation.shared.encryptPassword(password))
-                                    } catch {
+                                        //userId = try UserList.shared.userValidation(email: email, password: UserValidation.shared.encryptPassword(password))
+
+                                Authentication.shared.signIn(email: email, password: password) { id, error in
+                                    if let error = error {
                                         toastMessage = "\(error)"
-                                        isToastVisible.toggle()
+                                            isToastVisible.toggle()
+                                        }
+                                    if id != 0 {
+                                        userId = id
+                                        showLogin.toggle()
                                     }
+                                }
 
                                     if userId != 0 && userId != nil {
                                         showLogin.toggle()
@@ -161,7 +168,7 @@ struct ToastModifier: ViewModifier {
             content
             if isPresented {
                 ToastView(message: message)
-                        .offset(y: 200)
+                        .offset(y: 180)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 isPresented = false

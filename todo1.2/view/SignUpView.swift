@@ -10,10 +10,13 @@ struct SignUpView : View {
     @State var email:String = ""
     @State var password:String = ""
     @State var reEnteredPassword = ""
+    @State var description = ""
+    @State var hint = ""
     @State var showLogin = false
     @State var isPasswordVisible = false
     @State var isToastVisible = false
     @State var toastMessage = ""
+    private var id:Int64 = 1
     @Environment(\.presentationMode) var presentation
 
     private var isNotEmpty: Bool {
@@ -32,7 +35,7 @@ struct SignUpView : View {
                         .padding(.bottom, 50)
                 VStack(spacing: 30) {
 
-                    TextField("  Name", text: $name)
+                    TextField(" Name", text: $name)
                             .accessibility(hint: Text("Text is not empty"))
                             .padding()
                             .background(.white)
@@ -40,7 +43,14 @@ struct SignUpView : View {
                             .foregroundColor(.black)
                             .frame(width: .infinity, height: 50)
 
-                    TextField("  Email", text: $email)
+                    TextField(" Email", text: $email)
+                            .padding()
+                            .background(.white)
+                            .cornerRadius(10)
+                            .foregroundColor(.black)
+                            .frame(width: .infinity, height: 50)
+
+                    TextField(" description", text: $description)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
@@ -50,27 +60,40 @@ struct SignUpView : View {
                     PasswordView(isPasswordVisible: $isPasswordVisible, password: $password, text: "Enter Your Password")
                     PasswordView(isPasswordVisible: $isPasswordVisible, password: $reEnteredPassword, text: "Re Enter Your Password")
 
+                    TextField(" hint", text: $hint)
+                            .padding()
+                            .background(.white)
+                            .cornerRadius(10)
+                            .foregroundColor(.black)
+                            .frame(width: .infinity, height: 50)
+
                     HStack {
 
                         NavigationLink("", destination:LoginView(), isActive: $showLogin) //
 
-
                         Button(action: {
                             do {
                                 let emails = try CredentialTable.shared.getAllEmail()
-                                password = UserValidation.shared.encryptPassword(password)
-                                reEnteredPassword = UserValidation.shared.encryptPassword(reEnteredPassword)
-                                print(password, "password")
-                                print(reEnteredPassword, "reentered password")
-
+                                if !password.isEmpty && !reEnteredPassword.isEmpty {
+                                    password = UserValidation.shared.encryptPassword(password)
+                                    reEnteredPassword = UserValidation.shared.encryptPassword(reEnteredPassword)
+                                }
                                 if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) && !emails.contains(email) {
-                                    try UserList.shared.add(name: name, description: "", email: email, password: password)
-                                    print(password, "    ", reEnteredPassword)
-                                    toastMessage = "Sign in successful"
-                                    isToastVisible.toggle()
+                                    let user = User(id: id, name: name, description: description, email: email)
+                                    let credential = Credential(id: id, email: email, password: password, hint: hint)
 
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                        showLogin.toggle()
+                                    Authentication.shared.signUp(user: user, credential: credential) { result, error in
+                                        if let error = error {
+                                            print("Sign-up error: \(error)")
+                                            toastMessage = "\(error)"
+                                            isToastVisible.toggle()
+                                        } else {
+                                            toastMessage = "sign up successfully"
+                                            isToastVisible.toggle()
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                showLogin.toggle()
+                                            }
+                                        }
                                     }
                                 } else {
                                     if password != reEnteredPassword {
@@ -87,6 +110,7 @@ struct SignUpView : View {
                                 }
                             } catch {
                                 toastMessage = "\(error)"
+                                isToastVisible.toggle()
                             }
                         }) {
                             Text("Sign Up")
@@ -122,7 +146,7 @@ struct SignUpView : View {
                     Spacer()
                 }
             }
-            .padding()
+                    .padding()
         }
     }
 }

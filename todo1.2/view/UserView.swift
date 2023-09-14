@@ -49,7 +49,7 @@ struct UserView : View {
                         .padding(.bottom, 10)
                         .padding(5)
             }
-                    .frame(width: 140)
+                    .frame(width: 130)
 
             VStack {
                 NavigationLink(destination: LoginView()) {
@@ -72,6 +72,7 @@ struct UserView : View {
             }
             Spacer()
         }
+        .padding(15)
                 .toast(isPresented: $isToastVisible, message: $toastMessage)
                 .frame(width: .infinity, height: 80,alignment: .top)
     }
@@ -86,11 +87,6 @@ struct UserView : View {
     }
     
     func reload() {
-        do {
-            user = getUser(userId: user.getId() )
-        } catch {
-            toastMessage = "\(error)"
-            isToastVisible.toggle()
-        }
+        user = getUser(userId: user.getId())
     }
 }

@@ -17,22 +17,22 @@ class CredentialTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-           // try db.run("Drop table Credential")
-            try db.run("CREATE TABLE IF NOT EXISTS Credential (id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL)")
+            //try db.run("Drop table Credential")
+            try db.run("CREATE TABLE IF NOT EXISTS Credential (id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL, hint TEXT)")
         } catch {
             throw error
         }
     }
 
-    func insert(id:Int64, email:String, password:String) throws {
+    func insert(credential:Credential) throws {
 
         guard let db = db else { return }
 
-        let query = "INSERT INTO Credential (id, email, password) VALUES (?,?,?)"
+        let query = "INSERT INTO Credential (id, email, password, hint) VALUES (?,?,?,?)"
 
         do {
-            try db.run(query, id, email, password)
-
+            try db.run(query, credential.getId(), credential.getEmail(), credential.getPassword(), credential.getHint())
+            print(credential.getId(), credential.getEmail(), credential.getPassword(), credential.getHint())
         } catch {
             throw error
         }
@@ -45,7 +45,7 @@ class CredentialTable : ObservableObject {
         let query = " SELECT id from Credential WHERE email = ? and password = ? "
 
         do {
-            for row in try db.prepare(query,email, password) {
+            for row in try db.prepare(query, email, password) {
                 let id = row[0] as! Int64
                 if id > 0 {
                     return id
@@ -87,13 +87,13 @@ class CredentialTable : ObservableObject {
         return emails
     }
 
-    func update(id:Int64, email:String, password:String) throws  {
+    func update(credential:Credential) throws  {
         guard let db = db else { return }
 
-        let query = " UPDATE Credential SET email = ? , password = ?  WHERE id = ?"
+        let query = " UPDATE Credential SET email = ? , password = ? , hint = ? WHERE id = ?"
 
         do {
-            try db.run(query, email, password, id)
+            try db.run(query, credential.getEmail(), credential.getPassword(), credential.getHint(), credential.getId())
         } catch {
             throw error
         }
