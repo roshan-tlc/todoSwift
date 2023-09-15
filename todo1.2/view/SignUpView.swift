@@ -74,25 +74,26 @@ struct SignUpView : View {
                         Button(action: {
                             do {
                                 let emails = try CredentialTable.shared.getAllEmail()
-                                if !password.isEmpty && !reEnteredPassword.isEmpty {
-                                    password = UserValidation.shared.encryptPassword(password)
-                                    reEnteredPassword = UserValidation.shared.encryptPassword(reEnteredPassword)
-                                }
                                 if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) && !emails.contains(email) {
                                     let user = User(id: id, name: name, description: description, email: email)
                                     let credential = Credential(id: id, email: email, password: password, hint: hint)
 
                                     Authentication.shared.signUp(user: user, credential: credential) { result, error in
+                                        print(result)
                                         if let error = error {
                                             print("Sign-up error: \(error)")
                                             toastMessage = "\(error)"
                                             isToastVisible.toggle()
-                                        } else {
+                                        } else if result == true {
                                             toastMessage = "sign up successfully"
                                             isToastVisible.toggle()
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                            print("success message", result)
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                                 showLogin.toggle()
                                             }
+                                        } else {
+                                            toastMessage = "\(result)"
+                                            isToastVisible.toggle()
                                         }
                                     }
                                 } else {

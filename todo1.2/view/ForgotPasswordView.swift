@@ -11,8 +11,10 @@ struct ForgotPasswordView : View {
     @State var password:String = ""
     @State var reEnteredPassword = ""
     @State var showLogin = false
+    @State var oldHint = ""
+    @State var newHint = ""
     @State var isToastVisible = false
-    @State var message = ""
+    @State var toastMessage = ""
     @State var isPasswordVisible = false
     @Environment(\.presentationMode) var presentation
 
@@ -29,7 +31,23 @@ struct ForgotPasswordView : View {
 
                 VStack(spacing: 30) {
 
-                    TextField("  Email", text: $email)
+                    TextField("Email", text: $email)
+                            .padding()
+                            .background(.white)
+                            .cornerRadius(10)
+                            .foregroundColor(.black)
+                            .frame( height: 50)
+                            .padding(.horizontal, 20)
+
+                    TextField("old hint", text: $oldHint)
+                            .padding()
+                            .background(.white)
+                            .cornerRadius(10)
+                            .foregroundColor(.black)
+                            .frame( height: 50)
+                            .padding(.horizontal, 20)
+
+                    TextField("new hint ", text: $newHint)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
@@ -47,22 +65,29 @@ struct ForgotPasswordView : View {
                                 .navigationBarBackButtonHidden(true)
 
                         Button(action: {
-                            password = UserValidation.shared.encryptPassword(password)
-                            reEnteredPassword = UserValidation.shared.encryptPassword(reEnteredPassword)
 
                             if !email.isEmpty && !password.isEmpty && !reEnteredPassword.isEmpty && password == reEnteredPassword {
-                                do {
-                                    try UserList.shared.updatePassword(email: email, password: password)
-                                } catch {
-                                    message = "\(error)"
-                                    isToastVisible.toggle()
+                                Authentication.shared.forgotPassword(email: email, password: password, oldHint: oldHint, newHint: newHint) { result, error in
+                                    print(result, error)
+                                    if let error = error  {
+                                        toastMessage = "\(error) \n password changed unsuccessful"
+                                        isToastVisible.toggle()
+                                    }
+
+                                    if result == true {
+                                        toastMessage = "Password changed successfully"
+                                        isToastVisible.toggle()
+                                        showLogin.toggle()
+                                    } else {
+                                        toastMessage = "Password changed unsuccessful"
+                                        isToastVisible.toggle()
+                                    }
                                 }
-                                print(email, password)
-                                showLogin.toggle()
+
                             } else if (password != reEnteredPassword ){
-                                message = "passwords are not matched"
+                                toastMessage = "passwords are not matched"
                             } else {
-                                message = "email doesn't exists"
+                                toastMessage = "email doesn't exists"
                             }
                             isToastVisible.toggle()
                         }) {
@@ -75,7 +100,7 @@ struct ForgotPasswordView : View {
                                 .background(.secondary)
                                 .cornerRadius(10)
                                 .padding(.top, 40)
-                                .toast(isPresented: $isToastVisible, message: $message)
+                                .toast(isPresented: $isToastVisible, message: $toastMessage)
 
                         Button(action: {
                             presentation.wrappedValue.dismiss()
@@ -98,6 +123,6 @@ struct ForgotPasswordView : View {
                     .padding(.vertical, 140)
         }
                 .navigationBarBackButtonHidden(true)
-                .toast(isPresented: $isToastVisible, message: $message)
+                .toast(isPresented: $isToastVisible, message: $toastMessage)
     }
 }

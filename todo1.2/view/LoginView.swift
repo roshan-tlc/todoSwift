@@ -14,8 +14,8 @@ struct LoginView: View {
     @State private var isPasswordVisible = false
     @State private var isToastVisible = false
     @State private var toastMessage = ""
-    @State private var user:User?
-    @State private var userId:Int64?
+    @State private var user: User?
+    @State private var userId: Int64?
 
     init() {
         do {
@@ -74,44 +74,37 @@ struct LoginView: View {
 
                         HStack {
 
-                                NavigationLink("", destination: AppView(userId: userId ?? 0), isActive: $showLogin)
-                                Button(action: {
-                                        //userId = try UserList.shared.userValidation(email: email, password: UserValidation.shared.encryptPassword(password))
-
-                                Authentication.shared.signIn(email: email, password: password) { id, error in
-                                    if let error = error {
-                                        toastMessage = "\(error)"
+                            NavigationLink("", destination: AppView(userId: userId ?? 0), isActive: $showLogin)
+                            Button(action: {
+                                     Authentication.shared.signIn(email: email, password: password) { result, error in
+                                        if let error = error {
+                                            toastMessage = "\(error)"
+                                            isToastVisible.toggle()
+                                        } else if result == true {
+                                            toastMessage = "Login successful"
+                                            showLogin.toggle()
+                                        } else {
+                                            if email.isEmpty {
+                                                toastMessage.append("email is empty\n")
+                                            }
+                                            if password.isEmpty {
+                                                toastMessage.append("password is empty\n")
+                                            } else {
+                                                toastMessage = "Invalid email or password \n Sign In UnSuccessful"
+                                            }
                                             isToastVisible.toggle()
                                         }
-                                    if id != 0 {
-                                        userId = id
-                                        showLogin.toggle()
                                     }
-                                }
-
-                                    if userId != 0 && userId != nil {
-                                        showLogin.toggle()
-                                    } else {
-                                        if email.isEmpty {
-                                            toastMessage.append("email is empty\n")
-                                        }
-                                        if password.isEmpty {
-                                            toastMessage.append("password is empty\n")
-                                        } else {
-                                            toastMessage = "Invalid email or password \n Sign In UnSuccessful"
-                                        }
-                                        isToastVisible.toggle()
-                                    }
-                                }) {
-                                    Text("Sign In")
-                                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
-                                            .padding(.vertical)
-                                            .foregroundColor(.primary)
-                                            .frame(width: UIScreen.main.bounds.width - 50)
-                                }
-                                        .background(.secondary)
-                                        .cornerRadius(10)
-                                        .padding(.bottom, 10)
+                            }) {
+                                Text("Sign In")
+                                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
+                                        .padding(.vertical)
+                                        .foregroundColor(.primary)
+                                        .frame(width: UIScreen.main.bounds.width - 50)
+                            }
+                                    .background(.secondary)
+                                    .cornerRadius(10)
+                                    .padding(.bottom, 10)
                         }
                                 .toast(isPresented: $isToastVisible, message: $toastMessage)
                     }

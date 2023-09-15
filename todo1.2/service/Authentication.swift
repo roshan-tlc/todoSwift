@@ -4,11 +4,13 @@
 
 import Foundation
 
+
 class Authentication: ObservableObject {
 
     static let shared = Authentication()
 
-    private init() {}
+    private init() {
+    }
 
     func signUp(user: User, credential: Credential, completion: @escaping (Bool, Error?) -> Void) {
         if let url = URL(string: "http://localhost:8080/api/v1/user/signup") {
@@ -33,66 +35,106 @@ class Authentication: ObservableObject {
                                 if httpResponse.statusCode == 200 {
                                     completion(true, error)
                                 } else {
-                                    completion(false, error)
+                                    completion(false, Service.APIErrors.INVALID_RESPONSE)
                                 }
                             } else if let error = error {
                                 completion(false, error)
                             }
-                        }.resume()
+                        }
+                        .resume()
             }
         }
     }
 
-    func signIn(email: String, password: String, completion: @escaping (Int64?, Error?) -> Void) {
-        if let url = URL(string: "http://localhost:8080/api/v1/user/login") {
+    func signIn(email: String, password: String, completion: @escaping (Bool , Error?) -> Void) {
+
+        guard let url = URL(string: "http://localhost:8080/api/v1/user/login") else {
+            completion(false, Service.APIErrors.INVALID_URL_ERROR)
+            return
+        }
+
+        let credentials = ["email": email, "password": password]
+
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: credentials)
+
             var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = jsonData
 
-            let userData = [
-                "email": email,
-                "password": password
-            ]
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
-            if let jsonData = try? JSONSerialization.data(withJSONObject: userData) {
-                request.httpMethod = "POST"
-                request.httpBody = jsonData
-                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
 
-                URLSession.shared.dataTask(with: request) { data, response, error in
-                            if let error = error {
-                                completion(nil, error)
-                                return
-                            }
+                if let error = error {
+                    completion(false, error)
+                    return
+                }
 
-                            guard let httpResponse = response as? HTTPURLResponse else {
-                                completion(nil, NSError(domain: "Invalid Response", code: 0, userInfo: nil))
-                                return
-                            }
-
-                            print("status code", httpResponse.statusCode)
-
-                            if httpResponse.statusCode == 200, let data = data {
-                                do {
-                                    if let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                                       let dataDict = jsonDict["data"] as? [String: Any],
-                                       let token = dataDict["token"] as? String {
-                                        if let tokenData = token.data(using: .utf8),
-                                           let tokenJSON = try JSONSerialization.jsonObject(with: tokenData, options: []) as? [String: Any],
-                                           let userIDString = tokenJSON["id"] as? String,
-                                           let userID = Int64(userIDString) {
-                                            completion(userID, nil)
-                                        } else {
-                                            print("Failed to decode token")
-                                        }
-                                    }
-                                } catch {
-                                    completion(nil, error)
-                                }
-                            } else {
-                                completion(nil, NSError(domain: "HTTP Error", code: httpResponse.statusCode, userInfo: nil))
-                            }
-                        }.resume()
+                guard let data = data else {
+                    completion(false, nil)
+                    return
+                }
+                do {
+                    if let httpResponse = response as? HTTPURLResponse {
+                        if httpResponse.statusCode == 200 {
+                            completion(true, nil)
+                        } else {
+                            completion(false, nil)
+                        }
+                    }
+                } catch {
+                    completion(false, error)
+                }
             }
+            task.resume()
+        } catch {
+            completion(false, error)
         }
     }
 
+    func forgotPassword(email:String, password:String, oldHint:String, newHint: String, completion : @escaping (Bool, Error?) -> Void) {
+        guard let url = URL(string: "http://localhost:8080/api/v1/user/reset/password")  else {
+            completion(false, Service.APIErrors.INVALID_URL_ERROR)
+            return
+        }
+
+        let credential = ["email":email, "password": password, "oldHint":oldHint, "newHint": newHint]
+
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: credential)
+
+            var request =  URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = jsonData
+            request.addValue("application/json", forHTTPHeaderField: "content-type")
+
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    completion(false, error)
+                }
+
+                guard let data = data else {
+                    completion(false, nil)
+                    return
+                }
+
+                do {
+                    if let httResponse = response as? HTTPURLResponse {
+                        if httResponse.statusCode == 200 {
+                            completion(true, nil)
+                        } else {
+                            completion(false, nil)
+                        }
+                    }
+                } catch {
+                    completion(false, error)
+                }
+            }
+            task.resume()
+        } catch {
+            completion(false, Service.APIErrors.INVALID_RESPONSE)
+        }
+
+    }
 }
