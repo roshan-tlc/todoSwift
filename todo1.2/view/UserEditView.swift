@@ -30,19 +30,19 @@ struct UserEditView: View {
                             .foregroundColor(.white)
                             .padding()
                 }
-                TextField("New Name", text: $userName)
+                TextField(Properties.name, text: $userName)
                         .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                         .frame(alignment: .center)
                         .padding(.leading, 100)
                         .padding()
 
-                TextField("New Description", text: $description)
+                TextField(Properties.description, text: $description)
 
                         .frame(alignment: .center)
                         .padding(.leading, 100)
                         .padding()
 
-                TextField("email", text: $email)
+                TextField(Properties.email, text: $email)
 
                         .frame(alignment: .center)
                         .padding(.leading, 100)
@@ -59,7 +59,7 @@ struct UserEditView: View {
                         }
                         presentation.wrappedValue.dismiss()
                     }) {
-                        Text("Save")
+                        Text(Properties.save)
                     }
                             .frame(width: 80)
                             .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
@@ -69,7 +69,7 @@ struct UserEditView: View {
 
                         presentation.wrappedValue.dismiss()
                     }) {
-                        Text("Cancel")
+                        Text(Properties.cancel)
                     } .frame(width: 80)
                             .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
                             .padding()

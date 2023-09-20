@@ -30,37 +30,37 @@ struct SignUpView : View {
 
             VStack {
 
-                Text("Register User")
+                Text(Properties.registerUser)
                         .font(.title2)
                         .padding(.bottom, 50)
-                VStack(spacing: 30) {
+                VStack(spacing: 20) {
 
-                    TextField(" Name", text: $name)
-                            .accessibility(hint: Text("Text is not empty"))
+                    TextField(Properties.name, text: $name)
+                            .accessibility(hint: Text(Properties.emptyText))
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
                             .foregroundColor(.black)
                             .frame(width: .infinity, height: 50)
 
-                    TextField(" Email", text: $email)
+                    TextField(Properties.email, text: $email)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
                             .foregroundColor(.black)
                             .frame(width: .infinity, height: 50)
 
-                    TextField(" description", text: $description)
+                    TextField(Properties.description, text: $description)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
                             .foregroundColor(.black)
                             .frame(width: .infinity, height: 50)
 
-                    PasswordView(isPasswordVisible: $isPasswordVisible, password: $password, text: "Enter Your Password")
-                    PasswordView(isPasswordVisible: $isPasswordVisible, password: $reEnteredPassword, text: "Re Enter Your Password")
+                    PasswordView(isPasswordVisible: $isPasswordVisible, password: $password, text: Properties.enterPassword)
+                    PasswordView(isPasswordVisible: $isPasswordVisible, password: $reEnteredPassword, text: Properties.reEnterPassword)
 
-                    TextField(" hint", text: $hint)
+                    TextField(Properties.newHint, text: $hint)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
@@ -74,38 +74,33 @@ struct SignUpView : View {
                         Button(action: {
                             do {
                                 let emails = try CredentialTable.shared.getAllEmail()
-                                if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) && !emails.contains(email) {
+                                if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) {
                                     let user = User(id: id, name: name, description: description, email: email)
                                     let credential = Credential(id: id, email: email, password: password, hint: hint)
 
                                     Authentication.shared.signUp(user: user, credential: credential) { result, error in
-                                        print(result)
+                                        print(result, error)
                                         if let error = error {
-                                            print("Sign-up error: \(error)")
                                             toastMessage = "\(error)"
                                             isToastVisible.toggle()
-                                        } else if result == true {
-                                            toastMessage = "sign up successfully"
+                                        } else {
+                                            toastMessage = Properties.signUpSuccessful
                                             isToastVisible.toggle()
-                                            print("success message", result)
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                                 showLogin.toggle()
                                             }
-                                        } else {
-                                            toastMessage = "\(result)"
-                                            isToastVisible.toggle()
                                         }
                                     }
                                 } else {
                                     if password != reEnteredPassword {
-                                        toastMessage = "password is not matched"
+                                        toastMessage = Properties.passwordMisMatched
                                         isToastVisible.toggle()
                                     }
                                     if !email.isEmpty && emails.contains(emails) {
-                                        toastMessage = "The email is already exists"
+                                        toastMessage = Properties.emailExists
                                         isToastVisible.toggle()
                                     } else {
-                                        toastMessage = "Enter a valid details"
+                                        toastMessage = Properties.invalidData
                                         isToastVisible.toggle()
                                     }
                                 }
@@ -114,7 +109,7 @@ struct SignUpView : View {
                                 isToastVisible.toggle()
                             }
                         }) {
-                            Text("Sign Up")
+                            Text(Properties.signUp)
                                     .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
@@ -126,28 +121,25 @@ struct SignUpView : View {
                     }
                             .toast(isPresented: $isToastVisible, message: $toastMessage)
                 }
-                Spacer()
-
                 HStack {
 
-                    Text("Already have an account ?")
+                    Text(Properties.alreadyHaveAnAccount)
                             .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                             .padding()
                             .foregroundColor(.white)
 
                     NavigationLink(destination: LoginView()) {
-                        Text("SignIn")
+                        Text(Properties.signIn)
                                 .underline()
                                 .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                                 .padding()
                                 .foregroundColor(.blue)
 
                     }
-                    Spacer()
-                    Spacer()
                 }
             }
-                    .padding()
+                    .padding(30)
+                    .padding(.bottom, 100)
         }
     }
 }
@@ -181,7 +173,7 @@ struct PasswordView : View {
             }
 
             Button(action: { isPasswordVisible.toggle() }) {
-                Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                Image(systemName: isPasswordVisible ? Properties.eyeFillImage: Properties.eyeSlashFillImage)
             }
         }
                 .padding()

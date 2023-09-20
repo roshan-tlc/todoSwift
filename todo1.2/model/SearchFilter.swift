@@ -12,14 +12,9 @@ class SearchFilter : ObservableObject {
     var attribute:String = ""
     var status:Status = Status.ALL
     var isSearchEnable:Bool = false
-    var parentId:Int64 = 0
+    var parentId:String = ""
     var skip:Int = 0
     var limit:Limit = Limit.FIVE
-    
-//    enum OrderType {
-//        case ASC
-//        case DSC
-//    }
     
     enum Status {
         case ALL
@@ -41,11 +36,11 @@ class SearchFilter : ObservableObject {
         self.status = status
     }
 
-    func setParentId(parentId:Int64) {
+    func setParentId(parentId:String) {
         self.parentId = parentId
     }
 
-    func getParentId() -> Int64 {
+    func getParentId() -> String {
         parentId
     }
 

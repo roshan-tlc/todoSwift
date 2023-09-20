@@ -13,7 +13,7 @@ struct todo1_2App: App {
         WindowGroup {
             LoginView()
                 .environmentObject(ProjectList.shared)
-                .environmentObject(TodoList.shared)
+               // .environmentObject(TodoList.shared)
         }
     }
 }

@@ -11,18 +11,20 @@ struct MenuView: View {
 
     @State var textField: String = ""
     @State var userId: Int64
-    @EnvironmentObject var listView: ProjectList
+    @EnvironmentObject var projectView: ProjectList
     @State var isAddViewVisible = false
     @State var alertTitle: String = ""
     @State var showAlert: Bool = false
     @State var toastMessage = ""
     @State var isToastVisible = false
     @State var returnToMenu = false
+    @State var token:String
+    @State var project = [APIProject]()
 
     var body: some View {
         VStack {
             HStack {
-                Text("Menu")
+                Text(Properties.menu)
                         .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
             }
                     .padding(.top, 20)
@@ -33,7 +35,7 @@ struct MenuView: View {
             }
             VStack {
 
-                Image(systemName: "plus.app")
+                Image(systemName: Properties.plusAppImage)
                         .renderingMode(.original)
                         .onTapGesture {
                             isAddViewVisible.toggle()
@@ -46,43 +48,35 @@ struct MenuView: View {
             }
             if isAddViewVisible {
                 VStack {
-                    TextField("Enter Your Project", text: $textField)
-                            .frame(width: 250, height: 50)
+                    TextField(Properties.enterProject, text: $textField)
+                            .frame(width: 250, height: 30)
                             .background(Color.cyan)
                             .cornerRadius(10)
                             .multilineTextAlignment(.center)
                             .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
 
-                    Button(
-                            action: addProject
-                            , label: {
-                        Text("Add Project")
-                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
-                                .frame(width: 150, height: 50)
+                    Button(action: {
+                        addProject(token: token)
+                    }) {
+                        Text(Properties.addProject)
+                                .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                                .frame(width: 150, height: 30)
                                 .foregroundColor(.black)
-                                .background(.secondary).opacity(0.5)
-                                .multilineTextAlignment(.center)
+                                .background(Color.secondary.opacity(0.5))
                                 .cornerRadius(10)
-                    })
+                    }
                             .alert(isPresented: $showAlert, content: getAlert)
+
                 }
             }
             List {
-                ForEach(listView.projects) { item in
-                    NavigationLink(destination: AppView(project: item, showProject: true, userId: userId)) {
-                        ListRowView(project: item)
+                    ForEach(getAll()) { item in
+                        NavigationLink(destination: AppView(project: item, showProject: true, userId: userId, token: token)) {
+                            ListRowView(project: item)
+                        }
                     }
-                            .onAppear {
-                                do {
-                                    TodoList.shared.todos = try TodoTable.shared.get(parentId: item.id)
-                                } catch {
-                                    toastMessage = "\(error)"
-                                    isToastVisible.toggle()
-                                }
-                            }
+                            .onMove(perform: moveProject)
                 }
-                        .onMove(perform: moveTodo)
-            }
             Spacer()
         }
                 .frame(width: 280)
@@ -92,8 +86,8 @@ struct MenuView: View {
                 .background(ApplicationTheme.shared.defaultColor.color)
     }
 
-    func moveTodo(from source: IndexSet, to destination: Int) {
-        listView.projects.move(fromOffsets: source, toOffset: destination)
+    func moveProject(from source: IndexSet, to destination: Int) {
+        projectView.projects.move(fromOffsets: source, toOffset: destination)
         do {
             try ProjectTable.shared.updateProjectTable()
         } catch {
@@ -102,21 +96,27 @@ struct MenuView: View {
         }
     }
 
-    func addProject() {
+    func addProject(token:String) -> Void {
         if textIsAppropriate() {
-            do {
-                try listView.addProject(title: textField, userId: userId, order: listView.getOrder())
-            } catch {
-                toastMessage = "\(error)"
-                isToastVisible.toggle()
-            }
+                ProjectAPIService.shared.create(name: textField, description: "description", token:token) { result, error in
+                    if let error = error  {
+                        toastMessage = "\(error)\n" + Properties.projectCreatedUnSuccess
+                        isToastVisible.toggle()
+                    } else if result == true  {
+                        toastMessage = Properties.projectCreatedSuccess
+                        isToastVisible.toggle()
+                    } else {
+                        toastMessage = Properties.projectCreatedUnSuccess
+                        isToastVisible.toggle()
+                    }
+                }
             textField = ""
         }
     }
 
     func textIsAppropriate() -> Bool {
         if textField.isEmpty {
-            alertTitle = "Enter a valid todo"
+            alertTitle = Properties.enterValidProject
             showAlert.toggle()
             return false
         }
@@ -125,6 +125,20 @@ struct MenuView: View {
 
     func getAlert() -> Alert {
         Alert(title: Text(alertTitle))
+    }
+
+    func getAll() -> [APIProject] {
+        var projects:[APIProject] = []
+        ProjectAPIService.shared.getAllProjects(token: token) { result in
+            switch result {
+            case .success(let project):
+                projects = project
+            case .failure(let error):
+                toastMessage = "\(error)"
+                isToastVisible.toggle()
+            }
+        }
+        return projects
     }
 }
 
@@ -142,7 +156,7 @@ struct CustomBackButton<Content: View>: View {
         Button(action: {
             self.isActive = false
         }) {
-            Image(systemName: "arrow.left.circle.fill")
+            Image(systemName: Properties.arrowLeftCircleImage)
                     .foregroundColor(.blue)
                     .font(.title)
             content

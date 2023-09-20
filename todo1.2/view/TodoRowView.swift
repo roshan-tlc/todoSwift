@@ -15,7 +15,7 @@ struct TodoRowView: View {
     @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     @State var isToastVisible = false
     @State var toastMessage = ""
-    @EnvironmentObject var todoView: TodoList
+   // @EnvironmentObject var todoView: TodoList
 
     var body: some View {
         HStack {
@@ -44,7 +44,7 @@ struct TodoRowView: View {
 
     func remove() {
         do {
-            try todoView.removeTodo(id: todo.id, userId: todo.getParentId())
+            //try todoView.removeTodo(id: todo.id, userId: todo.getParentId())
         } catch {
             toastMessage = "\(error)"
         }
@@ -55,17 +55,17 @@ struct CheckBox: View {
     
     @Binding var isChecked: Todo.TodoStatus
     @State var todo: Todo
-    @EnvironmentObject var todoView: TodoList
+    //@EnvironmentObject var todoView: TodoList
     @State var isToastVisible = false
     @State var toastMessage = ""
 
     var body: some View {
         VStack {
-            Image(systemName: isChecked.rawValue == 1 ? "checkmark.square" : "square")
+            Image(systemName: isChecked.rawValue == 1 ? Properties.checkmarkImage : Properties.squareImage)
                     .onTapGesture {
                         todo.onCheckBoxClick()
                         do {
-                            try todoView.onCheckBoxClick(todo: todo)
+                            //try todoView.onCheckBoxClick(todo: todo)
                         } catch {
                             toastMessage = "\(error)"
                             isToastVisible.toggle()

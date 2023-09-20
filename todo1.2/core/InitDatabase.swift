@@ -29,4 +29,8 @@ class InitDataBase : Identifiable {
     func getDb() -> Connection? {
         db
     }
+
+    enum dbError : Error {
+        case invalidData
+    }
 }

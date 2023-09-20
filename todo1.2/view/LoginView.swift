@@ -16,13 +16,13 @@ struct LoginView: View {
     @State private var toastMessage = ""
     @State private var user: User?
     @State private var userId: Int64?
+    @State private var token:String?
 
     init() {
         do {
             try UserTable.shared.createTable()
-
             try ProjectTable.shared.createTable()
-            try TodoTable.shared.createTable()
+           // try TodoTable.shared.createTable()
             try ThemeTable.shared.createTable()
             try CredentialTable.shared.createTable()
 
@@ -34,7 +34,7 @@ struct LoginView: View {
             ApplicationTheme.shared.fontSize = try ThemeTable.shared.getFontSize()
             ApplicationTheme.shared.fontFamily = try ThemeTable.shared.getFontFamily()
         } catch {
-            toastMessage = "Error at \(error)"
+            toastMessage = Properties.errorOccurred + " \(error)"
             isToastVisible.toggle()
         }
     }
@@ -46,15 +46,16 @@ struct LoginView: View {
                         .edgesIgnoringSafeArea(.all)
                 VStack {
 
-                    Text("Login")
+                    Text(Properties.login)
                             .font(.title2)
                             .padding(.bottom, 30)
                     VStack(spacing: 30) {
-                        TextField("Email", text: $email)
+                        TextField(Properties.email, text: $email)
                                 .padding()
                                 .background(.white)
                                 .cornerRadius(10)
                                 .foregroundColor(.black)
+                                .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                                 .frame(width: .infinity, height: 50)
 
                         PasswordView(isPasswordVisible: $isPasswordVisible, password: $password, text: "Enter Your password")
@@ -63,7 +64,7 @@ struct LoginView: View {
                             Spacer()
 
                             NavigationLink(destination: ForgotPasswordView(email: $email)) {
-                                Text("Forgot Password")
+                                Text(Properties.forgotPassword)
                                         .underline()
                                         .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                                         .padding()
@@ -74,29 +75,30 @@ struct LoginView: View {
 
                         HStack {
 
-                            NavigationLink("", destination: AppView(userId: userId ?? 0), isActive: $showLogin)
+                            NavigationLink("", destination: AppView(userId: userId ?? 0, token: token ?? ""), isActive: $showLogin)
                             Button(action: {
-                                     Authentication.shared.signIn(email: email, password: password) { result, error in
+                                     Authentication.shared.signIn(email: email, password: password) { result, userToken, error in
                                         if let error = error {
                                             toastMessage = "\(error)"
                                             isToastVisible.toggle()
                                         } else if result == true {
-                                            toastMessage = "Login successful"
+                                            token = userToken
+                                            toastMessage = Properties.loginSuccess
                                             showLogin.toggle()
                                         } else {
                                             if email.isEmpty {
-                                                toastMessage.append("email is empty\n")
+                                                toastMessage.append(Properties.emptyEmail + "\n")
                                             }
                                             if password.isEmpty {
-                                                toastMessage.append("password is empty\n")
+                                                toastMessage.append(Properties.emptyPassword + "\n")
                                             } else {
-                                                toastMessage = "Invalid email or password \n Sign In UnSuccessful"
+                                                toastMessage = Properties.invalidLogin
                                             }
                                             isToastVisible.toggle()
                                         }
                                     }
                             }) {
-                                Text("Sign In")
+                                Text(Properties.signIn)
                                         .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                         .padding(.vertical)
                                         .foregroundColor(.primary)
@@ -112,13 +114,13 @@ struct LoginView: View {
 
                     HStack {
 
-                        Text("Don't have an account ?")
+                        Text(Properties.dontHaveAnAccount)
                                 .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                 .padding()
                                 .foregroundColor(.white)
 
                         NavigationLink(destination: SignUpView()) {
-                            Text("SignUp")
+                            Text(Properties.signUp)
                                     .underline()
                                     .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                                     .padding()
@@ -161,7 +163,7 @@ struct ToastModifier: ViewModifier {
             content
             if isPresented {
                 ToastView(message: message)
-                        .offset(y: 180)
+                        .offset(y: 150)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 isPresented = false

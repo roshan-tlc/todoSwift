@@ -53,9 +53,9 @@ class ApplicationTheme : ObservableObject {
     }
     
     func setFontFamily( value: String) -> FontFamily {
-        if value == "Cursive"{
+        if value == FontFamily.CURSIVE.rawValue{
             return .CURSIVE
-        } else if value == "HelveticaNeue-Bold" {
+        } else if value == FontFamily.BOLD.rawValue {
             return .BOLD
         } else {
             return .TIMES_NEW_ROMAN
@@ -72,11 +72,11 @@ class ApplicationTheme : ObservableObject {
             }
         }
     
-    func setColorValue(_ value : String) -> DefaultColor {
+    func setColorValue(_ value : String)  -> DefaultColor {
         if let color = DefaultColor(rawValue: value) {
             return color
         } else {
-            print("invalid color")
+            return DefaultColor.blue
         }
         return DefaultColor.blue
     }

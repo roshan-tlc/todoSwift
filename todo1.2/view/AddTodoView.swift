@@ -10,7 +10,7 @@ import SwiftUI
 struct AddTodoView: View {
 
     @State var textField:String = ""
-    @EnvironmentObject var listView: TodoList
+   // @EnvironmentObject var listView: TodoList
     @Environment(\.presentationMode) var presentationMode
     @State var parentId:Int64
     @State var searchText = ""
@@ -21,7 +21,7 @@ struct AddTodoView: View {
     
     var body: some View {
         VStack {
-            TextField("Enter Your todo ", text: $textField)
+            TextField(Properties.enterTodo, text: $textField)
                     .frame(height: 50)
                     .background(ApplicationTheme.shared.defaultColor.color).opacity(0.8)
                     .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
@@ -29,7 +29,7 @@ struct AddTodoView: View {
             Button(
                     action: addTodo
                     , label: {
-                Text("Add todo")
+                Text(Properties.addTodo)
                         .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                         .frame(height: 50)
                         .foregroundColor(ApplicationTheme.shared.defaultColor.color)
@@ -42,7 +42,7 @@ struct AddTodoView: View {
     func addTodo() {
         if textIsAppropriate()  {
             do {
-                try listView.addTodo(title: textField, parentId: parentId)
+                //try listView.addTodo(title: textField, parentId: parentId)
             } catch {
                 toastMessage = "\(error)"
                 isToastVisible.toggle()
@@ -54,7 +54,7 @@ struct AddTodoView: View {
     
     func textIsAppropriate() -> Bool {
         if textField.isEmpty {
-            alertTitle = "Enter a valid todo"
+            alertTitle = Properties.enterTodo
             showAlert.toggle()
             return false
         }

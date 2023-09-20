@@ -17,8 +17,8 @@ class CredentialTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            //try db.run("Drop table Credential")
-            try db.run("CREATE TABLE IF NOT EXISTS Credential (id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL, hint TEXT)")
+            //try db.run(Properties.dropCredentialTable)
+            try db.run(DBProperties.createCredentialTable)
         } catch {
             throw error
         }
@@ -28,7 +28,7 @@ class CredentialTable : ObservableObject {
 
         guard let db = db else { return }
 
-        let query = "INSERT INTO Credential (id, email, password, hint) VALUES (?,?,?,?)"
+        let query = DBProperties.insertCredential
 
         do {
             try db.run(query, credential.getId(), credential.getEmail(), credential.getPassword(), credential.getHint())
@@ -42,7 +42,7 @@ class CredentialTable : ObservableObject {
 
         guard let db = db else { return 0}
         print(email, password)
-        let query = " SELECT id from Credential WHERE email = ? and password = ? "
+        let query = DBProperties.validateUser
 
         do {
             for row in try db.prepare(query, email, password) {
@@ -61,7 +61,7 @@ class CredentialTable : ObservableObject {
 
         guard let db = db else { return }
 
-        let query = " UPDATE Credential SET password = ? where email = ?"
+        let query = DBProperties.updatePassword
 
         do {
             try db.run(query, password, email)
@@ -76,7 +76,7 @@ class CredentialTable : ObservableObject {
         var emails:[String] = []
 
         do {
-            for row in try db.run("SELECT email FROM USER") {
+            for row in try db.run(DBProperties.getAllEmail) {
                 print(row[0] as! String )
                 emails.append(row[0] as! String)
             }
@@ -90,7 +90,7 @@ class CredentialTable : ObservableObject {
     func update(credential:Credential) throws  {
         guard let db = db else { return }
 
-        let query = " UPDATE Credential SET email = ? , password = ? , hint = ? WHERE id = ?"
+        let query = DBProperties.updateCredential
 
         do {
             try db.run(query, credential.getEmail(), credential.getPassword(), credential.getHint(), credential.getId())
@@ -103,7 +103,7 @@ class CredentialTable : ObservableObject {
 
         guard let db = db else { return }
 
-        let query = "DELETE FROM Credential WHERE id = ?"
+        let query = DBProperties.removeCredential
 
         do {
             try db.run(query,id)

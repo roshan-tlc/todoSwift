@@ -4,15 +4,16 @@
 
 import Foundation
 
-class Service {
+class APIService {
 
-    static let shared = Service()
+    static let shared = APIService()
 
     private init() {}
 
     enum APIErrors : Error {
-        case INVALID_URL_ERROR
+        case INVALID_URL
         case INVALID_RESPONSE
+        case DECODING_ERROR
     }
 
 }

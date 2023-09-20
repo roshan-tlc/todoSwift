@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListRowView : View {
-    @State var project : Project;
+    @State var project : APIProject;
     @EnvironmentObject var listView:ProjectList
     @State var message = ""
     @State var isToastVisible = false
@@ -18,7 +18,7 @@ struct ListRowView : View {
             TextView(text: project.getTitle())
                 .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
             
-            Image(systemName: "minus.circle.fill")
+            Image(systemName: Properties.minusCircleImage)
                     .onTapGesture(perform: remove)
                     .frame(width: 20, height: 20)
                     .padding(.trailing, 20)
@@ -27,12 +27,12 @@ struct ListRowView : View {
     }
     
     func remove() {
-        do {
-            try listView.removeProject(id: project.id, userId: project.getUserId())
-        } catch {
-            message = "\(error)"
-            isToastVisible.toggle()
-        }
+//        do {
+//            try listView.removeProject(id: project.id, userId: project.getUserId())
+//        } catch {
+//            message = "\(error)"
+//            isToastVisible.toggle()
+//        }
     }
 }
 

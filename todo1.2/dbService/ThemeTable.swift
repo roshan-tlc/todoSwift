@@ -18,8 +18,8 @@ class ThemeTable {
         
         
         do {
-            // try db.run("DROP TABLE Theme")
-            try db.run("CREATE TABLE IF NOT EXISTS Theme (id INTEGER PRIMARY KEY AUTOINCREMENT, color TEXT, fontSize DOUBLE,fontFamily TEXT)")
+            // try db.run(Properties.dropThemeTable)
+            try db.run(DBProperties.createThemeTable)
             
         } catch {
             throw error
@@ -28,7 +28,7 @@ class ThemeTable {
     
     func insert(theme: ApplicationTheme) throws {
         guard let db = db else { return }
-        let query = "INSERT INTO Theme (color, fontSize, fontFamily) values (?, ?, ?)"
+        let query = DBProperties.insertThemeTable
         
         do {
             try db.run(query, theme.defaultColor.rawValue, Double(theme.fontSize.rawValue), theme.fontFamily.rawValue )
@@ -40,7 +40,7 @@ class ThemeTable {
     func updateColor(color:String) throws {
         guard let db = db else { return }
         
-        let query = "UPDATE Theme SET color = ?"
+        let query = DBProperties.updateThemeColor
         
         do {
             try db.run(query, color)
@@ -52,7 +52,7 @@ class ThemeTable {
     func updateFontSize(fontSize : Double) throws {
         guard let db = db else { return }
         
-        let query = "UPDATE Theme SET fontSize = ?"
+        let query = DBProperties.updateThemeFontSize
         
         do {
             try db.run(query, fontSize)
@@ -64,7 +64,7 @@ class ThemeTable {
     func updateFontFamily(fontFamily: String) throws {
         guard let db = db else { return }
         
-        let query = "UPDATE Theme SET fontFamily = ?"
+        let query = DBProperties.updateThemeFontFamily
         
         do {
             try db.run(query, fontFamily)
@@ -78,7 +78,7 @@ class ThemeTable {
         guard let db = db else { return ApplicationTheme.shared }
         
         do {
-            for row in try db.prepare("SELECT id, color, fontSize, fontFamily FROM Theme") {
+            for row in try db.prepare(DBProperties.getAppTheme) {
                 let id = row[0] as! Int64
                 let color = row[1] as! String
                 let fontSize = row[2] as! Double
@@ -94,8 +94,8 @@ class ThemeTable {
     func getColor() throws  -> ApplicationTheme.DefaultColor {
         guard let db = db else { return ApplicationTheme.DefaultColor.green}
         
-        let table = Table("Theme")
-        let color = Expression<String>("color")
+        let table = Table(DBProperties.themeTable)
+        let color = Expression<String>(DBProperties.color)
         
         do {
             if let row = try db.pluck(table) {
@@ -114,8 +114,8 @@ class ThemeTable {
     func getFontSize() throws -> ApplicationTheme.FontSize {
         guard let db = db else { return ApplicationTheme.FontSize.medium }
         
-        let table = Table("Theme")
-        let font = Expression<Double>("fontSize")
+        let table = Table(DBProperties.themeTable)
+        let font = Expression<Double>(DBProperties.fontSize)
         
         do {
             if let row = try db.pluck(table) {
@@ -133,8 +133,8 @@ class ThemeTable {
     func getFontFamily() throws -> ApplicationTheme.FontFamily {
         guard let db = db else { return ApplicationTheme.FontFamily.CURSIVE }
         
-        let table = Table("Theme")
-        let font = Expression<String>("fontFamily")
+        let table = Table(DBProperties.themeTable)
+        let font = Expression<String>(DBProperties.fontFamily)
         
         do {
             if let row = try db.pluck(table) {
@@ -152,8 +152,8 @@ class ThemeTable {
     func getFirstId() throws  -> Int64 {
         guard let db = db else { return 0}
         
-        let table = Table("Theme")
-        let id = Expression<Int64> ("id")
+        let table = Table(DBProperties.themeTable)
+        let id = Expression<Int64> (DBProperties.id)
         
         do  {
             if let row = try db.pluck(table) {

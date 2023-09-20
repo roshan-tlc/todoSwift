@@ -53,7 +53,7 @@ struct UserView : View {
 
             VStack {
                 NavigationLink(destination: LoginView()) {
-                    Image(systemName: "rectangle.portrait.and.arrow.forward.fill")
+                    Image(systemName: Properties.logoutImage)
                             .frame(width: 6, height: 6)
                             .foregroundColor(.blue)
                             .padding(.leading, 5)
@@ -61,7 +61,7 @@ struct UserView : View {
                 }
 
                 NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName() , description: user.getDescription(), email: user.getEmail())) {
-                    Image(systemName: "pencil.circle.fill")
+                    Image(systemName: Properties.editImage)
                             .foregroundColor(.blue)
                             .padding(.leading, 5)
                             .padding()

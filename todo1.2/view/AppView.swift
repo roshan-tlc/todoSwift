@@ -15,10 +15,11 @@ struct AppView: View {
     @State var defaultColor: ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     @State var message = ""
     @State var isToastVisible = false
-    @State var project: Project?
+    @State var project: APIProject?
     @State var showProject = false
     @State private var showMenu: Bool = false
     @State var userId: Int64
+    @State var token:String
 
     var body: some View {
 
@@ -29,13 +30,13 @@ struct AppView: View {
                 Spacer()
 
                 if showProject == true {
-                    TodoView(project: project ?? Project(id: 0, title: "", userId: 0, order: 0))
+                    //TodoView(project: project ?? APIProject(additional_attributes: AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, createdAt: 0, updatedAt: 0), id: "", name: "", description: "", sortedOrder: 0))
                 }
             }
 
             GeometryReader { geometry in
                 HStack {
-                    MenuView(userId: userId)
+                    MenuView(userId: userId, token: token)
                             .offset(x: showMenu ? 0 : UIScreen.main.bounds.width)
                 }
             }
@@ -46,12 +47,12 @@ struct AppView: View {
                                 do {
                                     try listView.projects = ProjectTable.shared.get(id: userId)
                                 } catch {
-                                    message = "Error occurred : \(error)"
+                                    message = Properties.errorOccurred + " \(error)"
                                     isToastVisible.toggle()
                                 }
 
                             } label: {
-                                Image(systemName: showMenu ? "xmark" : "text.justify")
+                                Image(systemName: showMenu ? Properties.xMarkImage : Properties.textJustifyImage)
                                         .renderingMode(.original)
                             }
                                     .foregroundColor(Color.primary)
@@ -62,7 +63,7 @@ struct AppView: View {
                         ToolbarItem(placement: .navigationBarTrailing) {
 
                             NavigationLink(destination: Theme()) {
-                                Text("Settings")
+                                Text(Properties.settings)
                                         .foregroundColor(.primary)
                             }
                         }

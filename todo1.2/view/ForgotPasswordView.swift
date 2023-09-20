@@ -24,14 +24,14 @@ struct ForgotPasswordView : View {
                     .edgesIgnoringSafeArea(.all)
 
             VStack {
-                Text("Forgot Password ?")
+                Text(Properties.forgotPassword)
                         .font(.title2)
                         .padding(.bottom, 50)
                         .padding(.horizontal,20)
 
                 VStack(spacing: 30) {
 
-                    TextField("Email", text: $email)
+                    TextField(Properties.email, text: $email)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
@@ -39,7 +39,7 @@ struct ForgotPasswordView : View {
                             .frame( height: 50)
                             .padding(.horizontal, 20)
 
-                    TextField("old hint", text: $oldHint)
+                    TextField(Properties.oldHint, text: $oldHint)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
@@ -47,7 +47,7 @@ struct ForgotPasswordView : View {
                             .frame( height: 50)
                             .padding(.horizontal, 20)
 
-                    TextField("new hint ", text: $newHint)
+                    TextField(Properties.newHint, text: $newHint)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
@@ -55,9 +55,9 @@ struct ForgotPasswordView : View {
                             .frame( height: 50)
                             .padding(.horizontal, 20)
 
-                    PasswordView(isPasswordVisible: $isPasswordVisible, password: $password, text: "Enter Your Password")
+                    PasswordView(isPasswordVisible: $isPasswordVisible, password: $password, text: Properties.enterPassword)
                             .padding(.horizontal, 20)
-                    PasswordView(isPasswordVisible: $isPasswordVisible, password: $reEnteredPassword, text: "Re Enter Your Password")
+                    PasswordView(isPasswordVisible: $isPasswordVisible, password: $reEnteredPassword, text: Properties.reEnterPassword)
                             .padding(.horizontal, 20)
 
                     HStack {
@@ -70,28 +70,30 @@ struct ForgotPasswordView : View {
                                 Authentication.shared.forgotPassword(email: email, password: password, oldHint: oldHint, newHint: newHint) { result, error in
                                     print(result, error)
                                     if let error = error  {
-                                        toastMessage = "\(error) \n password changed unsuccessful"
+                                        toastMessage = "\(error) " + Properties.passwordChangeUnSuccessful
                                         isToastVisible.toggle()
                                     }
 
                                     if result == true {
-                                        toastMessage = "Password changed successfully"
+                                        toastMessage = Properties.passwordChangeSuccessful
                                         isToastVisible.toggle()
                                         showLogin.toggle()
                                     } else {
-                                        toastMessage = "Password changed unsuccessful"
+                                        toastMessage = Properties.passwordChangeSuccessful
                                         isToastVisible.toggle()
                                     }
                                 }
 
                             } else if (password != reEnteredPassword ){
-                                toastMessage = "passwords are not matched"
+                                toastMessage = Properties.passwordMisMatched
+                                isToastVisible.toggle()
                             } else {
-                                toastMessage = "email doesn't exists"
+                                toastMessage = Properties.emailNotExists
+                                isToastVisible.toggle()
                             }
-                            isToastVisible.toggle()
+
                         }) {
-                            Text("Reset Password")
+                            Text(Properties.resetPassword)
                                     .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
@@ -105,7 +107,7 @@ struct ForgotPasswordView : View {
                         Button(action: {
                             presentation.wrappedValue.dismiss()
                         }) {
-                            Text("cancel")
+                            Text(Properties.cancel)
                                     .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)

@@ -9,21 +9,21 @@ import SwiftUI
 import SQLite
 
 class ProjectTable : ObservableObject {
-    
+
     static let shared = ProjectTable()
 
     private var db = InitDataBase.shared.getDb()
-    
+
     private init() {
-        
+
     }
 
     func createTable() throws  {
         guard let db = db else { return }
 
         do {
-            //try db.run("drop table Project")
-            try db.run("CREATE TABLE IF NOT EXISTS Project (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, userId INTEGER, projectOrder INTEGER DEFAULT 0)")
+            //try db.run(Properties.dropProjectTable)
+            try db.run(DBProperties.createProjectTable)
         } catch {
             throw error
         }
@@ -33,7 +33,7 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            let insert = "INSERT INTO Project (title, userId, projectOrder) VALUES ( ?, ?, ?)"
+            let insert = DBProperties.insertProjectTable
             try db.run(insert, project.getTitle(), project.getUserId(), project.getOrder())
         } catch {
             throw error
@@ -44,9 +44,9 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return [] }
 
         var projects: [Project] = []
-        
+
         do {
-            for row in try db.run("SELECT * FROM Project") {
+            for row in try db.run(DBProperties.getAllProject) {
                 let id = row[0] as! Int64
                 let title = row[1] as! String
                 let userId = row[2] as! Int64
@@ -58,13 +58,13 @@ class ProjectTable : ObservableObject {
         }
         return projects
     }
-    
+
     func get(id:Int64) throws -> [Project] {
         guard let db = db else { return [] }
 
         var projects: [Project] = []
-        let query =  "SELECT id, title, userId, projectOrder FROM Project WHERE userId = ? ORDER BY projectOrder"
-        
+        let query = DBProperties.getProjects
+
         do {
             for row in try db.prepare(query, id) {
                 let id = row[0] as! Int64
@@ -84,9 +84,9 @@ class ProjectTable : ObservableObject {
     func updateProjectTable() throws  {
         guard let db = db else { return}
         do {
-            let projectTable = Table("Project")
-            let idColumn = Expression<Int64>("id")
-            let orderColumn = Expression<Int>("projectOrder")
+            let projectTable = Table(DBProperties.projectTable)
+            let idColumn = Expression<Int64>(DBProperties.id)
+            let orderColumn = Expression<Int>(DBProperties.projectOrder)
 
             try db.transaction {
                 for (index, project) in ProjectList.shared.projects.enumerated() {
@@ -101,9 +101,9 @@ class ProjectTable : ObservableObject {
 
     func remove(id:Int64) throws {
         guard let db = db else { return }
-        
+
         do {
-            let remove = "DELETE FROM Project WHERE id = ?"
+            let remove = DBProperties.removeProject
             try db.run(remove, id)
         } catch {
             throw error

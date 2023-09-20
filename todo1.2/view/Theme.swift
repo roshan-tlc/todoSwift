@@ -16,15 +16,15 @@ struct Theme: View {
                     Section {
                         Section {
                             HStack {
-                                Text("Font Family")
+                                Text(Properties.fontFamily)
                                         .padding()
                                         .font(Font.custom(fontFamily.rawValue, size: fontSize.rawValue))
                                         .foregroundColor(defaultColor.color)
 
                                 Picker("", selection: $fontFamily) {
-                                    Text("Cursive").tag(ApplicationTheme.FontFamily.CURSIVE)
-                                    Text("HelveticaNeue-Bold").tag(ApplicationTheme.FontFamily.BOLD)
-                                    Text("Times New Roman").tag(ApplicationTheme.FontFamily.TIMES_NEW_ROMAN)
+                                    Text(Properties.fontFamilyCursive).tag(ApplicationTheme.FontFamily.CURSIVE)
+                                    Text(Properties.fontFamilyBold).tag(ApplicationTheme.FontFamily.BOLD)
+                                    Text(Properties.fontFamilyTimesNewRoman).tag(ApplicationTheme.FontFamily.TIMES_NEW_ROMAN)
                                 }
 
                                         .pickerStyle(MenuPickerStyle())
@@ -44,15 +44,15 @@ struct Theme: View {
 
                         Section {
                             HStack {
-                                Text("Font Size")
+                                Text(Properties.fontFamily)
                                         .padding()
                                         .font(Font.custom(fontFamily.rawValue, size: fontSize.rawValue))
                                         .foregroundColor(defaultColor.color)
 
                                 Picker("", selection: $fontSize) {
-                                    Text("small").tag(ApplicationTheme.FontSize.small)
-                                    Text("medium").tag(ApplicationTheme.FontSize.medium)
-                                    Text("large").tag(ApplicationTheme.FontSize.large)
+                                    Text(Properties.small).tag(ApplicationTheme.FontSize.small)
+                                    Text(Properties.medium).tag(ApplicationTheme.FontSize.medium)
+                                    Text(Properties.large).tag(ApplicationTheme.FontSize.large)
                                 }
                                         .pickerStyle(MenuPickerStyle())
                                         .accentColor(.primary)
