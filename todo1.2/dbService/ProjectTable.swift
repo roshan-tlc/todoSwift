@@ -59,7 +59,7 @@ class ProjectTable : ObservableObject {
         return projects
     }
 
-    func get(id:Int64) throws -> [Project] {
+    func get(id:String) throws -> [Project] {
         guard let db = db else { return [] }
 
         var projects: [Project] = []

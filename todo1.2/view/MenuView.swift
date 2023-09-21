@@ -10,7 +10,7 @@ import SwiftUI
 struct MenuView: View {
 
     @State var textField: String = ""
-    @State var userId: Int64
+    @State var userId: String
     @EnvironmentObject var projectView: ProjectList
     @State var isAddViewVisible = false
     @State var alertTitle: String = ""
@@ -19,7 +19,14 @@ struct MenuView: View {
     @State var isToastVisible = false
     @State var returnToMenu = false
     @State var token:String
-    @State var project = [APIProject]()
+    var project:[APIProject]
+    
+    init(userId:String, token:String) {
+        self.userId = userId
+        self.token = token
+        self.project = ProjectList.shared.getAll(token: token)
+        
+    }
 
     var body: some View {
         VStack {
@@ -70,12 +77,13 @@ struct MenuView: View {
                 }
             }
             List {
-                    ForEach(getAll()) { item in
-                        NavigationLink(destination: AppView(project: item, showProject: true, userId: userId, token: token)) {
-                            ListRowView(project: item)
+                ForEach(project) { item in
+                    NavigationLink(destination: AppView(project: item, showProject: true, userId: userId, token: token)) {
+                            ListRowView(project: item, token:token)
                         }
                     }
                             .onMove(perform: moveProject)
+                            
                 }
             Spacer()
         }
@@ -125,20 +133,6 @@ struct MenuView: View {
 
     func getAlert() -> Alert {
         Alert(title: Text(alertTitle))
-    }
-
-    func getAll() -> [APIProject] {
-        var projects:[APIProject] = []
-        ProjectAPIService.shared.getAllProjects(token: token) { result in
-            switch result {
-            case .success(let project):
-                projects = project
-            case .failure(let error):
-                toastMessage = "\(error)"
-                isToastVisible.toggle()
-            }
-        }
-        return projects
     }
 }
 

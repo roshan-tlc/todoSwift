@@ -15,17 +15,11 @@ struct LoginView: View {
     @State private var isToastVisible = false
     @State private var toastMessage = ""
     @State private var user: User?
-    @State private var userId: Int64?
+    @State private var userId: String?
     @State private var token:String?
 
     init() {
         do {
-            try UserTable.shared.createTable()
-            try ProjectTable.shared.createTable()
-           // try TodoTable.shared.createTable()
-            try ThemeTable.shared.createTable()
-            try CredentialTable.shared.createTable()
-
             if try ThemeTable.shared.getFirstId() == 0 {
                 try ThemeTable.shared.insert(theme: ApplicationTheme.shared)
             }
@@ -75,7 +69,7 @@ struct LoginView: View {
 
                         HStack {
 
-                            NavigationLink("", destination: AppView(userId: userId ?? 0, token: token ?? ""), isActive: $showLogin)
+                            NavigationLink("", destination: AppView(project:APIProject(), showProject: false, userId: userId ?? "0", token: token ?? ""), isActive: $showLogin)
                             Button(action: {
                                      Authentication.shared.signIn(email: email, password: password) { result, userToken, error in
                                         if let error = error {

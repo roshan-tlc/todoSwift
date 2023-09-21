@@ -9,7 +9,7 @@ import Foundation
 
 class Filter : ObservableObject {
 
-    static var searchFilterResult = [Todo]()
+    static var searchFilterResult = [APITodo]()
     var limit:SearchFilter.Limit = SearchFilter.Limit.FIVE
     var skip:Int = 0
     
@@ -21,7 +21,7 @@ class Filter : ObservableObject {
         }
     }
 
-    func getSearchFilter() -> [Todo] {
+    func getSearchFilter() -> [APITodo] {
         let filteredSequence = Filter.searchFilterResult
         return Array(filteredSequence)
     }

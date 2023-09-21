@@ -10,8 +10,9 @@ import SwiftUI
 struct ListRowView : View {
     @State var project : APIProject;
     @EnvironmentObject var listView:ProjectList
-    @State var message = ""
+    @State var toastMessage = ""
     @State var isToastVisible = false
+    @State var token:String
 
     var body: some View {
         HStack {
@@ -25,14 +26,22 @@ struct ListRowView : View {
                     .foregroundColor(.primary)
         }
     }
+        
     
     func remove() {
-//        do {
-//            try listView.removeProject(id: project.id, userId: project.getUserId())
-//        } catch {
-//            message = "\(error)"
-//            isToastVisible.toggle()
-//        }
+        ProjectAPIService.shared.remove(id: project.getId(), token: token) { result, error in
+            ProjectList.shared.getAll(token: token)
+            if let error = error  {
+                toastMessage = "\(error)"
+                isToastVisible.toggle()
+            } else if result == true {
+                toastMessage = Properties.projectRemoveSuccess
+                isToastVisible.toggle()
+            } else {
+                toastMessage = Properties.projectRemoveUnSuccess
+                isToastVisible.toggle()
+            }
+        }
     }
 }
 

@@ -335,6 +335,7 @@
 		3DF7B79B2884C901005DD8CA /* Planning.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Planning.md; sourceTree = "<group>"; };
 		3DFC0B862886C239001C8FC9 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		49EB68C31F7B3CB400D89D40 /* Coding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coding.swift; sourceTree = "<group>"; };
+		6BA8C9142ABC42F700453DC5 /* todo1.2 copy 2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "todo1.2 copy 2"; path = ../..; sourceTree = "<group>"; };
 		997DF2AD287FC06D00F8DF95 /* Query+with.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Query+with.swift"; sourceTree = "<group>"; };
 		A121AC451CA35C79005A31D1 /* SQLite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SQLite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB58B21028FB864300F8EEA4 /* SchemaReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaReader.swift; sourceTree = "<group>"; };
@@ -511,9 +512,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6BA8C9132ABC42F700453DC5 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				6BA8C9142ABC42F700453DC5 /* todo1.2 copy 2 */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		EE247AC91C3F04ED00AE3E12 = {
 			isa = PBXGroup;
 			children = (
+				6BA8C9132ABC42F700453DC5 /* Packages */,
 				3D3C3CCB26E5568800759140 /* SQLite.playground */,
 				EE247AD51C3F04ED00AE3E12 /* SQLite */,
 				EE247AE11C3F04ED00AE3E12 /* SQLiteTests */,

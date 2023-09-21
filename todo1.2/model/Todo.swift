@@ -9,13 +9,13 @@ import Foundation
 import SQLite
 
 class Todo : Identifiable {
-    internal let id : Int64
+    internal let id : String
     private let title : String
     internal var isCompleted : TodoStatus
-    private var parentId : Int64
+    private var parentId : String
     private var order: Int64
     
-    init(id:Int64, title:String, isCompleted: TodoStatus, parentId:Int64, order:Int64) {
+    init(id:String, title:String, isCompleted: TodoStatus, parentId:String, order:Int64) {
         self.id = id
         self.title = title
         self.isCompleted = isCompleted
@@ -23,7 +23,7 @@ class Todo : Identifiable {
         self.order = order
     }
     
-    func getId() -> Int64 {
+    func getId() -> String {
         id
     }
 
@@ -40,11 +40,11 @@ class Todo : Identifiable {
         }
     }
 
-    func setParentId(parentId : Int64) {
+    func setParentId(parentId : String) {
         self.parentId = parentId
     }
 
-    func getParentId() -> Int64 {
+    func getParentId() -> String {
         parentId
     }
 

@@ -18,8 +18,16 @@ struct AppView: View {
     @State var project: APIProject?
     @State var showProject = false
     @State private var showMenu: Bool = false
-    @State var userId: Int64
+    @State var userId: String
     @State var token:String
+    
+    init(project:APIProject, showProject: Bool, userId:String, token:String){
+        self.project = project
+        self.showProject = showProject
+        self.userId = userId
+        self.token = token
+        
+    }
 
     var body: some View {
 
@@ -30,7 +38,7 @@ struct AppView: View {
                 Spacer()
 
                 if showProject == true {
-                    //TodoView(project: project ?? APIProject(additional_attributes: AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, createdAt: 0, updatedAt: 0), id: "", name: "", description: "", sortedOrder: 0))
+                    TodoView(project: project ?? APIProject(additional_attributes: AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, createdAt: 0, updatedAt: 0), _id: "", name: "", description: "", sort_order: 0), token: token)
                 }
             }
 
@@ -43,14 +51,9 @@ struct AppView: View {
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button {
+                                listView.getAll(token: token)
+                                TodoList.shared.getTodos(status: .ALL, parentId: project?.getId() ?? "0" , token: token)
                                 self.showMenu.toggle()
-                                do {
-                                    try listView.projects = ProjectTable.shared.get(id: userId)
-                                } catch {
-                                    message = Properties.errorOccurred + " \(error)"
-                                    isToastVisible.toggle()
-                                }
-
                             } label: {
                                 Image(systemName: showMenu ? Properties.xMarkImage : Properties.textJustifyImage)
                                         .renderingMode(.original)

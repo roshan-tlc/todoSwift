@@ -89,7 +89,7 @@ class UserTable : ObservableObject {
         return users
     }
     
-    func get(id:Int64) throws -> User {
+    func get(id:String) throws -> User {
         guard let db = db else { return User(id: 0, name: "", description: "", email: "")}
         let query = DBProperties.getUserById
         

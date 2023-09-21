@@ -10,14 +10,15 @@ import SwiftUI
 struct AddTodoView: View {
 
     @State var textField:String = ""
-   // @EnvironmentObject var listView: TodoList
+    @EnvironmentObject var listView: TodoList
     @Environment(\.presentationMode) var presentationMode
-    @State var parentId:Int64
+    @State var parentId:String
     @State var searchText = ""
     @State var toastMessage = ""
     @State var isToastVisible = false
     @State var alertTitle : String = ""
     @State var showAlert: Bool = false
+    @State var token:String
     
     var body: some View {
         VStack {
@@ -41,11 +42,18 @@ struct AddTodoView: View {
     }
     func addTodo() {
         if textIsAppropriate()  {
-            do {
-                //try listView.addTodo(title: textField, parentId: parentId)
-            } catch {
-                toastMessage = "\(error)"
-                isToastVisible.toggle()
+            TodoAPIService.shared.create(name: textField, description: Properties.description, token: token, projectId: parentId) { result , error in
+                if let error = error {
+                    toastMessage = "\(error)"
+                    isToastVisible.toggle()
+                } else if result == true {
+                    toastMessage = Properties.todoCreatedSuccess
+                    isToastVisible.toggle()
+                } else {
+                    toastMessage = Properties.todoCreatedUnsuccess
+                    isToastVisible.toggle()
+                }
+                
             }
             textField = ""
             

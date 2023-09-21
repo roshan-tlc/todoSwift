@@ -9,68 +9,76 @@ import SwiftUI
 
 struct TodoRowView: View {
     
-    @State var todo: Todo;
+    @State var todo: APITodo;
+    @State var token:String
     @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
     @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
     @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     @State var isToastVisible = false
     @State var toastMessage = ""
-   // @EnvironmentObject var todoView: TodoList
-
+    @EnvironmentObject var todoView: TodoList
+    
     var body: some View {
         HStack {
             
-            CheckBox(isChecked: $todo.isCompleted, todo: todo)
-                    .frame(width: 20, height: 20)
-                    .padding(.leading, 30)
-
+            CheckBox(isChecked: $todo.is_completed, todo: todo, token: token)
+                .frame(width: 20, height: 20)
+                .padding(.leading, 30)
+            
             Text(todo.getTitle())
-                    .foregroundColor(todo.getStatus().rawValue == 1 ? Color.gray : Color.black)
-                    .padding(.trailing, 95)
-                    .frame(width: 240, height: 20)
-                    .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
-
+                .foregroundColor(todo.is_completed == true ? Color.gray : Color.black)
+                .padding(.trailing, 95)
+                .frame(width: 240, height: 20)
+                .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
+            
             Image(systemName: "minus.circle.fill")
-                    .onTapGesture(perform: remove)
-                    .frame(width: 20, height: 20)
-                    .padding(.trailing, 30)
-
-
+                .onTapGesture(perform: remove)
+                .frame(width: 20, height: 20)
+                .padding(.trailing, 30)
+            
+            
         }
-            .padding(.vertical, 10)
-                .toast(isPresented: $isToastVisible, message: $toastMessage)
+        .padding(.vertical, 10)
+        .toast(isPresented: $isToastVisible, message: $toastMessage)
     }
-
-
+    
+    
     func remove() {
-        do {
-            //try todoView.removeTodo(id: todo.id, userId: todo.getParentId())
-        } catch {
-            toastMessage = "\(error)"
+        TodoAPIService.shared.remove(id: todo.getId(), token: token) { result, error in
+            TodoAPIService.shared.get(id: todo.getId(), token: token) { result in
+                print(result)
+            }
+            if let error = error  {
+                toastMessage = "\(error)"
+                isToastVisible.toggle()
+            } else if result == true {
+                toastMessage = Properties.projectRemoveSuccess
+                isToastVisible.toggle()
+            } else {
+                toastMessage = Properties.projectRemoveUnSuccess
+                isToastVisible.toggle()
+            }
         }
     }
 }
 
 struct CheckBox: View {
     
-    @Binding var isChecked: Todo.TodoStatus
-    @State var todo: Todo
-    //@EnvironmentObject var todoView: TodoList
+    @Binding var isChecked: Bool
+    @State var todo: APITodo
+    @EnvironmentObject var todoView: TodoList
     @State var isToastVisible = false
     @State var toastMessage = ""
-
+    @State var token:String
+    
     var body: some View {
         VStack {
-            Image(systemName: isChecked.rawValue == 1 ? Properties.checkmarkImage : Properties.squareImage)
-                    .onTapGesture {
-                        todo.onCheckBoxClick()
-                        do {
-                            //try todoView.onCheckBoxClick(todo: todo)
-                        } catch {
-                            toastMessage = "\(error)"
-                            isToastVisible.toggle()
-                        }
-                    }
+            Image(systemName: isChecked == true ? Properties.checkmarkImage : Properties.squareImage)
+                .onTapGesture {
+                    isChecked.toggle()
+                    todo.onCheckBoxClick()
+                    todoView.onCheckBoxClick(todo: todo, id:todo.getId(),  parentId:todo.getParentId(), token: token)
+                }
         }
     }
 }

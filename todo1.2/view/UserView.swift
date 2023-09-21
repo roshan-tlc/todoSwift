@@ -6,21 +6,23 @@ import SwiftUI
 
 struct UserView : View {
 
-    @State private var user:User
+    @State private var user:APIUser
     @State private var toastMessage = ""
     @State private var isToastVisible = false
+    @State var token:String
 
-    init(id: Int64) {
-        let result: User
-        do {
-            result = try UserList.shared.get(id: id)
-        } catch {
-            toastMessage = "\(error)"
-            result = User(id: 0, name: "", description: "", email: "")
+    init(id: String) {
+        UserAPIService.shared.get(token: token) { result in
+            switch result {
+            case .success(let user):
+                self.user = user
+            case .failure(_) :
+                toastMessage = Properties.getUserUnsuccessful
+                isToastVisible.toggle()
+            }
+            
         }
-        user = result
     }
-
 
     var body : some View {
         HStack {
@@ -77,7 +79,7 @@ struct UserView : View {
                 .frame(width: .infinity, height: 80,alignment: .top)
     }
 
-    func getUser(userId:Int64) -> User {
+    func getUser(userId:String) -> User {
         do {
             return try UserList.shared.get(id: userId)
         } catch {
@@ -87,6 +89,6 @@ struct UserView : View {
     }
     
     func reload() {
-        user = getUser(userId: user.getId())
+        user = getUser(userId: String(user.getId()))
     }
 }

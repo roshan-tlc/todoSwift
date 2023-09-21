@@ -62,7 +62,7 @@ class UserList : ObservableObject{
         }
     }
     
-    func get(id:Int64) throws -> User {
+    func get(id:String) throws -> User {
         do {
             return try userTable.get(id: id)
         } catch {
