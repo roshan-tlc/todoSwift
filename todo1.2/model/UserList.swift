@@ -18,12 +18,14 @@ class UserList : ObservableObject{
 
     }
 
-
-    func update (id: Int64, name:String, description:String, email:String) throws {
-        do {
-            try userTable.update(id: id, name: name, description: description, email: email)
-        } catch {
-            throw error
+    func update (id: String, name:String, title:String, token:String) {
+        UserAPIService.shared.update(name: name, title: title , token: token) {result, error in
+            
+            if let error = error  {
+                print("error")
+            } else if result == true {
+                
+            }
         }
     }
 

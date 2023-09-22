@@ -10,8 +10,8 @@ import SwiftUI
 struct AppView: View {
 
     @EnvironmentObject var listView: ProjectList
-    @State var fontSize: ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
-    @State var fontFamily: ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
+    @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize
+    @State var fontFamily: String = ApplicationTheme.shared.fontFamily
     @State var defaultColor: ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     @State var message = ""
     @State var isToastVisible = false
@@ -26,7 +26,8 @@ struct AppView: View {
         self.showProject = showProject
         self.userId = userId
         self.token = token
-        
+        ApplicationTheme.shared.getTheme(token: token)
+
     }
 
     var body: some View {
@@ -38,7 +39,7 @@ struct AppView: View {
                 Spacer()
 
                 if showProject == true {
-                    TodoView(project: project ?? APIProject(additional_attributes: AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, createdAt: 0, updatedAt: 0), _id: "", name: "", description: "", sort_order: 0), token: token)
+                    TodoView(project: project ?? APIProject(additional_attributes: AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, updatedAt: 0), _id: "", name: "", description: "", sort_order: 0), token: token)
                 }
             }
 
@@ -51,8 +52,7 @@ struct AppView: View {
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button {
-                                listView.getAll(token: token)
-                                TodoList.shared.getTodos(status: .ALL, parentId: project?.getId() ?? "0" , token: token)
+                                ProjectList.shared.getAll(token: token)
                                 self.showMenu.toggle()
                             } label: {
                                 Image(systemName: showMenu ? Properties.xMarkImage : Properties.textJustifyImage)

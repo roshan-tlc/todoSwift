@@ -30,7 +30,7 @@ struct ListRowView : View {
     
     func remove() {
         ProjectAPIService.shared.remove(id: project.getId(), token: token) { result, error in
-            ProjectList.shared.getAll(token: token)
+            ProjectList.shared.remove(id: project.getId())
             if let error = error  {
                 toastMessage = "\(error)"
                 isToastVisible.toggle()
@@ -42,6 +42,7 @@ struct ListRowView : View {
                 isToastVisible.toggle()
             }
         }
+        ProjectList.shared.remove(id: project.getId())
     }
 }
 

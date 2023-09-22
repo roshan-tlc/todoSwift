@@ -81,24 +81,6 @@ class ProjectTable : ObservableObject {
     }
 
 
-    func updateProjectTable() throws  {
-        guard let db = db else { return}
-        do {
-            let projectTable = Table(DBProperties.projectTable)
-            let idColumn = Expression<Int64>(DBProperties.id)
-            let orderColumn = Expression<Int>(DBProperties.projectOrder)
-
-            try db.transaction {
-                for (index, project) in ProjectList.shared.projects.enumerated() {
-                    let projectToUpdate = projectTable.filter(idColumn == project.id)
-                    try db.run(projectToUpdate.update(orderColumn <- index))
-                }
-            }
-        } catch {
-            throw error
-        }
-    }
-
     func remove(id:Int64) throws {
         guard let db = db else { return }
 

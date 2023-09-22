@@ -19,13 +19,10 @@ struct MenuView: View {
     @State var isToastVisible = false
     @State var returnToMenu = false
     @State var token:String
-    var project:[APIProject]
     
     init(userId:String, token:String) {
         self.userId = userId
         self.token = token
-        self.project = ProjectList.shared.getAll(token: token)
-        
     }
 
     var body: some View {
@@ -38,7 +35,7 @@ struct MenuView: View {
                     .padding(.bottom, 10)
             VStack {
 
-                UserView(id: userId)
+                UserView(user: APIUser(), token: token)
             }
             VStack {
 
@@ -77,7 +74,7 @@ struct MenuView: View {
                 }
             }
             List {
-                ForEach(project) { item in
+                ForEach(projectView.projects,id:\.self) { item in
                     NavigationLink(destination: AppView(project: item, showProject: true, userId: userId, token: token)) {
                             ListRowView(project: item, token:token)
                         }
@@ -96,12 +93,6 @@ struct MenuView: View {
 
     func moveProject(from source: IndexSet, to destination: Int) {
         projectView.projects.move(fromOffsets: source, toOffset: destination)
-        do {
-            try ProjectTable.shared.updateProjectTable()
-        } catch {
-            toastMessage = "\(error)"
-            isToastVisible.toggle()
-        }
     }
 
     func addProject(token:String) -> Void {
@@ -112,12 +103,14 @@ struct MenuView: View {
                         isToastVisible.toggle()
                     } else if result == true  {
                         toastMessage = Properties.projectCreatedSuccess
+
                         isToastVisible.toggle()
                     } else {
                         toastMessage = Properties.projectCreatedUnSuccess
                         isToastVisible.toggle()
                     }
                 }
+            projectView.addProject(title: textField, userId: userId)
             textField = ""
         }
     }
@@ -135,29 +128,7 @@ struct MenuView: View {
         Alert(title: Text(alertTitle))
     }
 }
-
-
-struct CustomBackButton<Content: View>: View {
-    @Binding var isActive: Bool
-    var content: Content
-
-    init(isActive: Binding<Bool>, @ViewBuilder content: () -> Content) {
-        self._isActive = isActive
-        self.content = content()
-    }
-
-    var body: some View {
-        Button(action: {
-            self.isActive = false
-        }) {
-            Image(systemName: Properties.arrowLeftCircleImage)
-                    .foregroundColor(.blue)
-                    .font(.title)
-            content
-        }
-    }
-}
-
+ 
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {

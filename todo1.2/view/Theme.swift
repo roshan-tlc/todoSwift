@@ -2,8 +2,8 @@ import SwiftUI
 
 struct Theme: View {
     @EnvironmentObject var appTheme: ApplicationTheme
-    @State var fontSize: ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
-    @State var fontFamily: ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
+    @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize
+    @State var fontFamily: String = ApplicationTheme.shared.fontFamily
     @State var defaultColor: ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
     @State var isToastVisible = false
     @State var toastMessage = ""
@@ -18,11 +18,11 @@ struct Theme: View {
                             HStack {
                                 Text(Properties.fontFamily)
                                         .padding()
-                                        .font(Font.custom(fontFamily.rawValue, size: fontSize.rawValue))
+                                        .font(Font.custom(fontFamily, size: fontSize))
                                         .foregroundColor(defaultColor.color)
 
                                 Picker("", selection: $fontFamily) {
-                                    Text(Properties.fontFamilyCursive).tag(ApplicationTheme.FontFamily.CURSIVE)
+                                    Text(Properties.fontFamilyCursive).tag("Cursive")
                                     Text(Properties.fontFamilyBold).tag(ApplicationTheme.FontFamily.BOLD)
                                     Text(Properties.fontFamilyTimesNewRoman).tag(ApplicationTheme.FontFamily.TIMES_NEW_ROMAN)
                                 }
@@ -96,7 +96,6 @@ struct Theme: View {
                             }
                         }
                                 .frame(width: .infinity,height: 40)
-
                     }
                 }
             }

@@ -5,10 +5,12 @@
 import SwiftUI
 
 struct UserEditView: View {
-    @State var userId:Int64
+    
+    @State var userId:String
     @State var userName:String
     @State var description:String
     @State var email:String
+    @State var token:String
     @State var toastMessage = ""
     @State var isToastVisible = false
     @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
@@ -51,12 +53,8 @@ struct UserEditView: View {
                 HStack(spacing: 20) {
 
                     Button(action: {
-                        do {
-                            try UserList.shared.update(id: userId, name: userName, description: description, email: " ")
-                        } catch {
-                            toastMessage = "\(error)"
-                            isToastVisible.toggle()
-                        }
+                        UserList.shared.update(id: userId, name: userName, title: description, token: token)
+                        
                         presentation.wrappedValue.dismiss()
                     }) {
                         Text(Properties.save)

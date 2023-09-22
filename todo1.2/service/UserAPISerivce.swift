@@ -12,8 +12,6 @@ class UserAPIService : Identifiable {
     
     private init() {}
     
-    
-    
     func get(token: String, completion: @escaping (Result<APIUser, APIService.APIErrors>) -> Void) {
         guard let url = URL(string: DBProperties.baseUrl + "/api/v1/user/details") else {
             completion(.failure(.INVALID_URL))
@@ -54,6 +52,39 @@ class UserAPIService : Identifiable {
         }.resume()
     }
     
+    func update(name:String, title:String ,token:String ,completion: @escaping (Bool, Error?) -> Void) {
+            guard let url = URL(string: DBProperties.baseUrl + "/api/v1/user/details") else {
+                completion(false, APIService.APIErrors.INVALID_URL)
+                return
+            }
+        interceptor = APIRequestInterceptor(token: token)
+        var request = interceptor?.intercept( URLRequest(url: url)) ??  URLRequest(url: url)
+        
+            let userData = [
+                Properties.name: name,
+                //Properties.title: title,
+            ]
+
+            if let jsonData = try? JSONSerialization.data(withJSONObject: userData) {
+                request.httpMethod = DBProperties.post
+                request.httpBody = jsonData
+                request.setValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType )
+
+                URLSession.shared.dataTask(with: request) { data, response, error in
+                            if let httpResponse = response as? HTTPURLResponse {
+                                if httpResponse.statusCode == 200 {
+                                    completion(true, error)
+                                } else {
+                                    completion(false, APIService.APIErrors.INVALID_RESPONSE)
+                                }
+                            } else if let error = error {
+                                completion(false, error)
+                            }
+                        }
+                        .resume()
+            }
+    }
+    
     
     func remove(id:String, token:String, completion : @escaping (Bool, Error?) -> Void) {
         
@@ -90,5 +121,5 @@ class UserAPIService : Identifiable {
 
 struct GetUserResponse : Decodable {
     let success: Bool
-    let data: APIProject
+    let data: APIUser
 }

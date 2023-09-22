@@ -45,9 +45,7 @@ struct TodoRowView: View {
     
     func remove() {
         TodoAPIService.shared.remove(id: todo.getId(), token: token) { result, error in
-            TodoAPIService.shared.get(id: todo.getId(), token: token) { result in
-                print(result)
-            }
+            
             if let error = error  {
                 toastMessage = "\(error)"
                 isToastVisible.toggle()

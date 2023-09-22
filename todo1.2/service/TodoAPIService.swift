@@ -24,7 +24,7 @@ class TodoAPIService : Identifiable {
             Properties.description : description,
             Properties.projectId : projectId
         ]
-        
+        print("project", projectId)
         interceptor = APIRequestInterceptor(token: token)
         var request = interceptor?.intercept( URLRequest(url: url)) ??  URLRequest(url: url)
         
@@ -49,7 +49,7 @@ class TodoAPIService : Identifiable {
         
     }
     
-    func getAllProjects(token: String, completion: @escaping (Result<[APITodo], Error>) -> Void) {
+    func getAll(token: String, completion: @escaping (Result<[APITodo], Error>) -> Void) {
         guard let url = URL(string: DBProperties.baseUrl + "/api/v1/item") else {
             completion(.failure(APIService.APIErrors.INVALID_URL))
             return
@@ -168,7 +168,7 @@ class TodoAPIService : Identifiable {
     
     func remove(id:String, token:String, completion : @escaping (Bool, Error?) -> Void) {
         
-        guard let url = URL(string: DBProperties.baseUrl + "/api/v1/project/" + id) else {
+        guard let url = URL(string: DBProperties.baseUrl + "/api/v1/item/" + id) else {
             completion(false, APIService.APIErrors.INVALID_URL)
             return
         }

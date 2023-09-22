@@ -10,24 +10,16 @@ import SwiftUI
 
 class ApplicationTheme : ObservableObject {
     
-    @Published var fontFamily :FontFamily = .CURSIVE
-    @Published var fontSize : FontSize = .medium
+    @Published var fontFamily:String = "Cursive"
+    @Published var fontSize : CGFloat = 16
     @Published var defaultColor : DefaultColor = .blue
-    @State var theme = ThemeTable.shared
+    @State var theme:APISettings = APISettings()
     
     static var shared = ApplicationTheme()
     
     private init(){
         
     }
-
-    enum FontFamily: String {
-        case CURSIVE = "Cursive"
-        case BOLD = "HelveticaNeue-Bold"
-        case TIMES_NEW_ROMAN = "TimesNewRoman"
-        
-    }
-
     enum FontSize : CGFloat {
         case small = 14
         case medium = 17
@@ -52,16 +44,6 @@ class ApplicationTheme : ObservableObject {
         }
     }
     
-    func setFontFamily( value: String) -> FontFamily {
-        if value == FontFamily.CURSIVE.rawValue{
-            return .CURSIVE
-        } else if value == FontFamily.BOLD.rawValue {
-            return .BOLD
-        } else {
-            return .TIMES_NEW_ROMAN
-        }
-    }
-    
     func setFontValue( value: CGFloat) -> FontSize {
             if value == FontSize.small.rawValue {
                 return .small
@@ -78,33 +60,17 @@ class ApplicationTheme : ObservableObject {
         } else {
             return DefaultColor.blue
         }
-        return DefaultColor.blue
     }
     
-    func setFontFamily(fontFamily:String) throws {
-        do {
-            try theme.updateFontFamily(fontFamily: fontFamily)
-        } catch {
-            throw error
-        }
-        self.fontFamily = setFontFamily(value: fontFamily)
+    func setFontFamily(fontFamily:String)  {
+        self.fontFamily = fontFamily
     }
     
-    func setFontSize(fontSize:ApplicationTheme.FontSize) throws  {
-        do {
-            try theme.updateFontSize(fontSize: fontSize.rawValue)
-        } catch {
-            throw error
-        }
+    func setFontSize(fontSize:CGFloat)  {
         self.fontSize = fontSize
     }
     
     func setDefaultColor(color: ApplicationTheme.DefaultColor) throws {
-        do {
-            try theme.updateColor(color: color.rawValue)
-        } catch {
-            throw error
-        }
         defaultColor = color
     }
     
@@ -113,11 +79,28 @@ class ApplicationTheme : ObservableObject {
     }
     
     func getFontSize() -> CGFloat {
-        fontSize.rawValue
+        fontSize
     }
     
-    func getFontFamily() -> FontFamily {
+    func getFontFamily() -> String {
         fontFamily
     }
+
+    func setTheme() {
+        defaultColor =  setColorValue(theme.color)
+        setFontFamily(fontFamily: theme.font_family)
+        fontSize =  theme.font_size
+    }
     
+    func getTheme(token:String) {
+        SettingsAPI.shared.get(token: token) { result in
+            switch result {
+            case .success(let Setting):
+                self.theme = Setting
+            case .failure(_):
+                print("error")
+            }
+        }
+        setTheme()
+    }
 }

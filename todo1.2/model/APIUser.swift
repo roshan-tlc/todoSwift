@@ -18,7 +18,8 @@ class APIUser : Decodable {
         return _id
     }
     
-    init(){
+    init()
+    {
         self.additional_attributes = UserAttributes(isDeleted: false, createdAt: 0, updatedAt: 0)
         self._id = ""
         self.name = ""
@@ -26,12 +27,16 @@ class APIUser : Decodable {
         self.email = ""
     }
     
+    init(additional_attributes: UserAttributes, _id: String, name: String, title: String, email: String) {
+        self.additional_attributes = additional_attributes
+        self._id = _id
+        self.name = name
+        self.title = title
+        self.email = email
+    }
+    
     func getId() -> String{
         _id
-    }
-
-    func setId(id:Int64) {
-        self.id = id
     }
 
     func getEmail() -> String {
@@ -56,5 +61,23 @@ class APIUser : Decodable {
     
     func setTitle(title:String) {
         self.title = title
+    }
+}
+
+struct UserAttributes : Decodable {
+
+    var is_deleted : Bool
+    var created_at : Int64
+    var updated_at : Int64
+
+    init(isDeleted: Bool, createdAt: Int64, updatedAt: Int64) {
+        self.is_deleted = isDeleted
+        self.created_at = createdAt
+        self.updated_at = updatedAt
+    }
+    init() {
+        self.is_deleted = false
+        self.created_at = 0
+        self.updated_at = 0
     }
 }

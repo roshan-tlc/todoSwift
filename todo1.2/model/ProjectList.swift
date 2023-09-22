@@ -8,56 +8,51 @@
 import Foundation
 
 class ProjectList : ObservableObject {
-    @Published var projects :[Project] = []
+    @Published var projects :[APIProject] = []
     var apiProjects = [APIProject]()
     private let projectTable = ProjectTable.shared
     private var id:Int64  = 1
     private let apiService = ProjectAPIService.shared
     static let shared = ProjectList()
-
+    
     private init() {}
-
-    func addProject(title:String, userId:Int64, order:Int, token:String) throws {
-        do {
-            try projectTable.insert(project: Project(id: id, title: title, userId: userId, order: order))
-            projects = try projectTable.get(id: String(userId))
-            print(projects)
-            id += 1
-        } catch {
-            throw error
-        }
+    
+    func addProject(title:String, userId:String) {
+        projects.append(APIProject(additional_attributes: AdditionalAttributes(createdBy: userId, updatedBy: userId, isDeleted: false, updatedAt: 0), _id: String(id), name: title, description: title, sort_order: getOrder()))
+        print(projects)
     }
-
-
-    func getLastId() -> Int64 {
-        id
-    }
-
+    
     func get(id:String , token:String)  {
         apiService.get(id:id, token: token) { result in
             switch result {
             case .success(let project):
-                print(project)
+                project
             case .failure(_):
                 self.apiProjects = []
             }
         }
     }
-
-    func getOrder() -> Int {
-         projects.count + 1
-    }
     
-    func getAll(token:String) -> [APIProject]{
+    func getOrder() -> Int {
+        projects.count + 1
+    }
+
+    func getAll(token:String) {
         apiService.getAllProjects(token: token) { result in
             switch result {
             case .success(let project):
-                self.apiProjects = project
+                DispatchQueue.main.async {
+                    self.apiProjects = project
+                    self.projects = self.apiProjects
+                }
             case .failure(_):
                 self.apiProjects = []
             }
         }
-        return apiProjects
     }
 
+    func remove(id:String) {
+        projects.removeAll { $0.id == id}
+    }
+    
 }

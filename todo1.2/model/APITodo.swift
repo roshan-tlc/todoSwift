@@ -7,7 +7,15 @@
 
 import Foundation
 
-class APITodo :Identifiable, Decodable {
+class APITodo :Identifiable, Decodable, Hashable {
+    
+    static func == (lhs: APITodo, rhs: APITodo) -> Bool {
+        lhs._id == rhs._id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+           hasher.combine(_id)
+    }
     
     var additional_attributes : AdditionalAttributes
     var _id : String
@@ -21,7 +29,7 @@ class APITodo :Identifiable, Decodable {
     }
     
     init(){
-        self.additional_attributes = AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, createdAt: 0, updatedAt: 0)
+        self.additional_attributes = AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, updatedAt: 0)
         self._id = ""
         self.name = ""
         self.description = ""
@@ -64,10 +72,34 @@ class APITodo :Identifiable, Decodable {
         is_completed.toggle()
     }
     
+    func getStatus() -> Bool {
+        is_completed
+    }
     
     enum TodoStatus: Int {
         case unCompleted = 0
         case completed  = 1
+    }
+}
+
+struct AdditionalAttributes : Decodable {
+    var created_by : String
+    var updated_by : String
+    var is_deleted : Bool
+    var updated_at : Int64
+
+    init(createdBy: String, updatedBy: String, isDeleted: Bool, updatedAt: Int64) {
+        self.created_by = createdBy
+        self.updated_by = updatedBy
+        self.is_deleted = isDeleted
+        self.updated_at = updatedAt
+    }
+
+    init() {
+        self.created_by = ""
+        self.updated_by = ""
+        self.is_deleted = false
+        self.updated_at = 0
     }
 }
 

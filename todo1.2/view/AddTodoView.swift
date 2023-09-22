@@ -55,8 +55,8 @@ struct AddTodoView: View {
                 }
                 
             }
+            TodoList.shared.addTodo(title: textField, parentId: parentId)
             textField = ""
-            
         }
     }
     

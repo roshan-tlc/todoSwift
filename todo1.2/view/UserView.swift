@@ -11,17 +11,9 @@ struct UserView : View {
     @State private var isToastVisible = false
     @State var token:String
 
-    init(id: String) {
-        UserAPIService.shared.get(token: token) { result in
-            switch result {
-            case .success(let user):
-                self.user = user
-            case .failure(_) :
-                toastMessage = Properties.getUserUnsuccessful
-                isToastVisible.toggle()
-            }
-            
-        }
+    init(user:APIUser, token:String) {
+        self.user = user
+        self.token = token
     }
 
     var body : some View {
@@ -45,7 +37,7 @@ struct UserView : View {
                         .foregroundColor(.black)
                         .padding(5)
 
-                Text(user.getDescription() )
+                Text(user.getTitle() )
                         .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
                         .foregroundColor(.black)
                         .padding(.bottom, 10)
@@ -62,7 +54,7 @@ struct UserView : View {
                             .padding(.bottom, 10)
                 }
 
-                NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName() , description: user.getDescription(), email: user.getEmail())) {
+                NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName() , description: user.getTitle(), email: user.getEmail(), token: token)) {
                     Image(systemName: Properties.editImage)
                             .foregroundColor(.blue)
                             .padding(.leading, 5)
@@ -79,16 +71,19 @@ struct UserView : View {
                 .frame(width: .infinity, height: 80,alignment: .top)
     }
 
-    func getUser(userId:String) -> User {
-        do {
-            return try UserList.shared.get(id: userId)
-        } catch {
-            toastMessage = "\(error)"
-            return User(id: 0, name: "", description: "", email: "")
+    func getUser(userId:String)  {
+        UserAPIService.shared.get(token: token) { result in
+            switch result {
+            case .success(let user):
+                self.user = user
+            case .failure(_) :
+                toastMessage = Properties.getUserUnsuccessful
+                isToastVisible.toggle()
+            }
         }
     }
     
     func reload() {
-        user = getUser(userId: String(user.getId()))
+        getUser(userId: user.id)
     }
 }

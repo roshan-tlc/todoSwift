@@ -7,7 +7,15 @@
 
 import Foundation
 
-class APIProject :Identifiable,Decodable {
+class APIProject :Identifiable,Decodable, Hashable {
+    
+    static func == (lhs: APIProject, rhs: APIProject) -> Bool {
+        lhs._id == rhs._id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+           hasher.combine(_id)
+       }
     
     var _id : String
     var additional_attributes : AdditionalAttributes
@@ -19,7 +27,7 @@ class APIProject :Identifiable,Decodable {
     }
     
     init(){
-        self.additional_attributes = AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, createdAt: 0, updatedAt: 0)
+        self.additional_attributes = AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, updatedAt: 0)
         self._id = ""
         self.name = ""
         self.description = ""

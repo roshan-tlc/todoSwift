@@ -15,7 +15,7 @@ class Filter : ObservableObject {
     
     func setSearchFilter(searchItem:SearchFilter) throws {
         do {
-           // Filter.searchFilterResult = try TodoList.shared.getSearchFilteredTodo(searchItem: searchItem)
+            Filter.searchFilterResult = try  TodoList.shared.getSearchFilteredTodo(searchItem: searchItem)
         } catch {
             throw error
         }
