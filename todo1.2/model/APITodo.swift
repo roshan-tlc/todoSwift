@@ -7,7 +7,7 @@
 
 import Foundation
 
-class APITodo :Identifiable, Decodable, Hashable {
+class APITodo :Identifiable, Decodable, Hashable, Encodable {
     
     static func == (lhs: APITodo, rhs: APITodo) -> Bool {
         lhs._id == rhs._id
@@ -79,6 +79,10 @@ class APITodo :Identifiable, Decodable, Hashable {
     enum TodoStatus: Int {
         case unCompleted = 0
         case completed  = 1
+    }
+
+    func encode(to encoder: Encoder) throws {
+
     }
 }
 

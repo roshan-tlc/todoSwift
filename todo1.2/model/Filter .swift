@@ -13,16 +13,29 @@ class Filter : ObservableObject {
     var limit:SearchFilter.Limit = SearchFilter.Limit.FIVE
     var skip:Int = 0
     
-    func setSearchFilter(searchItem:SearchFilter) throws {
-        do {
-            Filter.searchFilterResult = try  TodoList.shared.getSearchFilteredTodo(searchItem: searchItem)
-        } catch {
-            throw error
-        }
+    func setSearchFilter(searchItem:SearchFilter, todos:[APITodo]) throws {
+            Filter.searchFilterResult = getSearchFilteredTodo(searchItem: searchItem, todos:todos)
     }
 
     func getSearchFilter() -> [APITodo] {
         let filteredSequence = Filter.searchFilterResult
         return Array(filteredSequence)
+    }
+
+    func getSearchFilteredTodo(searchItem: SearchFilter, todos:[APITodo]) -> [APITodo] {
+
+        var filteredTodos = [APITodo]()
+        filteredTodos = todos.filter { $0.name.lowercased().contains(searchItem.attribute.lowercased())}
+
+        if searchItem.status == SearchFilter.Status.COMPLETED {
+            filteredTodos = filteredTodos.filter {
+                $0.getStatus() == true
+            }
+        } else if searchItem.status == SearchFilter.Status.UNCOMPLETED {
+            filteredTodos = filteredTodos.filter {
+                $0.getStatus() == false
+            }
+        }
+        return filteredTodos
     }
 }

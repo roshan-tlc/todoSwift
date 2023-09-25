@@ -7,7 +7,7 @@
 
 import Foundation
 
-class APIProject :Identifiable,Decodable, Hashable {
+class APIProject :Identifiable,Decodable, Hashable, Encodable {
     
     static func == (lhs: APIProject, rhs: APIProject) -> Bool {
         lhs._id == rhs._id
@@ -56,5 +56,9 @@ class APIProject :Identifiable,Decodable, Hashable {
     
     func getId() -> String {
         id
+    }
+
+    func encode(to encoder: Encoder) throws {
+
     }
 }

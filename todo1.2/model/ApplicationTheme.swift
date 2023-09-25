@@ -11,8 +11,8 @@ import SwiftUI
 class ApplicationTheme : ObservableObject {
     
     @Published var fontFamily:String = "Cursive"
-    @Published var fontSize : CGFloat = 16
-    @Published var defaultColor : DefaultColor = .blue
+    @Published var fontSize : CGFloat = 14
+    @Published var defaultColor : Color = .blue
     @State var theme:APISettings = APISettings()
     
     static var shared = ApplicationTheme()
@@ -27,6 +27,11 @@ class ApplicationTheme : ObservableObject {
         
     }
 
+    enum FontFamily : String {
+        case CURSIVE = "cursive"
+        case TIMES_NEW_ROMAN = "TimesNewRoman"
+        case ROBOTO = "roboto"
+    }
     enum DefaultColor: String {
         case blue = "blue"
         case green = "green"
@@ -41,6 +46,21 @@ class ApplicationTheme : ObservableObject {
             case .mint:
                 return Color.mint
             }
+        }
+    }
+
+    func setFontFamilyValue(font:String) {
+        switch font{
+        case "cursive" :
+            fontFamily = ApplicationTheme.FontFamily.CURSIVE.rawValue
+            break
+        case "timesNewRoman" :
+            fontFamily = ApplicationTheme.FontFamily.TIMES_NEW_ROMAN.rawValue
+            break
+        case "roboto" :
+            fontFamily = ApplicationTheme.FontFamily.ROBOTO.rawValue
+        default:
+            fontFamily = ApplicationTheme.FontFamily.TIMES_NEW_ROMAN.rawValue
         }
     }
     
@@ -70,14 +90,6 @@ class ApplicationTheme : ObservableObject {
         self.fontSize = fontSize
     }
     
-    func setDefaultColor(color: ApplicationTheme.DefaultColor) throws {
-        defaultColor = color
-    }
-    
-    func getDefaultColor() -> Color {
-        defaultColor.color
-    }
-    
     func getFontSize() -> CGFloat {
         fontSize
     }
@@ -87,8 +99,8 @@ class ApplicationTheme : ObservableObject {
     }
 
     func setTheme() {
-        defaultColor =  setColorValue(theme.color)
-        setFontFamily(fontFamily: theme.font_family)
+        defaultColor =  Color(theme.color)
+        setFontFamilyValue(font: theme.font_family)
         fontSize =  theme.font_size
     }
     
@@ -101,6 +113,44 @@ class ApplicationTheme : ObservableObject {
                 print("error")
             }
         }
+        print(theme)
         setTheme()
     }
 }
+
+extension Color {
+    init?(hex: String) {
+        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
+
+        var rgb: UInt64 = 0
+
+        var r: CGFloat = 0.0
+        var g: CGFloat = 0.0
+        var b: CGFloat = 0.0
+        var a: CGFloat = 1.0
+
+        let length = hexSanitized.count
+
+        guard Scanner(string: hexSanitized).scanHexInt64(&rgb) else { return nil }
+
+        if length == 6 {
+            r = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
+            g = CGFloat((rgb & 0x00FF00) >> 8) / 255.0
+            b = CGFloat(rgb & 0x0000FF) / 255.0
+
+        } else if length == 8 {
+            r = CGFloat((rgb & 0xFF000000) >> 24) / 255.0
+            g = CGFloat((rgb & 0x00FF0000) >> 16) / 255.0
+            b = CGFloat((rgb & 0x0000FF00) >> 8) / 255.0
+            a = CGFloat(rgb & 0x000000FF) / 255.0
+
+        } else {
+            return nil
+        }
+
+        self.init(red: r, green: g, blue: b, opacity: a)
+    }
+}
+
+

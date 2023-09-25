@@ -12,7 +12,7 @@ struct AppView: View {
     @EnvironmentObject var listView: ProjectList
     @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize
     @State var fontFamily: String = ApplicationTheme.shared.fontFamily
-    @State var defaultColor: ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
+    @State var defaultColor: Color = ApplicationTheme.shared.defaultColor
     @State var message = ""
     @State var isToastVisible = false
     @State var project: APIProject?
@@ -33,8 +33,7 @@ struct AppView: View {
     var body: some View {
 
         ZStack {
-            ApplicationTheme.shared.defaultColor.color
-                    .ignoresSafeArea()
+
             VStack {
                 Spacer()
 
@@ -65,7 +64,7 @@ struct AppView: View {
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
 
-                            NavigationLink(destination: Theme()) {
+                            NavigationLink(destination: LoginView()) {
                                 Text(Properties.settings)
                                         .foregroundColor(.primary)
                             }

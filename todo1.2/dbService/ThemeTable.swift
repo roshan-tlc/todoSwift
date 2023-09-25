@@ -30,11 +30,11 @@ class ThemeTable {
         guard let db = db else { return }
         let query = DBProperties.insertThemeTable
         
-        do {
-            try db.run(query, theme.defaultColor.rawValue, Double(theme.fontSize.rawValue), theme.fontFamily.rawValue )
-        } catch {
-            throw error
-        }
+//        do {
+//            try db.run(query, theme.defaultColor as! Binding, Double(theme.fontSize), theme.fontFamily )
+//        } catch {
+//            throw error
+//        }
     }
     
     func updateColor(color:String) throws {
@@ -130,24 +130,24 @@ class ThemeTable {
         return ApplicationTheme.FontSize.medium
     }
     
-    func getFontFamily() throws -> ApplicationTheme.FontFamily {
-        guard let db = db else { return ApplicationTheme.FontFamily.CURSIVE }
-        
-        let table = Table(DBProperties.themeTable)
-        let font = Expression<String>(DBProperties.fontFamily)
-        
-        do {
-            if let row = try db.pluck(table) {
-                let font = row[font]
-                let fontValue = ApplicationTheme.shared.setFontFamily(value: font)
-                return fontValue
-            }
-        } catch {
-            throw error
-        }
-        
-        return ApplicationTheme.FontFamily.CURSIVE
-    }
+//    func getFontFamily() throws -> ApplicationTheme.FontFamily {
+//        guard let db = db else { return ApplicationTheme.FontFamily.CURSIVE }
+//        
+//        let table = Table(DBProperties.themeTable)
+//        let font = Expression<String>(DBProperties.fontFamily)
+//        
+//        do {
+//            if let row = try db.pluck(table) {
+//                let font = row[font]
+//                let fontValue = ApplicationTheme.shared.setFontFamily(value: font)
+//                return fontValue
+//            }
+//        } catch {
+//            throw error
+//        }
+//        
+//        return ApplicationTheme.FontFamily.CURSIVE
+//    }
     
     func getFirstId() throws  -> Int64 {
         guard let db = db else { return 0}

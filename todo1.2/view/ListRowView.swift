@@ -17,7 +17,7 @@ struct ListRowView : View {
     var body: some View {
         HStack {
             TextView(text: project.getTitle())
-                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
             
             Image(systemName: Properties.minusCircleImage)
                     .onTapGesture(perform: remove)

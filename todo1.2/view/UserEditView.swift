@@ -13,9 +13,9 @@ struct UserEditView: View {
     @State var token:String
     @State var toastMessage = ""
     @State var isToastVisible = false
-    @State var fontSize : ApplicationTheme.FontSize = ApplicationTheme.shared.fontSize
-    @State var fontFamily : ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
-    @State var defaultColor : ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
+    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize
+    @State var fontFamily : String = ApplicationTheme.shared.fontFamily
+    @State var defaultColor : Color = ApplicationTheme.shared.defaultColor
     @Environment(\.presentationMode) var presentation
     
     var body: some View {
@@ -28,12 +28,12 @@ struct UserEditView: View {
                             .padding()
 
                     Text(userName.prefix(1).uppercased())
-                            .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
+                            .font(Font.custom(fontFamily, size : fontSize))
                             .foregroundColor(.white)
                             .padding()
                 }
                 TextField(Properties.name, text: $userName)
-                        .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
+                        .font(Font.custom(fontFamily, size : fontSize))
                         .frame(alignment: .center)
                         .padding(.leading, 100)
                         .padding()
@@ -60,7 +60,7 @@ struct UserEditView: View {
                         Text(Properties.save)
                     }
                             .frame(width: 80)
-                            .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
+                            .font(Font.custom(fontFamily, size : fontSize))
                             .padding()
 
                     Button(action: {
@@ -69,12 +69,12 @@ struct UserEditView: View {
                     }) {
                         Text(Properties.cancel)
                     } .frame(width: 80)
-                            .font(Font.custom(fontFamily.rawValue, size : fontSize.rawValue))
+                            .font(Font.custom(fontFamily, size : fontSize))
                             .padding()
                 }
             }
         }
-                .background(ApplicationTheme.shared.defaultColor.color)
+                .background(ApplicationTheme.shared.defaultColor)
                 .toast(isPresented: $isToastVisible, message: $toastMessage)
     }
 }

@@ -84,25 +84,6 @@ class TodoList: ObservableObject {
         todos.count + 1
     }
 
-    func getSearchFilteredTodo(searchItem: SearchFilter) -> [APITodo] {
-
-        var filteredTodos = [APITodo]()
-
-        filteredTodos = todos.filter {
-            $0.name == searchItem.attribute
-        }
-
-        if searchItem.status == SearchFilter.Status.COMPLETED {
-            filteredTodos = filteredTodos.filter {
-                $0.getStatus() == true
-            }
-        } else if searchItem.status == SearchFilter.Status.UNCOMPLETED {
-            filteredTodos = filteredTodos.filter {
-                $0.getStatus() == false
-            }
-        }
-        return filteredTodos
-    }
 
     func get(id: String, token: String) -> APITodo {
 

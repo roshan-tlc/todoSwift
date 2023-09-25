@@ -24,9 +24,6 @@ struct LoginView: View {
                 try ThemeTable.shared.insert(theme: ApplicationTheme.shared)
             }
 
-            ApplicationTheme.shared.defaultColor = try ThemeTable.shared.getColor()
-            ApplicationTheme.shared.fontSize = try ThemeTable.shared.getFontSize()
-            ApplicationTheme.shared.fontFamily = try ThemeTable.shared.getFontFamily()
         } catch {
             toastMessage = Properties.errorOccurred + " \(error)"
             isToastVisible.toggle()
@@ -36,7 +33,7 @@ struct LoginView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                ApplicationTheme.shared.defaultColor.color
+                Color.white
                         .edgesIgnoringSafeArea(.all)
                 VStack {
 
@@ -46,11 +43,11 @@ struct LoginView: View {
                     VStack(spacing: 30) {
                         TextField(Properties.email, text: $email)
                                 .padding()
-                                .background(.white)
                                 .cornerRadius(10)
                                 .foregroundColor(.black)
-                                .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
-                                .frame(width: .infinity, height: 50)
+                                .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                                .frame(width: .infinity, height: 50).accentColor(.primary).multilineTextAlignment(.center)
+                                .border(.primary, width: 0.5)
 
                         PasswordView(isPasswordVisible: $isPasswordVisible, password: $password, text: "Enter Your password")
 
@@ -60,9 +57,9 @@ struct LoginView: View {
                             NavigationLink(destination: ForgotPasswordView(email: $email)) {
                                 Text(Properties.forgotPassword)
                                         .underline()
-                                        .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                                        .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
                                         .padding()
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.primary)
 
                             }
                         }
@@ -93,7 +90,7 @@ struct LoginView: View {
                                     }
                             }) {
                                 Text(Properties.signIn)
-                                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
+                                        .font(Font.custom(ApplicationTheme.shared.fontFamily, fixedSize: ApplicationTheme.shared.fontSize))
                                         .padding(.vertical)
                                         .foregroundColor(.primary)
                                         .frame(width: UIScreen.main.bounds.width - 50)
@@ -109,16 +106,16 @@ struct LoginView: View {
                     HStack {
 
                         Text(Properties.dontHaveAnAccount)
-                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
+                                .font(Font.custom(ApplicationTheme.shared.fontFamily, fixedSize: ApplicationTheme.shared.fontSize))
                                 .padding()
-                                .foregroundColor(.white)
+                                .foregroundColor(.secondary)
 
                         NavigationLink(destination: SignUpView()) {
                             Text(Properties.signUp)
                                     .underline()
-                                    .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                                    .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
                                     .padding()
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(.primary)
                         }
 
                         Spacer()

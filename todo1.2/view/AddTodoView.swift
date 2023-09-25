@@ -24,16 +24,16 @@ struct AddTodoView: View {
         VStack {
             TextField(Properties.enterTodo, text: $textField)
                     .frame(height: 50)
-                    .background(ApplicationTheme.shared.defaultColor.color).opacity(0.8)
-                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                    .background(ApplicationTheme.shared.defaultColor).opacity(0.8)
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
 
             Button(
                     action: addTodo
                     , label: {
                 Text(Properties.addTodo)
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
                         .frame(height: 50)
-                        .foregroundColor(ApplicationTheme.shared.defaultColor.color)
+                        .foregroundColor(ApplicationTheme.shared.defaultColor)
             })
                     .alert(isPresented: $showAlert, content: getAlert)
                     .toast(isPresented: $isToastVisible, message: $toastMessage)
@@ -50,7 +50,7 @@ struct AddTodoView: View {
                     toastMessage = Properties.todoCreatedSuccess
                     isToastVisible.toggle()
                 } else {
-                    toastMessage = Properties.todoCreatedUnsuccess
+                    toastMessage = Properties.todoCreatedUnSuccess
                     isToastVisible.toggle()
                 }
                 

@@ -21,11 +21,11 @@ struct UserView : View {
             HStack {
                 ZStack {
                     Circle()
-                            .foregroundColor(.blue)
+                            .foregroundColor(.primary)
                             .frame(width: 80, height: 60)
 
                     Text(user.getName().prefix(1).uppercased())
-                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily , size : ApplicationTheme.shared.fontSize))
                             .foregroundColor(.white)
                 }
                         .padding(.leading, 10)
@@ -33,13 +33,13 @@ struct UserView : View {
 
             VStack {
                 Text(user.getName() )
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
-                        .foregroundColor(.black)
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily, size : ApplicationTheme.shared.fontSize))
+                        .foregroundColor(.primary)
                         .padding(5)
 
                 Text(user.getTitle() )
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
-                        .foregroundColor(.black)
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily , size : ApplicationTheme.shared.fontSize))
+                        .foregroundColor(.primary)
                         .padding(.bottom, 10)
                         .padding(5)
             }
@@ -49,14 +49,14 @@ struct UserView : View {
                 NavigationLink(destination: LoginView()) {
                     Image(systemName: Properties.logoutImage)
                             .frame(width: 6, height: 6)
-                            .foregroundColor(.blue)
+                            .foregroundColor(.primary)
                             .padding(.leading, 5)
                             .padding(.bottom, 10)
                 }
 
                 NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName() , description: user.getTitle(), email: user.getEmail(), token: token)) {
                     Image(systemName: Properties.editImage)
-                            .foregroundColor(.blue)
+                            .foregroundColor(.primary)
                             .padding(.leading, 5)
                             .padding()
                 }

@@ -18,9 +18,9 @@ struct MenuView: View {
     @State var toastMessage = ""
     @State var isToastVisible = false
     @State var returnToMenu = false
-    @State var token:String
-    
-    init(userId:String, token:String) {
+    @State var token: String
+
+    init(userId: String, token: String) {
         self.userId = userId
         self.token = token
     }
@@ -29,7 +29,7 @@ struct MenuView: View {
         VStack {
             HStack {
                 Text(Properties.menu)
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
             }
                     .padding(.top, 20)
                     .padding(.bottom, 10)
@@ -54,16 +54,17 @@ struct MenuView: View {
                 VStack {
                     TextField(Properties.enterProject, text: $textField)
                             .frame(width: 250, height: 30)
-                            .background(Color.cyan)
+                            .background(.secondary.opacity(0.5))
+
                             .cornerRadius(10)
                             .multilineTextAlignment(.center)
-                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
 
                     Button(action: {
                         addProject(token: token)
                     }) {
                         Text(Properties.addProject)
-                                .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                                .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
                                 .frame(width: 150, height: 30)
                                 .foregroundColor(.black)
                                 .background(Color.secondary.opacity(0.5))
@@ -74,42 +75,56 @@ struct MenuView: View {
                 }
             }
             List {
-                ForEach(projectView.projects,id:\.self) { item in
+                ForEach(projectView.projects, id: \.self) { item in
                     NavigationLink(destination: AppView(project: item, showProject: true, userId: userId, token: token)) {
-                            ListRowView(project: item, token:token)
-                        }
+                        ListRowView(project: item, token: token)
                     }
-                            .onMove(perform: moveProject)
-                            
                 }
+                        .onMove(perform: moveProject)
+
+            }
             Spacer()
         }
                 .frame(width: 280)
                 .padding(.top, 50)
                 .border(Color.black, width: 0.2)
                 .edgesIgnoringSafeArea(.vertical)
-                .background(ApplicationTheme.shared.defaultColor.color)
+                .background(.white).ignoresSafeArea()
     }
 
     func moveProject(from source: IndexSet, to destination: Int) {
+
+        guard destination >= 0, destination < projectView.projects.count else { return }
         projectView.projects.move(fromOffsets: source, toOffset: destination)
+        let movedProject = projectView.projects[destination]
+
+        ProjectAPIService.shared.updatePosition(id: movedProject.getId(), token: token, todos: projectView.projects) { error in
+            if let error = error {
+                toastMessage = "\(error) \(Properties.updatedUnSuccessful)"
+            } else {
+                toastMessage = Properties.updateSuccess
+            }
+
+            isToastVisible.toggle()
+        }
     }
 
-    func addProject(token:String) -> Void {
-        if textIsAppropriate() {
-                ProjectAPIService.shared.create(name: textField, description: "description", token:token) { result, error in
-                    if let error = error  {
-                        toastMessage = "\(error)\n" + Properties.projectCreatedUnSuccess
-                        isToastVisible.toggle()
-                    } else if result == true  {
-                        toastMessage = Properties.projectCreatedSuccess
 
-                        isToastVisible.toggle()
-                    } else {
-                        toastMessage = Properties.projectCreatedUnSuccess
-                        isToastVisible.toggle()
-                    }
+    func addProject(token: String) -> Void {
+        if textIsAppropriate() {
+            ProjectAPIService.shared.create(name: textField, description: "description", token: token) { result, error in
+                if let error = error {
+                    toastMessage = "\(error)\n" + Properties.projectCreatedUnSuccess
+                    isToastVisible.toggle()
+                } else if result == true {
+                    toastMessage = Properties.projectCreatedSuccess
+
+                    isToastVisible.toggle()
+                } else {
+                    toastMessage = Properties.projectCreatedUnSuccess
+                    isToastVisible.toggle()
                 }
+            }
             projectView.addProject(title: textField, userId: userId)
             textField = ""
         }
@@ -128,7 +143,7 @@ struct MenuView: View {
         Alert(title: Text(alertTitle))
     }
 }
- 
+
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {

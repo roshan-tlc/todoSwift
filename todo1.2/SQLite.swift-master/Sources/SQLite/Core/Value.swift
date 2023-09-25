@@ -121,6 +121,7 @@ extension Int: Number, Value {
 
     public static var declaredDatatype = Int64.declaredDatatype
 
+
     public static func fromDatatypeValue(_ datatypeValue: Int64) -> Int {
         Int(datatypeValue)
     }

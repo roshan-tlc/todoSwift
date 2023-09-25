@@ -94,8 +94,8 @@ class ProjectAPIService : Identifiable {
             return
         }
         
-        interceptor = APIRequestInterceptor(token: token)
-        var request = interceptor?.intercept(URLRequest(url: url)) ?? URLRequest(url: url)
+        let interceptor = APIRequestInterceptor(token: token)
+        var request = interceptor.intercept(URLRequest(url: url))
         request.httpMethod = DBProperties.get
         request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
         
@@ -104,12 +104,12 @@ class ProjectAPIService : Identifiable {
                 completion(.failure(.DECODING_ERROR))
                 return
             }
-            
+
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.INVALID_RESPONSE))
                 return
             }
-            
+
             switch httpResponse.statusCode {
             case 200:
                 if let data = data {
@@ -127,6 +127,44 @@ class ProjectAPIService : Identifiable {
             }
         }.resume()
     }
+
+    func updatePosition(id:String, token:String,  todos:[APIProject], completion:@escaping (Error?) -> Void) {
+        guard let url = URL(string:"\(DBProperties.baseUrl)/api/v1/project/\(id)") else {
+            completion(APIService.APIErrors.INVALID_URL)
+            return
+        }
+
+        let interceptor = APIRequestInterceptor(token:token)
+        var request = interceptor.intercept(URLRequest(url:url))
+        request.httpMethod = DBProperties.put
+        request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
+
+        do {
+            let jsonData = try JSONEncoder().encode(todos)
+            request.httpBody = jsonData
+        } catch {
+            completion(error)
+            return
+        }
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error  {
+                completion(error)
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(APIService.APIErrors.INVALID_RESPONSE)
+                return
+            }
+
+            if httpResponse.statusCode == 200 {
+                completion(nil)
+            } else {
+                completion(APIService.APIErrors.INVALID_RESPONSE)
+            }
+        } .resume()
+    }
+
     
     
     func remove(id:String, token:String, completion : @escaping (Bool, Error?) -> Void) {
