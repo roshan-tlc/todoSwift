@@ -24,7 +24,6 @@ class TodoAPIService : Identifiable {
             Properties.description : description,
             Properties.projectId : projectId
         ]
-        print("project", projectId)
         interceptor = APIRequestInterceptor(token: token)
         var request = interceptor?.intercept( URLRequest(url: url)) ??  URLRequest(url: url)
         

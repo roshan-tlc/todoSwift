@@ -20,7 +20,6 @@ struct TodoView: View {
     @State var isSearchEnable = false
     @State var toastMessage = ""
     @State var isToastVisible = false
-    @State var result = TodoList.shared.apiTodos
     @State var selectedStatus: SearchFilter.Status = SearchFilter.Status.ALL
     @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize
     @State var fontFamily: String = ApplicationTheme.shared.fontFamily
@@ -36,13 +35,15 @@ struct TodoView: View {
 
     var paginatedTodo: [APITodo] {
         get {
+            
+            todos = todos.filter { $0.getParentId() == parentId}
+
             let startIndex = max(currentIndex, 0)
             let endIndex = min(startIndex + selectedLimit.rawValue, todos.count)
             if startIndex <= endIndex {
                 return Array(todos[startIndex..<endIndex])
             }
-
-            return result
+            return todos
         }
         set(newPaginatedTodo) {
             let startIndex = max(currentIndex, 0)
@@ -133,6 +134,7 @@ struct TodoView: View {
                                     .padding(.horizontal)
                                     .onChange(of: selectedStatus) { status in
                                         selectedStatus = status
+                                        todos = todoView.todos
                                     }
 
                             Picker(selection: $selectedLimit) {
@@ -157,7 +159,7 @@ struct TodoView: View {
                         }
                     }
                     if isAddViewVisible {
-                        AddTodoView(parentId: parentId, todos: $todos, token: token)
+                        AddTodoView(parentId: parentId, token: token)
                     }
 
                     List {
@@ -175,10 +177,13 @@ struct TodoView: View {
                                 }
                     }
                             .onAppear {
-                                DispatchQueue.main.async{
+
+                                DispatchQueue.main.async {
+                                
                                     todos = todoView.todos
                                 }
                             }
+
                             .onChange(of: todoView.todos) { change in
                                 todos = todoView.todos
                             }
@@ -264,23 +269,22 @@ struct TodoView: View {
              return Filter().getSearchFilter()
         }
 
-        todos = todos.filter {
+        let result = todos.filter {
             $0.getParentId() == parentId
         }
 
         if selectedStatus == SearchFilter.Status.COMPLETED {
-            let todo = todos.filter {
+            let todo = result.filter {
                 $0.getStatus() == true
             }
-            print("selected status ==>", todo)
             return todo
         } else if selectedStatus == SearchFilter.Status.UNCOMPLETED {
-            let todo = todos.filter {
+            let todo = result.filter {
                 $0.getStatus() == false
             }
             return todo
         }
-        return todoView.todos
+        return result
     }
 
 }

@@ -25,8 +25,8 @@ struct SignUpView : View {
 
     var body : some View {
         ZStack {
-            ApplicationTheme.shared.defaultColor
-                    .edgesIgnoringSafeArea(.all)
+            Color.white
+            .edgesIgnoringSafeArea(.all)
 
             VStack {
 
@@ -38,23 +38,22 @@ struct SignUpView : View {
                     TextField(Properties.name, text: $name)
                             .accessibility(hint: Text(Properties.emptyText))
                             .padding()
-                            .background(.white)
-                            .cornerRadius(10)
-                            .foregroundColor(.black)
+                            .background(.white).border(.primary, width: 0.5)
+                            .foregroundColor(.primary)
                             .frame(width: .infinity, height: 50)
 
                     TextField(Properties.email, text: $email)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary).border(.primary, width: 0.5)
                             .frame(width: .infinity, height: 50)
 
                     TextField(Properties.description, text: $description)
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary).border(.primary, width: 0.5)
                             .frame(width: .infinity, height: 50)
 
                     PasswordView(isPasswordVisible: $isPasswordVisible, password: $password, text: Properties.enterPassword)
@@ -64,7 +63,7 @@ struct SignUpView : View {
                             .padding()
                             .background(.white)
                             .cornerRadius(10)
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary).border(.primary, width: 0.5)
                             .frame(width: .infinity, height: 50)
 
                     HStack {
@@ -126,14 +125,14 @@ struct SignUpView : View {
                     Text(Properties.alreadyHaveAnAccount)
                             .font(Font.custom(ApplicationTheme.shared.fontFamily, fixedSize: ApplicationTheme.shared.fontSize))
                             .padding()
-                            .foregroundColor(.white)
+                            .foregroundColor(.secondary)
 
                     NavigationLink(destination: LoginView()) {
                         Text(Properties.signIn)
                                 .underline()
                                 .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
                                 .padding()
-                                .foregroundColor(.blue)
+                                .foregroundColor(.primary)
 
                     }
                 }

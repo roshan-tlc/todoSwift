@@ -37,7 +37,6 @@ struct AppView: View {
                 Spacer()
 
                 if showProject == true {
-
                     TodoView(project: project ?? APIProject(additional_attributes: AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, updatedAt: 0), _id: "", name: "", description: "", sort_order: 0), token: token)
                 }
             }

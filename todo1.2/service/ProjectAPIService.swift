@@ -73,7 +73,6 @@ class ProjectAPIService : Identifiable {
                 if let data = data {
                     do {
                         let projects = try JSONDecoder().decode(GetAllProjectResponse.self, from: data)
-                        
                         completion(.success(projects.data))
                     } catch {
                         print("Error -> ", error)
@@ -165,8 +164,8 @@ class ProjectAPIService : Identifiable {
         } .resume()
     }
 
-    
-    
+
+
     func remove(id:String, token:String, completion : @escaping (Bool, Error?) -> Void) {
         
         guard let url = URL(string: DBProperties.baseUrl + "/api/v1/project/" + id) else {

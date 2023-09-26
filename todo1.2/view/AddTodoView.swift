@@ -13,7 +13,6 @@ struct AddTodoView: View {
     @EnvironmentObject var listView: TodoList
     @Environment(\.presentationMode) var presentationMode
     @State var parentId:String
-    @Binding var todos:[APITodo]
     @State var searchText = ""
     @State var toastMessage = ""
     @State var isToastVisible = false
