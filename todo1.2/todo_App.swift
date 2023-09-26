@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct todo1_2App: App {
+struct todo_App: App {
     var body: some Scene {
         WindowGroup {
             LoginView()

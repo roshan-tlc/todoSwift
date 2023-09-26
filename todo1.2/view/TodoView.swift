@@ -37,8 +37,8 @@ struct TodoView: View {
     var paginatedTodo: [APITodo] {
         get {
             let startIndex = max(currentIndex, 0)
-            let endIndex = min(startIndex + selectedLimit.rawValue, reload().count)
-            let result = reload()
+            let endIndex = min(startIndex + selectedLimit.rawValue, todos.count)
+            todos = reload()
             if startIndex <= endIndex {
                 return Array(result[startIndex..<endIndex])
             }
@@ -48,7 +48,7 @@ struct TodoView: View {
         set(newPaginatedTodo) {
             let startIndex = max(currentIndex, 0)
             let endIndex = startIndex + newPaginatedTodo.count
-            var searchResults = reload()
+            var searchResults = todos
             let clampedEndIndex = min(endIndex, searchResults.count)
             let newSearchResults = Array(searchResults[startIndex..<clampedEndIndex])
             searchResults = newSearchResults
@@ -134,7 +134,6 @@ struct TodoView: View {
                                     .padding(.horizontal)
                                     .onChange(of: selectedStatus) { status in
                                         selectedStatus = status
-                                        reload()
                                     }
 
                             Picker(selection: $selectedLimit) {
@@ -154,7 +153,6 @@ struct TodoView: View {
 
                                     .onChange(of: selectedLimit) { newValue in
                                         currentIndex = 0
-                                        reload()
                                     }
 
                         }
@@ -219,7 +217,7 @@ struct TodoView: View {
             Spacer()
 
             var totalPages: Int {
-                let totalCount = reload().count
+                let totalCount = todos.count
                 let pages = (totalCount + selectedLimit.rawValue - 1) / selectedLimit.rawValue
                 return max(pages, 1)
             }

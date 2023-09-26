@@ -24,7 +24,7 @@ struct AddTodoView: View {
         VStack {
             TextField(Properties.enterTodo, text: $textField)
                     .frame(height: 50)
-                    .background(ApplicationTheme.shared.defaultColor).opacity(0.8)
+                    .background(.secondary.opacity(0.8))
                     .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
 
             Button(
@@ -33,7 +33,7 @@ struct AddTodoView: View {
                 Text(Properties.addTodo)
                         .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
                         .frame(height: 50)
-                        .foregroundColor(ApplicationTheme.shared.defaultColor)
+                        .foregroundColor(.primary)
             })
                     .alert(isPresented: $showAlert, content: getAlert)
                     .toast(isPresented: $isToastVisible, message: $toastMessage)
