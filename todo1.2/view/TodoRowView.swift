@@ -11,6 +11,7 @@ struct TodoRowView: View {
     
     @State var todo: APITodo;
     @State var token:String
+    @Binding var todos: [APITodo]
     @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize
     @State var fontFamily : String = ApplicationTheme.shared.fontFamily
     @State var defaultColor : Color = ApplicationTheme.shared.defaultColor
@@ -20,7 +21,6 @@ struct TodoRowView: View {
     
     var body: some View {
         HStack {
-            
             CheckBox(isChecked: $todo.is_completed, todo: todo, token: token)
                 .frame(width: 20, height: 20)
                 .padding(.leading, 30)
@@ -45,6 +45,7 @@ struct TodoRowView: View {
     
     
     func remove() {
+        todoView.removeTodo(id: todo.getId())
         TodoAPIService.shared.remove(id: todo.getId(), token: token) { result, error in
             
             if let error = error  {

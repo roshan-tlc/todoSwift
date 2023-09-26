@@ -24,7 +24,7 @@ class TodoList: ObservableObject {
         todos.append(APITodo(additional_attributes: AdditionalAttributes(), _id: String(1), name: title, description: "", sort_order: getOrder(), is_completed: false, project_id: parentId))
     }
 
-    func removeTodo(id: String, userId: String) {
+    func removeTodo(id: String) {
         todos.removeAll {
             $0.id == id
         }
@@ -45,19 +45,19 @@ class TodoList: ObservableObject {
         }
     }
 
-    func getAll(token: String, completion: @escaping ([APITodo]) -> Void) {
+    func getAll(token: String) {
         TodoAPIService.shared.getAll(token: token) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let todo):
                     self.apiTodos = todo
-                    completion(todo)
+                    self.todos = self.apiTodos
                 case .failure(_):
                     self.apiTodos = []
-                    completion([])
                 }
             }
         }
+        print("getAll ->", todos)
     }
 
     func getTodos(status: SearchFilter.Status, parentId: String) -> [APITodo] {

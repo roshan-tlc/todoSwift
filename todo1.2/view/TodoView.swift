@@ -38,9 +38,8 @@ struct TodoView: View {
         get {
             let startIndex = max(currentIndex, 0)
             let endIndex = min(startIndex + selectedLimit.rawValue, todos.count)
-            todos = reload()
             if startIndex <= endIndex {
-                return Array(result[startIndex..<endIndex])
+                return Array(todos[startIndex..<endIndex])
             }
 
             return result
@@ -158,12 +157,12 @@ struct TodoView: View {
                         }
                     }
                     if isAddViewVisible {
-                        AddTodoView(parentId: parentId, token: token)
+                        AddTodoView(parentId: parentId, todos: $todos, token: token)
                     }
 
                     List {
-                        ForEach(paginatedTodo) { todo in
-                            TodoRowView(todo: todo, token: token)
+                        ForEach(paginatedTodo, id:\.self) { todo in
+                            TodoRowView(todo: todo, token: token, todos: $todos)
                         }
                                 .onMove { sourceIndices, destination in
                                     let source = sourceIndices.map {
@@ -175,7 +174,14 @@ struct TodoView: View {
                                     todoView.todos.move(fromOffsets: IndexSet(source), toOffset: itemDestination)
                                 }
                     }
-
+                            .onAppear {
+                                DispatchQueue.main.async{
+                                    todos = todoView.todos
+                                }
+                            }
+                            .onChange(of: todoView.todos) { change in
+                                todos = todoView.todos
+                            }
                             .navigationBarBackButtonHidden(false).foregroundColor(defaultColor)
                             .padding()
 
@@ -258,10 +264,6 @@ struct TodoView: View {
              return Filter().getSearchFilter()
         }
 
-        TodoList.shared.getAll(token: token) { apiTodo in
-            todos = apiTodo
-        }
-
         todos = todos.filter {
             $0.getParentId() == parentId
         }
@@ -278,7 +280,7 @@ struct TodoView: View {
             }
             return todo
         }
-        return todos
+        return todoView.todos
     }
 
 }

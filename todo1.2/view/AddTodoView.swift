@@ -13,6 +13,7 @@ struct AddTodoView: View {
     @EnvironmentObject var listView: TodoList
     @Environment(\.presentationMode) var presentationMode
     @State var parentId:String
+    @Binding var todos:[APITodo]
     @State var searchText = ""
     @State var toastMessage = ""
     @State var isToastVisible = false
@@ -42,6 +43,7 @@ struct AddTodoView: View {
     }
     func addTodo() {
         if textIsAppropriate()  {
+
             TodoAPIService.shared.create(name: textField, description: Properties.description, token: token, projectId: parentId) { result , error in
                 if let error = error {
                     toastMessage = "\(error)"
@@ -53,8 +55,8 @@ struct AddTodoView: View {
                     toastMessage = Properties.todoCreatedUnSuccess
                     isToastVisible.toggle()
                 }
-                
             }
+
             TodoList.shared.addTodo(title: textField, parentId: parentId)
             textField = ""
         }

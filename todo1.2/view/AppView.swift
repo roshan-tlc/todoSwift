@@ -10,6 +10,7 @@ import SwiftUI
 struct AppView: View {
 
     @EnvironmentObject var listView: ProjectList
+    @EnvironmentObject var todoList: TodoList
     @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize
     @State var fontFamily: String = ApplicationTheme.shared.fontFamily
     @State var defaultColor: Color = ApplicationTheme.shared.defaultColor
@@ -26,8 +27,6 @@ struct AppView: View {
         self.showProject = showProject
         self.userId = userId
         self.token = token
-        ApplicationTheme.shared.getTheme(token: token)
-
     }
 
     var body: some View {
@@ -38,6 +37,7 @@ struct AppView: View {
                 Spacer()
 
                 if showProject == true {
+
                     TodoView(project: project ?? APIProject(additional_attributes: AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, updatedAt: 0), _id: "", name: "", description: "", sort_order: 0), token: token)
                 }
             }
@@ -52,6 +52,7 @@ struct AppView: View {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button {
                                 ProjectList.shared.getAll(token: token)
+                                todoList.getAll(token: token)
                                 self.showMenu.toggle()
                             } label: {
                                 Image(systemName: showMenu ? Properties.xMarkImage : Properties.textJustifyImage)
