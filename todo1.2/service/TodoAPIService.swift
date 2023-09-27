@@ -90,7 +90,7 @@ class TodoAPIService : Identifiable {
     
     func update(id:String, isCompleted:Bool, token:String, projectId:String, completion : @escaping (Bool, Error?) -> Void ) {
         
-        guard let url = URL(string: DBProperties.baseUrl + "/api/v1/item" + id) else {
+        guard let url = URL(string: DBProperties.baseUrl + "/api/v1/item/" + id) else {
             completion(false, APIService.APIErrors.INVALID_URL)
             return
         }
@@ -106,6 +106,7 @@ class TodoAPIService : Identifiable {
         request.httpMethod = DBProperties.put
         
         let data =  try! JSONSerialization.data(withJSONObject: userData, options: .prettyPrinted)
+        
         URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
