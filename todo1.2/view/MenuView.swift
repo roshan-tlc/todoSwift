@@ -29,7 +29,7 @@ struct MenuView: View {
         VStack {
             HStack {
                 Text(Properties.menu)
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
             }
                     .padding(.top, 20)
                     .padding(.bottom, 10)
@@ -58,13 +58,13 @@ struct MenuView: View {
 
                             .cornerRadius(10)
                             .multilineTextAlignment(.center)
-                            .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
 
                     Button(action: {
                         addProject(token: token)
                     }) {
                         Text(Properties.addProject)
-                                .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                            .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
                                 .frame(width: 150, height: 30)
                                 .foregroundColor(.black)
                                 .background(Color.secondary.opacity(0.5))
@@ -98,15 +98,25 @@ struct MenuView: View {
         projectView.projects.move(fromOffsets: source, toOffset: destination)
         let movedProject = projectView.projects[destination]
 
-        ProjectAPIService.shared.updatePosition(id: movedProject.getId(), token: token, todos: projectView.projects) { error in
-            if let error = error {
-                toastMessage = "\(error) \(Properties.updatedUnSuccessful)"
-            } else {
-                toastMessage = Properties.updateSuccess
-            }
+        for (position, item) in projectView.projects.enumerated() {
+            let newOrder = position + 1
+            let updateOrder:[String: Any] = ["sort_order": newOrder]
+            print(item.getId(), item.sort_order)
 
-            isToastVisible.toggle()
+            ProjectAPIService.shared.updatePosition(id: movedProject.getId(), token: token, updatedOrder: updateOrder)  {error in
+                if let error = error {
+                    print("error", error
+                    )
+                    toastMessage = "\(error)"
+                    isToastVisible.toggle()
+                } else {
+                    toastMessage = Properties.updateSuccess
+                    isToastVisible.toggle()
+                }
+            }
         }
+
+
     }
 
 

@@ -4,15 +4,16 @@
 
 import Foundation
 
-class ProjectAPIService : Identifiable {
+class ProjectAPIService: Identifiable {
     
     static let shared = ProjectAPIService()
     
     private var interceptor: APIRequestInterceptor?
     
-    private init() {}
+    private init() {
+    }
     
-    func create(name:String, description:String, token:String, completion : @escaping (Bool, Error?) -> Void ) {
+    func create(name: String, description: String, token: String, completion: @escaping (Bool, Error?) -> Void) {
         
         guard let url = URL(string: DBProperties.baseUrl + "/api/v1/project") else {
             completion(false, APIService.APIErrors.INVALID_URL)
@@ -25,12 +26,12 @@ class ProjectAPIService : Identifiable {
         ]
         
         interceptor = APIRequestInterceptor(token: token)
-        var request = interceptor?.intercept( URLRequest(url: url)) ??  URLRequest(url: url)
+        var request = interceptor?.intercept(URLRequest(url: url)) ?? URLRequest(url: url)
         
         if let jsonData = try? JSONSerialization.data(withJSONObject: userData) {
             request.httpMethod = DBProperties.post
             request.httpBody = jsonData
-            request.setValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType )
+            request.setValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
             
             URLSession.shared.dataTask(with: request) { data, response, error in
                 if let httpResponse = response as? HTTPURLResponse {
@@ -49,12 +50,13 @@ class ProjectAPIService : Identifiable {
     }
     
     func getAllProjects(token: String, completion: @escaping (Result<[APIProject], Error>) -> Void) {
-        guard let url = URL(string: DBProperties.baseUrl + "/api/v1/project") else {
+        guard let url = URL(string: "\(DBProperties.baseUrl)/api/v1/project") else {
             completion(.failure(APIService.APIErrors.INVALID_URL))
             return
         }
+        
         interceptor = APIRequestInterceptor(token: token)
-        var request = interceptor?.intercept( URLRequest(url: url)) ??  URLRequest(url: url)
+        var request = interceptor?.intercept(URLRequest(url: url)) ?? URLRequest(url: url)
         request.httpMethod = DBProperties.get
         request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
         
@@ -75,7 +77,6 @@ class ProjectAPIService : Identifiable {
                         let projects = try JSONDecoder().decode(GetAllProjectResponse.self, from: data)
                         completion(.success(projects.data))
                     } catch {
-                        print("Error -> ", error)
                         completion(.failure(error))
                     }
                 } else {
@@ -84,8 +85,10 @@ class ProjectAPIService : Identifiable {
             } else {
                 completion(.failure(APIService.APIErrors.INVALID_RESPONSE))
             }
-        }.resume()
+        }
+        .resume()
     }
+    
     
     func get(id: String, token: String, completion: @escaping (Result<APIProject, APIService.APIErrors>) -> Void) {
         guard let url = URL(string: DBProperties.baseUrl + "/api/v1/project/" + id) else {
@@ -103,12 +106,12 @@ class ProjectAPIService : Identifiable {
                 completion(.failure(.DECODING_ERROR))
                 return
             }
-
+            
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.INVALID_RESPONSE))
                 return
             }
-
+            
             switch httpResponse.statusCode {
             case 200:
                 if let data = data {
@@ -124,88 +127,86 @@ class ProjectAPIService : Identifiable {
             default:
                 completion(.failure(.INVALID_RESPONSE))
             }
-        }.resume()
+        }
+        .resume()
     }
-
-    func updatePosition(id:String, token:String,  todos:[APIProject], completion:@escaping (Error?) -> Void) {
-        guard let url = URL(string:"\(DBProperties.baseUrl)/api/v1/project/\(id)") else {
+    
+    func updatePosition(id: String, token: String, updatedOrder: [String:Any], completion: @escaping (Error?) -> Void) {
+        
+        guard let url = URL(string: "\(DBProperties.baseUrl)/api/v1/project/\(id)") else {
             completion(APIService.APIErrors.INVALID_URL)
             return
         }
-
-        let interceptor = APIRequestInterceptor(token:token)
-        var request = interceptor.intercept(URLRequest(url:url))
+        
+        let interceptor = APIRequestInterceptor(token: token)
+        var request = interceptor.intercept(URLRequest(url: url))
         request.httpMethod = DBProperties.put
         request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
-
-        do {
-            let jsonData = try JSONEncoder().encode(todos)
-            request.httpBody = jsonData
-        } catch {
-            completion(error)
-            return
-        }
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error  {
+        
+        let data = try! JSONSerialization.data(withJSONObject: updatedOrder, options: .prettyPrinted)
+        
+        URLSession.shared.uploadTask(with: request , from : data) { data, response, error in
+            if let error = error {
                 completion(error)
                 return
             }
-
+            
+            
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(APIService.APIErrors.INVALID_RESPONSE)
                 return
             }
-
+            
             if httpResponse.statusCode == 200 {
                 completion(nil)
             } else {
                 completion(APIService.APIErrors.INVALID_RESPONSE)
             }
-        } .resume()
+        }
+        .resume()
     }
 
+    func remove(id: String, token: String, completion: @escaping (Bool, Error?) -> Void) {
 
-
-    func remove(id:String, token:String, completion : @escaping (Bool, Error?) -> Void) {
-        
         guard let url = URL(string: DBProperties.baseUrl + "/api/v1/project/" + id) else {
             completion(false, APIService.APIErrors.INVALID_URL)
             return
         }
-        
+
         interceptor = APIRequestInterceptor(token: token)
-        var request = interceptor?.intercept( URLRequest(url: url)) ??  URLRequest(url: url)
+        var request = interceptor?.intercept(URLRequest(url: url)) ?? URLRequest(url: url)
         request.httpMethod = DBProperties.remove
         request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
-        
+
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(false, error)
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(false, APIService.APIErrors.INVALID_RESPONSE)
-                return
-            }
-            
-            if httpResponse.statusCode == 200 {
-                completion(true, nil)
-            } else {
-                completion(false, APIService.APIErrors.INVALID_RESPONSE)
-            }
-        }.resume()
+                    if let error = error {
+                        completion(false, error)
+                        return
+                    }
+
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        completion(false, APIService.APIErrors.INVALID_RESPONSE)
+                        return
+                    }
+
+                    if httpResponse.statusCode == 200 {
+                        completion(true, nil)
+                    } else {
+                        completion(false, APIService.APIErrors.INVALID_RESPONSE)
+                    }
+                }
+                .resume()
     }
-    
+
 }
 
-struct GetAllProjectResponse : Decodable {
+struct GetAllProjectResponse: Decodable {
     let success: Bool
     let message: String
     let data: [APIProject]
 }
 
-struct GetProjectResponse : Decodable {
+struct GetProjectResponse: Decodable {
     let success: Bool
     let message: String
     let data: APIProject

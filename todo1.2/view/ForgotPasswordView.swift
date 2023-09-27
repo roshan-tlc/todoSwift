@@ -94,7 +94,7 @@ struct ForgotPasswordView : View {
 
                         }) {
                             Text(Properties.resetPassword)
-                                    .font(Font.custom(ApplicationTheme.shared.fontFamily, fixedSize: ApplicationTheme.shared.fontSize))
+                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
                                     .frame(width: UIScreen.main.bounds.width - 250)
@@ -108,7 +108,7 @@ struct ForgotPasswordView : View {
                             presentation.wrappedValue.dismiss()
                         }) {
                             Text(Properties.cancel)
-                                    .font(Font.custom(ApplicationTheme.shared.fontFamily, fixedSize: ApplicationTheme.shared.fontSize))
+                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
                                     .frame(width: UIScreen.main.bounds.width - 250)

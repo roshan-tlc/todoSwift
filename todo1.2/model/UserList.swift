@@ -19,9 +19,14 @@ class UserList : ObservableObject{
     }
 
     func update (id: String, name:String, title:String, token:String) {
+        if let index = usersList.firstIndex(where: { String($0.id) == id }) {
+            let matchingTodo = usersList[index]
+            matchingTodo.setName(name: name)
+            matchingTodo.setDescription(description: title)
+        }
         UserAPIService.shared.update(name: name, title: title , token: token) {result, error in
             
-            if let error = error  {
+            if error != nil  {
                 print("error")
             } else if result == true {
                 
@@ -31,7 +36,6 @@ class UserList : ObservableObject{
 
     func userValidation(email:String, password:String)  throws -> Int64 {
         do {
-            //return try await LoginService.shared.signIn(email:email , password: password)
             return try credentialTable.validation(email: email, password: password)
 
         } catch {
@@ -63,13 +67,11 @@ class UserList : ObservableObject{
             throw error
         }
     }
+
+
     
-    func get(id:String) throws -> User {
-        do {
-            return try userTable.get(id: id)
-        } catch {
-            throw error
-        }
+    func get(id:String)  -> User {
+        usersList.first(where: { String($0.id) == id}) ?? User(id: 0, name: "", description: "", email: "")
     }
     
     func get() throws -> [User] {

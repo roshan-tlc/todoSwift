@@ -59,6 +59,7 @@ class APIProject :Identifiable,Decodable, Hashable, Encodable {
     }
 
     func encode(to encoder: Encoder) throws {
-
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(sort_order, forKey: .sort_order)
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 class TodoList: ObservableObject {
     @Published var todos = [APITodo]()
-    var apiTodos = [APITodo]()
+    static var apiTodos = [APITodo]()
     var todo = APITodo()
     static let shared = TodoList()
     private let filter = Filter()
@@ -50,14 +50,13 @@ class TodoList: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let todo):
-                    self.apiTodos = todo
-                    self.todos = self.apiTodos
+                    TodoList.apiTodos = todo
+                    self.todos = TodoList.apiTodos
                 case .failure(_):
-                    self.apiTodos = []
+                    TodoList.apiTodos = []
                 }
             }
         }
-        print("getAll ->", todos)
     }
 
     func getTodos(status: SearchFilter.Status, parentId: String) -> [APITodo] {
@@ -82,6 +81,11 @@ class TodoList: ObservableObject {
 
     func getOrder() -> Int {
         todos.count + 1
+    }
+
+    func getTodo(parentId:String) -> [APITodo] {
+        TodoList.apiTodos.filter {$0.getParentId() == parentId}
+
     }
 
 

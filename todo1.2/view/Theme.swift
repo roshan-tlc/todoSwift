@@ -3,8 +3,8 @@
 //struct Theme: View {
 //    @EnvironmentObject var appTheme: ApplicationTheme
 //    @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize
-//    @State var fontFamily: String = ApplicationTheme.shared.fontFamily
-//    @State var defaultColor: ApplicationTheme.DefaultColor = ApplicationTheme.shared.defaultColor
+//    @State var fontFamily: String = ApplicationTheme.shared.fontFamily.rawValue
+//    @State var defaultColor: Color = ApplicationTheme.shared.defaultColor
 //    @State var isToastVisible = false
 //    @State var toastMessage = ""
 //    @State var isLogout = false
@@ -19,7 +19,7 @@
 //                                Text(Properties.fontFamily)
 //                                        .padding()
 //                                        .font(Font.custom(fontFamily, size: fontSize))
-//                                        .foregroundColor(defaultColor.color)
+//                                        .foregroundColor(defaultColor)
 //
 //                                Picker("", selection: $fontFamily) {
 //                                    Text(Properties.fontFamilyCursive).tag(ApplicationTheme.FontFamily.CURSIVE)

@@ -14,7 +14,7 @@ struct UserEditView: View {
     @State var toastMessage = ""
     @State var isToastVisible = false
     @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize
-    @State var fontFamily : String = ApplicationTheme.shared.fontFamily
+    @State var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
     @State var defaultColor : Color = ApplicationTheme.shared.defaultColor
     @Environment(\.presentationMode) var presentation
     
@@ -54,7 +54,6 @@ struct UserEditView: View {
 
                     Button(action: {
                         UserList.shared.update(id: userId, name: userName, title: description, token: token)
-                        
                         presentation.wrappedValue.dismiss()
                     }) {
                         Text(Properties.save)
@@ -77,4 +76,5 @@ struct UserEditView: View {
                 .background(ApplicationTheme.shared.defaultColor)
                 .toast(isPresented: $isToastVisible, message: $toastMessage)
     }
+
 }

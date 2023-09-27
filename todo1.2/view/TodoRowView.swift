@@ -13,7 +13,7 @@ struct TodoRowView: View {
     @State var token:String
     @Binding var todos: [APITodo]
     @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize
-    @State var fontFamily : String = ApplicationTheme.shared.fontFamily
+    @State var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
     @State var defaultColor : Color = ApplicationTheme.shared.defaultColor
     @State var isToastVisible = false
     @State var toastMessage = ""

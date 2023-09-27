@@ -53,7 +53,7 @@ class APITodo :Identifiable, Decodable, Hashable, Encodable {
     }
     
     func getParentId() -> String {
-        additional_attributes.created_by
+        project_id
     }
     
     func getOrder() -> Int {

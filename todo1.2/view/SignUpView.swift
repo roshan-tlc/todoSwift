@@ -109,7 +109,7 @@ struct SignUpView : View {
                             }
                         }) {
                             Text(Properties.signUp)
-                                    .font(Font.custom(ApplicationTheme.shared.fontFamily, fixedSize: ApplicationTheme.shared.fontSize))
+                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
                                     .frame(width: UIScreen.main.bounds.width - 50)
@@ -123,14 +123,14 @@ struct SignUpView : View {
                 HStack {
 
                     Text(Properties.alreadyHaveAnAccount)
-                            .font(Font.custom(ApplicationTheme.shared.fontFamily, fixedSize: ApplicationTheme.shared.fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
                             .padding()
                             .foregroundColor(.secondary)
 
                     NavigationLink(destination: LoginView()) {
                         Text(Properties.signIn)
                                 .underline()
-                                .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                                .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
                                 .padding()
                                 .foregroundColor(.primary)
 
@@ -154,14 +154,14 @@ struct PasswordView : View {
 
                 if isPasswordVisible {
                     TextField(text, text: $password)
-                            .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
                             .padding()
                             .frame(width: .infinity, height: 50).accentColor(.primary).multilineTextAlignment(.center)
                             .border(.primary, width: 0.5)
                             .cornerRadius(10)
                 } else {
                     SecureField(text, text: $password)
-                            .font(Font.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
                             .padding()
                             .foregroundColor(.primary)
                             .frame(width: .infinity, height: 50).accentColor(.primary).multilineTextAlignment(.center)

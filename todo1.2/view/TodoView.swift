@@ -10,7 +10,6 @@ import SwiftUI
 struct TodoView: View {
 
     @EnvironmentObject var todoView: TodoList
-    @State var project: APIProject
     @State var parentId: String
     @State var parentTitle: String
     @State private var searchText = ""
@@ -22,7 +21,7 @@ struct TodoView: View {
     @State var isToastVisible = false
     @State var selectedStatus: SearchFilter.Status = SearchFilter.Status.ALL
     @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize
-    @State var fontFamily: String = ApplicationTheme.shared.fontFamily
+    @State var fontFamily: String = ApplicationTheme.shared.fontFamily.rawValue
     @State var defaultColor: Color = ApplicationTheme.shared.defaultColor
     @State var isAddView = false
     @State var selectedLimit: SearchFilter.Limit = SearchFilter.Limit.FIVE
@@ -55,10 +54,10 @@ struct TodoView: View {
         }
     }
 
-    init(project: APIProject, token: String) {
-        self.project = project
-        parentId = project.getId()
-        parentTitle = project.getTitle()
+    init(projectId: String, title:String, token: String) {
+
+        parentId = projectId
+        parentTitle = title
         self.token = token
     }
 
@@ -77,6 +76,7 @@ struct TodoView: View {
                         Image(systemName: Properties.plusAppImage)
                                 .onTapGesture {
                                     isAddViewVisible.toggle()
+                                    todos = reload()
                                 }
                                 .imageScale(.large)
                                 .foregroundColor(.primary)
@@ -95,6 +95,7 @@ struct TodoView: View {
                                     } else {
                                         isSearchEnable = true
                                     }
+                                    todos = reload()
                                 }
                     }
                     if isSearchViewVisible {
@@ -108,6 +109,7 @@ struct TodoView: View {
                                         .onTapGesture {
                                             isSearchEnable.toggle()
                                         }
+                                        
                             } else {
                                 Button(action: {
                                     isSearchBarVisible.toggle()
@@ -134,7 +136,7 @@ struct TodoView: View {
                                     .padding(.horizontal)
                                     .onChange(of: selectedStatus) { status in
                                         selectedStatus = status
-                                        todos = todoView.todos
+                                        todos = reload()
                                     }
 
                             Picker(selection: $selectedLimit) {
@@ -154,6 +156,7 @@ struct TodoView: View {
 
                                     .onChange(of: selectedLimit) { newValue in
                                         currentIndex = 0
+                                        todos = reload()
                                     }
 
                         }
@@ -174,18 +177,35 @@ struct TodoView: View {
                                     let itemDestination = min(max(destinationIndex, 0), todoView.todos.count)
 
                                     todoView.todos.move(fromOffsets: IndexSet(source), toOffset: itemDestination)
+                                    
+                                    let movedTodo = todoView.todos[destination]
+                                    
+                                    for (position, item) in todoView.todos.enumerated() {
+                                        let newOrder = position + 1
+
+                                        TodoAPIService.shared.updatePosition(id: movedTodo.getId(), token: token, projectId: movedTodo.getParentId(), updatedOrder: newOrder)  {error in
+                                            if let error = error {
+                                                print("error", error
+                                                )
+                                                toastMessage = "\(error)"
+                                                isToastVisible.toggle()
+                                            } else {
+                                                toastMessage = Properties.updateSuccess
+                                                isToastVisible.toggle()
+                                            }
+                                        }
+                                    }
                                 }
                     }
                             .onAppear {
 
                                 DispatchQueue.main.async {
-                                
-                                    todos = todoView.todos
+                                    todos = reload()
                                 }
                             }
 
                             .onChange(of: todoView.todos) { change in
-                                todos = todoView.todos
+                                todos = reload()
                             }
                             .navigationBarBackButtonHidden(false).foregroundColor(defaultColor)
                             .padding()
@@ -248,11 +268,8 @@ struct TodoView: View {
         currentIndex -= selectedLimit.rawValue
     }
 
-    func setSearchFalse(completion: (Bool) -> Void) {
-        self.isSearchEnable.toggle()
-    }
-
-    func reload() -> [APITodo]{
+    func reload() -> [APITodo] {
+        
         if isSearchEnable {
             searchFilter.setAttribute(attribute: searchText)
             searchFilter.setSelectedStatus(status: selectedStatus)
@@ -261,37 +278,33 @@ struct TodoView: View {
             searchFilter.setSkip(skip: 0)
 
             do {
-                try filter.setSearchFilter(searchItem: searchFilter, todos:todos)
+                try filter.setSearchFilter(searchItem: searchFilter, todos: todos)
+                return Filter().getSearchFilter()
             } catch {
                 toastMessage = "\(error)"
                 isToastVisible.toggle()
+                return []
             }
-             return Filter().getSearchFilter()
-        }
+        } else {
+            let filteredTodos = todoView.todos.filter { $0.getParentId() == parentId }
 
-        let result = todos.filter {
-            $0.getParentId() == parentId
-        }
-
-        if selectedStatus == SearchFilter.Status.COMPLETED {
-            let todo = result.filter {
-                $0.getStatus() == true
+            switch selectedStatus {
+            case .COMPLETED:
+                return filteredTodos.filter { $0.getStatus() }
+            case .UNCOMPLETED:
+                return filteredTodos.filter { !$0.getStatus() }
+            default:
+                return filteredTodos
             }
-            return todo
-        } else if selectedStatus == SearchFilter.Status.UNCOMPLETED {
-            let todo = result.filter {
-                $0.getStatus() == false
-            }
-            return todo
         }
-        return result
     }
+
 
 }
 
 struct SearchBar: View {
     @Binding var text: String
-    @State var fontFamily: String = ApplicationTheme.shared.fontFamily
+    @State var fontFamily: String = ApplicationTheme.shared.fontFamily.rawValue
     @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize
 
     var body: some View {

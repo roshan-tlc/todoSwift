@@ -78,8 +78,8 @@
             filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -141,8 +141,8 @@
             filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -204,8 +204,8 @@
             filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -556,8 +556,8 @@
             filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "223"
-            endingLineNumber = "223"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -572,8 +572,8 @@
             filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "224"
-            endingLineNumber = "224"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -716,8 +716,8 @@
             filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -734,8 +734,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "35"
             endingLineNumber = "35"
-            landmarkName = "TodoView"
-            landmarkType = "14">
+            landmarkName = "paginatedTodo"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -780,8 +780,8 @@
             filePath = "todo1.2/service/TodoAPIService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
+            startingLineNumber = "227"
+            endingLineNumber = "227"
             landmarkName = "remove(id:token:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -796,8 +796,8 @@
             filePath = "todo1.2/service/TodoAPIService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "remove(id:token:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -814,8 +814,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "88"
             endingLineNumber = "88"
-            landmarkName = "previews"
-            landmarkType = "24">
+            landmarkName = "TodoRowView_Previews"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -828,8 +828,8 @@
             filePath = "todo1.2/model/UserList.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "update(id:name:title:token:)"
             landmarkType = "7">
             <Locations>
@@ -869,118 +869,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6BC09E51-2896-42AA-9407-ECD72EFAF61F"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "todo1.2/service/UserAPISerivce.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
-            landmarkName = "update(name:title:token:completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "6BC09E51-2896-42AA-9407-ECD72EFAF61F - fd42281f1d1308fe"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in todo1_2.UserAPIService.update(user: todo1_2.APIUser, completion: (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "todo1.2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krithikroshan/Library/Mobile%20Documents/com~apple~CloudDocs/todo1.2%20copy%202/todo1.2/service/UserAPISerivce.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "78"
-                  endingLineNumber = "78"
-                  offsetFromSymbolStart = "368">
-               </Location>
-               <Location
-                  uuid = "6BC09E51-2896-42AA-9407-ECD72EFAF61F - 863150d0dc1bb8ab"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in todo1_2.UserAPIService.update(name: Swift.String, title: Swift.String, token: Swift.String, completion: (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "todo1.2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krithikroshan/Library/Mobile%20Documents/com~apple~CloudDocs/todo1.2%20copy%202/todo1.2/service/UserAPISerivce.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "79"
-                  endingLineNumber = "79"
-                  offsetFromSymbolStart = "416">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "DFCC37F6-D0EA-4B03-9E2F-9BF238A1B12C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "todo1.2/service/UserAPISerivce.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
-            landmarkName = "update(name:title:token:completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "DFCC37F6-D0EA-4B03-9E2F-9BF238A1B12C - 863150d0dc1bb8e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in todo1_2.UserAPIService.update(name: Swift.String, title: Swift.String, token: Swift.String, completion: (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "todo1.2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krithikroshan/Library/Mobile%20Documents/com~apple~CloudDocs/todo1.2%20copy%202/todo1.2/service/UserAPISerivce.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "356">
-               </Location>
-               <Location
-                  uuid = "DFCC37F6-D0EA-4B03-9E2F-9BF238A1B12C - 863150d0dc1bb888"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in todo1_2.UserAPIService.update(name: Swift.String, title: Swift.String, token: Swift.String, completion: (Swift.Bool, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "todo1.2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krithikroshan/Library/Mobile%20Documents/com~apple~CloudDocs/todo1.2%20copy%202/todo1.2/service/UserAPISerivce.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "78"
-                  endingLineNumber = "78"
-                  offsetFromSymbolStart = "384">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "51216C76-E60F-4C80-90E1-4B04FD279664"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "todo1.2/service/UserAPISerivce.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "update(name:title:token:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "D81C4CBD-132C-47DB-A6FE-F65B6657AA06"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -988,8 +876,8 @@
             filePath = "todo1.2/view/MenuView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "moveProject(from:to:)"
             landmarkType = "7">
             <Locations>
@@ -1211,8 +1099,8 @@
             filePath = "todo1.2/view/TodoView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -1305,8 +1193,8 @@
             filePath = "todo1.2/model/ApplicationTheme.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "getTheme(token:)"
             landmarkType = "7">
          </BreakpointContent>

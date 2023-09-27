@@ -51,39 +51,37 @@ class UserAPIService : Identifiable {
             }
         }.resume()
     }
-    
-    func update(name:String, title:String ,token:String ,completion: @escaping (Bool, Error?) -> Void) {
-            guard let url = URL(string: DBProperties.baseUrl + "/api/v1/user/details") else {
-                completion(false, APIService.APIErrors.INVALID_URL)
-                return
-            }
-        interceptor = APIRequestInterceptor(token: token)
-        var request = interceptor?.intercept( URLRequest(url: url)) ??  URLRequest(url: url)
-        
-            let userData = [
-                Properties.name: name,
-                //Properties.title: title,
-            ]
 
-            if let jsonData = try? JSONSerialization.data(withJSONObject: userData) {
-                request.httpMethod = DBProperties.post
-                request.httpBody = jsonData
-                request.setValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType )
+    func update(name: String, title: String, token: String, completion: @escaping (Bool, Error?) -> Void) {
+        guard let url = URL(string: DBProperties.baseUrl + "/api/v1/user/details") else {
+            completion(false, APIService.APIErrors.INVALID_URL)
+            return
+        }
 
-                URLSession.shared.dataTask(with: request) { data, response, error in
-                            if let httpResponse = response as? HTTPURLResponse {
-                                if httpResponse.statusCode == 200 {
-                                    completion(true, error)
-                                } else {
-                                    completion(false, APIService.APIErrors.INVALID_RESPONSE)
-                                }
-                            } else if let error = error {
-                                completion(false, error)
-                            }
-                        }
-                        .resume()
-            }
+        let interceptor = APIRequestInterceptor(token: token)
+        var request = interceptor.intercept(URLRequest(url: url))
+        request.httpMethod = DBProperties.put
+        request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
+
+        let userData = [
+            Properties.name: name,
+            Properties.title: title,
+        ]
+            let data = try! JSONSerialization.data(withJSONObject: userData, options: .prettyPrinted)
+
+            URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 200 {
+                        completion(true, error)
+                    } else {
+                        completion(false, APIService.APIErrors.INVALID_RESPONSE)
+                    }
+                } else if let error = error {
+                    completion(false, error)
+                }
+            }.resume()
     }
+
     
     
     func remove(id:String, token:String, completion : @escaping (Bool, Error?) -> Void) {

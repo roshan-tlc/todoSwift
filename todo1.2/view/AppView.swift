@@ -12,7 +12,7 @@ struct AppView: View {
     @EnvironmentObject var listView: ProjectList
     @EnvironmentObject var todoList: TodoList
     @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize
-    @State var fontFamily: String = ApplicationTheme.shared.fontFamily
+    @State var fontFamily: ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
     @State var defaultColor: Color = ApplicationTheme.shared.defaultColor
     @State var message = ""
     @State var isToastVisible = false
@@ -37,7 +37,9 @@ struct AppView: View {
                 Spacer()
 
                 if showProject == true {
-                    TodoView(project: project ?? APIProject(additional_attributes: AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, updatedAt: 0), _id: "", name: "", description: "", sort_order: 0), token: token)
+                    if let project = project {
+                        TodoView(projectId: project.getId(), title: project.getTitle(), token: token)
+                    }
                 }
             }
 
@@ -52,6 +54,7 @@ struct AppView: View {
                             Button {
                                 ProjectList.shared.getAll(token: token)
                                 todoList.getAll(token: token)
+
                                 self.showMenu.toggle()
                             } label: {
                                 Image(systemName: showMenu ? Properties.xMarkImage : Properties.textJustifyImage)

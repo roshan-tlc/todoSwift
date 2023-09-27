@@ -102,26 +102,63 @@ class TodoAPIService : Identifiable {
         
         interceptor = APIRequestInterceptor(token: token)
         var request = interceptor?.intercept( URLRequest(url: url)) ??  URLRequest(url: url)
+        request.setValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
+        request.httpMethod = DBProperties.put
         
-        if let jsonData = try? JSONSerialization.data(withJSONObject: userData) {
-            request.httpMethod = DBProperties.put
-            request.httpBody = jsonData
-            request.setValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType )
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                if let httpResponse = response as? HTTPURLResponse {
-                    if httpResponse.statusCode == 200 {
-                        completion(true, error)
-                    } else {
-                        completion(false, APIService.APIErrors.INVALID_RESPONSE)
-                    }
-                } else if let error = error {
-                    completion(false, error)
+        let data =  try! JSONSerialization.data(withJSONObject: userData, options: .prettyPrinted)
+        URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 200 {
+                    completion(true, error)
+                } else {
+                    completion(false, APIService.APIErrors.INVALID_RESPONSE)
                 }
+            } else if let error = error {
+                completion(false, error)
             }
-            .resume()
+        }
+        .resume()
+    }
+    
+    func updatePosition(id: String, token: String, projectId:String, updatedOrder: Int, completion: @escaping (Error?) -> Void) {
+        
+        guard let url = URL(string: "\(DBProperties.baseUrl)/api/v1/item/\(id)") else {
+            completion(APIService.APIErrors.INVALID_URL)
+            return
         }
         
+        let interceptor = APIRequestInterceptor(token: token)
+        var request = interceptor.intercept(URLRequest(url: url))
+        request.httpMethod = DBProperties.put
+        request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
+        
+        let json = [
+            Properties.sortOrder : updatedOrder,
+            Properties.projectId : projectId
+        ] as [String: Any]
+        
+        
+        let data = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+        
+        URLSession.shared.uploadTask(with: request , from : data) { data, response, error in
+            if let error = error {
+                completion(error)
+                return
+            }
+            
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(APIService.APIErrors.INVALID_RESPONSE)
+                return
+            }
+            
+            if httpResponse.statusCode == 200 {
+                completion(nil)
+            } else {
+                completion(APIService.APIErrors.INVALID_RESPONSE)
+            }
+        }
+        .resume()
     }
     
     func get(id: String, token: String, completion: @escaping (Result<APITodo, APIService.APIErrors>) -> Void) {
@@ -130,8 +167,8 @@ class TodoAPIService : Identifiable {
             return
         }
         
-        interceptor = APIRequestInterceptor(token: token)
-        var request = interceptor?.intercept(URLRequest(url: url)) ?? URLRequest(url: url)
+        let interceptor = APIRequestInterceptor(token: token)
+        var request = interceptor.intercept(URLRequest(url: url))
         request.httpMethod = DBProperties.get
         request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
         
@@ -172,8 +209,8 @@ class TodoAPIService : Identifiable {
             return
         }
         
-        interceptor = APIRequestInterceptor(token: token)
-        var request = interceptor?.intercept( URLRequest(url: url)) ??  URLRequest(url: url)
+        let interceptor = APIRequestInterceptor(token: token)
+        var request = interceptor.intercept( URLRequest(url: url))
         request.httpMethod = DBProperties.remove
         request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
         
@@ -195,7 +232,6 @@ class TodoAPIService : Identifiable {
             }
         }.resume()
     }
-    
 }
 
 struct GetAllTodo : Decodable {

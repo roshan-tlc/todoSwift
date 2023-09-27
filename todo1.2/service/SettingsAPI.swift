@@ -53,6 +53,39 @@ class SettingsAPI : Identifiable {
             }
         }.resume()
     }
+
+
+    func update(token: String, theme:APIService, completion: @escaping (Bool, Error?) -> Void) {
+        guard let url = URL(string: DBProperties.baseUrl + "/api/v1/user/details") else {
+            completion(false, APIService.APIErrors.INVALID_URL)
+            return
+        }
+
+        let interceptor = APIRequestInterceptor(token: token)
+        var request = interceptor.intercept(URLRequest(url: url))
+        request.httpMethod = DBProperties.put
+        request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
+
+        let userData = [
+            DBProperties.fontFamily: "roboto",
+            DBProperties.fontSize : 16,
+            DBProperties.color : "f6f6f6"
+        ] as [String : Any]
+
+        let data = try! JSONSerialization.data(withJSONObject: userData, options: .prettyPrinted)
+
+        URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+                    if let httpResponse = response as? HTTPURLResponse {
+                        if httpResponse.statusCode == 200 {
+                            completion(true, error)
+                        } else {
+                            completion(false, APIService.APIErrors.INVALID_RESPONSE)
+                        }
+                    } else if let error = error {
+                        completion(false, error)
+                    }
+                }.resume()
+    }
 }
 
 struct SettingsResponse : Decodable {

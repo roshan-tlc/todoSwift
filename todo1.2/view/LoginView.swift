@@ -45,7 +45,7 @@ struct LoginView: View {
                                 .padding()
                                 .cornerRadius(10)
                                 .foregroundColor(.black)
-                                .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                                .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
                                 .frame(width: .infinity, height: 50).accentColor(.primary).multilineTextAlignment(.center)
                                 .border(.primary, width: 0.5)
 
@@ -57,7 +57,7 @@ struct LoginView: View {
                             NavigationLink(destination: ForgotPasswordView(email: $email)) {
                                 Text(Properties.forgotPassword)
                                         .underline()
-                                        .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                                        .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
                                         .padding()
                                         .foregroundColor(.primary)
 
@@ -91,7 +91,7 @@ struct LoginView: View {
                                     }
                             }) {
                                 Text(Properties.signIn)
-                                        .font(Font.custom(ApplicationTheme.shared.fontFamily, fixedSize: ApplicationTheme.shared.fontSize))
+                                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
                                         .padding(.vertical)
                                         .foregroundColor(.primary)
                                         .frame(width: UIScreen.main.bounds.width - 50)
@@ -107,14 +107,14 @@ struct LoginView: View {
                     HStack {
 
                         Text(Properties.dontHaveAnAccount)
-                                .font(Font.custom(ApplicationTheme.shared.fontFamily, fixedSize: ApplicationTheme.shared.fontSize))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
                                 .padding()
                                 .foregroundColor(.secondary)
 
                         NavigationLink(destination: SignUpView()) {
                             Text(Properties.signUp)
                                     .underline()
-                                    .font(.custom(ApplicationTheme.shared.fontFamily, size: ApplicationTheme.shared.fontSize))
+                                    .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
                                     .padding()
                                     .foregroundColor(.primary)
                         }

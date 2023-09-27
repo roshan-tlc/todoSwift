@@ -10,7 +10,7 @@ import SwiftUI
 
 class ApplicationTheme : ObservableObject {
     
-    @Published var fontFamily:String = "Cursive"
+    @Published var fontFamily:FontFamily = .CURSIVE
     @Published var fontSize : CGFloat = 14
     @Published var defaultColor : Color = .blue
     @State var theme:APISettings = APISettings()
@@ -51,16 +51,16 @@ class ApplicationTheme : ObservableObject {
 
     func setFontFamilyValue(font:String) {
         switch font{
-        case "cursive" :
-            fontFamily = ApplicationTheme.FontFamily.CURSIVE.rawValue
+        case Properties.fontFamilyCursive :
+            fontFamily = ApplicationTheme.FontFamily.CURSIVE
             break
-        case "timesNewRoman" :
-            fontFamily = ApplicationTheme.FontFamily.TIMES_NEW_ROMAN.rawValue
+        case Properties.fontFamilyTimesNewRoman :
+            fontFamily = ApplicationTheme.FontFamily.TIMES_NEW_ROMAN
             break
-        case "roboto" :
-            fontFamily = ApplicationTheme.FontFamily.ROBOTO.rawValue
+        case Properties.fontFamilyRobodo :
+            fontFamily = ApplicationTheme.FontFamily.ROBOTO
         default:
-            fontFamily = ApplicationTheme.FontFamily.TIMES_NEW_ROMAN.rawValue
+            fontFamily = ApplicationTheme.FontFamily.TIMES_NEW_ROMAN
         }
     }
     
@@ -82,9 +82,6 @@ class ApplicationTheme : ObservableObject {
         }
     }
     
-    func setFontFamily(fontFamily:String)  {
-        self.fontFamily = fontFamily
-    }
     
     func setFontSize(fontSize:CGFloat)  {
         self.fontSize = fontSize
@@ -94,7 +91,7 @@ class ApplicationTheme : ObservableObject {
         fontSize
     }
     
-    func getFontFamily() -> String {
+    func getFontFamily() -> FontFamily {
         fontFamily
     }
 
