@@ -12,7 +12,7 @@ class UserList : ObservableObject{
     private var id:Int64 = 1
     static var shared = UserList()
 
-    private init () {}
+  ///  private init () {}
 
     func add(name: String, description: String, email: String, password: String, hint: String, completion: @escaping (Bool) -> Void) {
 

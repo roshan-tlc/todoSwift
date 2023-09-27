@@ -13,9 +13,9 @@ struct UserEditView: View {
     @State var token:String
     @State var toastMessage = ""
     @State var isToastVisible = false
-    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize
+    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
     @State var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
-    @State var defaultColor : Color = ApplicationTheme.shared.defaultColor
+    @State var defaultColor : Color = ApplicationTheme.shared.defaultColor.color
     @Environment(\.presentationMode) var presentation
     
     var body: some View {
@@ -73,7 +73,7 @@ struct UserEditView: View {
                 }
             }
         }
-                .background(ApplicationTheme.shared.defaultColor)
+        .background(ApplicationTheme.shared.defaultColor.color)
                 .toast(isPresented: $isToastVisible, message: $toastMessage)
     }
 

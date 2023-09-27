@@ -81,8 +81,6 @@ class UserAPIService : Identifiable {
                 }
             }.resume()
     }
-
-    
     
     func remove(id:String, token:String, completion : @escaping (Bool, Error?) -> Void) {
         

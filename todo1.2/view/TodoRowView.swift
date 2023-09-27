@@ -12,9 +12,9 @@ struct TodoRowView: View {
     @State var todo: APITodo;
     @State var token:String
     @Binding var todos: [APITodo]
-    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize
+    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
     @State var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
-    @State var defaultColor : Color = ApplicationTheme.shared.defaultColor
+    @State var defaultColor : Color = ApplicationTheme.shared.defaultColor.color
     @State var isToastVisible = false
     @State var toastMessage = ""
     @EnvironmentObject var todoView: TodoList

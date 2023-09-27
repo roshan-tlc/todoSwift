@@ -29,7 +29,7 @@ struct MenuView: View {
         VStack {
             HStack {
                 Text(Properties.menu)
-                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
             }
                     .padding(.top, 20)
                     .padding(.bottom, 10)
@@ -58,13 +58,13 @@ struct MenuView: View {
 
                             .cornerRadius(10)
                             .multilineTextAlignment(.center)
-                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
 
                     Button(action: {
                         addProject(token: token)
                     }) {
                         Text(Properties.addProject)
-                            .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
+                            .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                                 .frame(width: 150, height: 30)
                                 .foregroundColor(.black)
                                 .background(Color.secondary.opacity(0.5))
@@ -89,7 +89,7 @@ struct MenuView: View {
                 .padding(.top, 50)
                 .border(Color.black, width: 0.2)
                 .edgesIgnoringSafeArea(.vertical)
-                .background(.white).ignoresSafeArea()
+                .background(ApplicationTheme.shared.defaultColor.color)
     }
 
     func moveProject(from source: IndexSet, to destination: Int) {
@@ -101,7 +101,6 @@ struct MenuView: View {
         for (position, item) in projectView.projects.enumerated() {
             let newOrder = position + 1
             let updateOrder:[String: Any] = ["sort_order": newOrder]
-            print(item.getId(), item.sort_order)
 
             ProjectAPIService.shared.updatePosition(id: movedProject.getId(), token: token, updatedOrder: updateOrder)  {error in
                 if let error = error {
@@ -115,8 +114,6 @@ struct MenuView: View {
                 }
             }
         }
-
-
     }
 
 

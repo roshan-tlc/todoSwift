@@ -25,7 +25,7 @@ struct UserView : View {
                             .frame(width: 80, height: 60)
 
                     Text(user.getName().prefix(1).uppercased())
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
                             .foregroundColor(.white)
                 }
                         .padding(.leading, 10)
@@ -33,12 +33,12 @@ struct UserView : View {
 
             VStack {
                 Text(user.getName() )
-                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize))
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                         .foregroundColor(.primary)
                         .padding(5)
 
                 Text(user.getTitle() )
-                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize))
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue , size : ApplicationTheme.shared.fontSize.rawValue))
                         .foregroundColor(.primary)
                         .padding(.bottom, 10)
                         .padding(5)

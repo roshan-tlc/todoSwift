@@ -7,7 +7,12 @@
 
 import Foundation
 
-class APITodo :Identifiable, Decodable, Hashable, Encodable {
+class APITodo : Identifiable, Decodable, Hashable, Encodable, Comparable {
+    
+    static func < (lhs: APITodo, rhs: APITodo) -> Bool {
+        lhs.sort_order < rhs.sort_order
+    }
+    
     
     static func == (lhs: APITodo, rhs: APITodo) -> Bool {
         lhs._id == rhs._id

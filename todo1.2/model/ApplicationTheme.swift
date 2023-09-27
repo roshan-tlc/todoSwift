@@ -11,8 +11,8 @@ import SwiftUI
 class ApplicationTheme : ObservableObject {
     
     @Published var fontFamily:FontFamily = .CURSIVE
-    @Published var fontSize : CGFloat = 14
-    @Published var defaultColor : Color = .blue
+    @Published var fontSize :FontSize = .medium
+    @Published var defaultColor : DefaultColor = .blue
     @State var theme:APISettings = APISettings()
     
     static var shared = ApplicationTheme()
@@ -36,6 +36,7 @@ class ApplicationTheme : ObservableObject {
         case blue = "blue"
         case green = "green"
         case mint = "dark"
+        case light = "light"
         
         var color: Color {
             switch self {
@@ -45,29 +46,29 @@ class ApplicationTheme : ObservableObject {
                 return Color(#colorLiteral(red: 0.5, green: 0.8, blue: 0.5, alpha: 1.0))
             case .mint:
                 return Color.mint
+            case .light:
+                return Color.white
             }
         }
     }
 
-    func setFontFamilyValue(font:String) {
+    func setFontFamilyValue(font:String) -> FontFamily {
         switch font{
         case Properties.fontFamilyCursive :
-            fontFamily = ApplicationTheme.FontFamily.CURSIVE
-            break
+            return ApplicationTheme.FontFamily.CURSIVE
         case Properties.fontFamilyTimesNewRoman :
-            fontFamily = ApplicationTheme.FontFamily.TIMES_NEW_ROMAN
-            break
-        case Properties.fontFamilyRobodo :
-            fontFamily = ApplicationTheme.FontFamily.ROBOTO
+            return ApplicationTheme.FontFamily.TIMES_NEW_ROMAN
+        case Properties.fontFamilyRoboto :
+            return ApplicationTheme.FontFamily.ROBOTO
         default:
-            fontFamily = ApplicationTheme.FontFamily.TIMES_NEW_ROMAN
+            return ApplicationTheme.FontFamily.TIMES_NEW_ROMAN
         }
     }
     
     func setFontValue( value: CGFloat) -> FontSize {
-            if value == FontSize.small.rawValue {
+            if value <= 16 {
                 return .small
-            } else if value == FontSize.medium.rawValue {
+            } else if value <= 18  {
                 return .medium
             } else {
                 return .large
@@ -76,48 +77,42 @@ class ApplicationTheme : ObservableObject {
     
     func setColorValue(_ value : String)  -> DefaultColor {
         if let color = DefaultColor(rawValue: value) {
+            print("set color", color)
             return color
         } else {
-            return DefaultColor.blue
+            return DefaultColor.light
         }
     }
     
     
-    func setFontSize(fontSize:CGFloat)  {
-        self.fontSize = fontSize
-    }
-    
-    func getFontSize() -> CGFloat {
+    func getFontSize() -> FontSize {
         fontSize
     }
     
     func getFontFamily() -> FontFamily {
         fontFamily
     }
-
-    func setTheme() {
-        defaultColor =  Color(theme.color)
-        setFontFamilyValue(font: theme.font_family)
-        fontSize =  theme.font_size
-    }
     
     func getTheme(token:String) {
         SettingsAPI.shared.get(token: token) { result in
             switch result {
-            case .success(let Setting):
-                self.theme = Setting
+            case .success(let setting):
+                self.theme = setting
+                self.fontSize = self.setFontValue(value: setting.font_size)
+                self.fontFamily = self.setFontFamilyValue(font: setting.font_family)
+                print(self.fontFamily)
+                self.defaultColor = self.setColorValue(setting.color)
             case .failure(_):
                 print("error")
             }
         }
-        print(theme)
-        setTheme()
     }
 }
 
 extension Color {
     init?(hex: String) {
-        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        let value = "#\(hex)"
+        var hexSanitized = value.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
 
         var rgb: UInt64 = 0

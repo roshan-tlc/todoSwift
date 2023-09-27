@@ -25,13 +25,13 @@ struct AddTodoView: View {
             TextField(Properties.enterTodo, text: $textField)
                     .frame(height: 50)
                     .background(.secondary.opacity(0.8))
-                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
 
             Button(
                     action: addTodo
                     , label: {
                 Text(Properties.addTodo)
-                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                         .frame(height: 50)
                         .foregroundColor(.primary)
             })

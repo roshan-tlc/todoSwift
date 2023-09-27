@@ -20,7 +20,7 @@ struct ForgotPasswordView : View {
 
     var body : some View {
         ZStack {
-            ApplicationTheme.shared.defaultColor
+            ApplicationTheme.shared.defaultColor.color
                     .edgesIgnoringSafeArea(.all)
 
             VStack {
@@ -94,7 +94,7 @@ struct ForgotPasswordView : View {
 
                         }) {
                             Text(Properties.resetPassword)
-                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
+                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
                                     .frame(width: UIScreen.main.bounds.width - 250)
@@ -108,7 +108,7 @@ struct ForgotPasswordView : View {
                             presentation.wrappedValue.dismiss()
                         }) {
                             Text(Properties.cancel)
-                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
+                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
                                     .frame(width: UIScreen.main.bounds.width - 250)

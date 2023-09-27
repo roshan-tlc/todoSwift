@@ -8,6 +8,8 @@
 import Foundation
 
 class TodoList: ObservableObject {
+   
+    
     @Published var todos = [APITodo]()
     static var apiTodos = [APITodo]()
     var todo = APITodo()
@@ -50,8 +52,10 @@ class TodoList: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let todo):
-                    TodoList.apiTodos = todo
-                    self.todos = TodoList.apiTodos
+                    DispatchQueue.main.async {
+                        TodoList.apiTodos = todo.sorted(by: {$0 < $1 })
+                        self.todos = TodoList.apiTodos
+                    }
                 case .failure(_):
                     TodoList.apiTodos = []
                 }

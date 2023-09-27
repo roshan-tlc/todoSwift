@@ -72,7 +72,6 @@ struct SignUpView : View {
 
                         Button(action: {
                             do {
-                                let emails = try CredentialTable.shared.getAllEmail()
                                 if UserValidation.shared.validateUserDetails(name: name, email: email, password: password, reEnteredPassword: reEnteredPassword) {
                                     let user = User(id: id, name: name, description: description, email: email)
                                     let credential = Credential(id: id, email: email, password: password, hint: hint)
@@ -95,10 +94,7 @@ struct SignUpView : View {
                                         toastMessage = Properties.passwordMisMatched
                                         isToastVisible.toggle()
                                     }
-                                    if !email.isEmpty && emails.contains(emails) {
-                                        toastMessage = Properties.emailExists
-                                        isToastVisible.toggle()
-                                    } else {
+                                    else {
                                         toastMessage = Properties.invalidData
                                         isToastVisible.toggle()
                                     }
@@ -109,7 +105,7 @@ struct SignUpView : View {
                             }
                         }) {
                             Text(Properties.signUp)
-                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
+                                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                                     .padding(.vertical)
                                     .foregroundColor(.primary)
                                     .frame(width: UIScreen.main.bounds.width - 50)
@@ -123,14 +119,14 @@ struct SignUpView : View {
                 HStack {
 
                     Text(Properties.alreadyHaveAnAccount)
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
                             .padding()
                             .foregroundColor(.secondary)
 
                     NavigationLink(destination: LoginView()) {
                         Text(Properties.signIn)
                                 .underline()
-                                .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
+                                .font(.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                                 .padding()
                                 .foregroundColor(.primary)
 
@@ -154,14 +150,14 @@ struct PasswordView : View {
 
                 if isPasswordVisible {
                     TextField(text, text: $password)
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                             .padding()
                             .frame(width: .infinity, height: 50).accentColor(.primary).multilineTextAlignment(.center)
                             .border(.primary, width: 0.5)
                             .cornerRadius(10)
                 } else {
                     SecureField(text, text: $password)
-                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
                             .padding()
                             .foregroundColor(.primary)
                             .frame(width: .infinity, height: 50).accentColor(.primary).multilineTextAlignment(.center)

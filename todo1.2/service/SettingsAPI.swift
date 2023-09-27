@@ -54,9 +54,8 @@ class SettingsAPI : Identifiable {
         }.resume()
     }
 
-
-    func update(token: String, theme:APIService, completion: @escaping (Bool, Error?) -> Void) {
-        guard let url = URL(string: DBProperties.baseUrl + "/api/v1/user/details") else {
+    func update(token: String, theme:ApplicationTheme, completion: @escaping (Bool, Error?) -> Void) {
+        guard let url = URL(string: DBProperties.baseUrl + "/api/v1/user/system/settings") else {
             completion(false, APIService.APIErrors.INVALID_URL)
             return
         }
@@ -67,14 +66,14 @@ class SettingsAPI : Identifiable {
         request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
 
         let userData = [
-            DBProperties.fontFamily: "roboto",
-            DBProperties.fontSize : 16,
-            DBProperties.color : "f6f6f6"
-        ] as [String : Any]
+               DBProperties.fontFamily: theme.fontFamily.rawValue,
+               DBProperties.fontSize: theme.fontSize.rawValue,
+               DBProperties.color: theme.defaultColor.rawValue     
+           ] as [String: Any]
 
-        let data = try! JSONSerialization.data(withJSONObject: userData, options: .prettyPrinted)
+         let jsonData = try? JSONSerialization.data(withJSONObject: userData)
 
-        URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+        URLSession.shared.uploadTask(with: request, from: jsonData) { data, response, error in
                     if let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode == 200 {
                             completion(true, error)

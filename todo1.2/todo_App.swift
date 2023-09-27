@@ -8,12 +8,16 @@
 import SwiftUI
 
 @main
-struct todo_App: App {
+struct todoApp: App {
     var body: some Scene {
         WindowGroup {
             LoginView()
                 .environmentObject(ProjectList.shared)
                 .environmentObject(TodoList.shared)
+                .environmentObject(Filter())
+                .environmentObject(ApplicationTheme.shared)
+                .environmentObject(SearchFilter())
+                .environmentObject(UserList())
         }
     }
 }
