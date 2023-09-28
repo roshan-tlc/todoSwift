@@ -12,9 +12,6 @@ struct TodoRowView: View {
     @State var todo: APITodo;
     @State var token:String
     @Binding var todos: [APITodo]
-    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
-    @State var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
-    @State var defaultColor : Color = ApplicationTheme.shared.defaultColor.color
     @State var isToastVisible = false
     @State var toastMessage = ""
     @EnvironmentObject var todoView: TodoList
@@ -29,9 +26,9 @@ struct TodoRowView: View {
                 .foregroundColor(todo.is_completed == true ? .secondary : .primary)
                 .padding(.trailing, 95)
                 .frame(width: 240, height: 20)
-                .font(Font.custom(fontFamily, fixedSize: fontSize))
+                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, fixedSize: ApplicationTheme.shared.fontSize.rawValue))
             
-            Image(systemName: "minus.circle.fill")
+            Image(systemName: IconProperties.minusCircleImage)
                 .onTapGesture(perform: remove)
                 .frame(width: 20, height: 20)
                 .padding(.trailing, 30)
@@ -73,7 +70,7 @@ struct CheckBox: View {
     
     var body: some View {
         VStack {
-            Image(systemName: isChecked == true ? Properties.checkmarkImage : Properties.squareImage)
+            Image(systemName: isChecked == true ? IconProperties.checkmarkImage : IconProperties.squareImage)
                     .foregroundColor(.primary)
                 .onTapGesture {
                     isChecked.toggle()

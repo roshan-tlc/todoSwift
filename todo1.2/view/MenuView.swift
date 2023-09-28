@@ -20,7 +20,7 @@ struct MenuView: View {
     @State var returnToMenu = false
     @State var token: String
 
-    init(userId: String, token: String) {
+    init(userId: String, token: String, user:APIUser) {
         self.userId = userId
         self.token = token
     }
@@ -35,11 +35,11 @@ struct MenuView: View {
                     .padding(.bottom, 10)
             VStack {
 
-                UserView(user: APIUser(), token: token)
+                UserView(user: UserList.shared.user, token: token)
             }
             VStack {
 
-                Image(systemName: Properties.plusAppImage)
+                Image(systemName: IconProperties.plusAppImage)
                         .renderingMode(.original)
                         .onTapGesture {
                             isAddViewVisible.toggle()
@@ -81,7 +81,6 @@ struct MenuView: View {
                     }
                 }
                         .onMove(perform: moveProject)
-
             }
             Spacer()
         }
@@ -100,12 +99,10 @@ struct MenuView: View {
 
         for (position, item) in projectView.projects.enumerated() {
             let newOrder = position + 1
-            let updateOrder:[String: Any] = ["sort_order": newOrder]
+            let updateOrder:[String: Any] = [Properties.sortOrder: newOrder]
 
             ProjectAPIService.shared.updatePosition(id: movedProject.getId(), token: token, updatedOrder: updateOrder)  {error in
                 if let error = error {
-                    print("error", error
-                    )
                     toastMessage = "\(error)"
                     isToastVisible.toggle()
                 } else {
@@ -119,7 +116,7 @@ struct MenuView: View {
 
     func addProject(token: String) -> Void {
         if textIsAppropriate() {
-            ProjectAPIService.shared.create(name: textField, description: "description", token: token) { result, error in
+            ProjectAPIService.shared.create(name: textField, description: Properties.description, token: token) { result, error in
                 if let error = error {
                     toastMessage = "\(error)\n" + Properties.projectCreatedUnSuccess
                     isToastVisible.toggle()

@@ -18,7 +18,7 @@ class CredentialTable : ObservableObject {
 
         do {
             //try db.run(Properties.dropCredentialTable)
-            try db.run(DBProperties.createCredentialTable)
+            try db.run(DBTableProperties.createCredentialTable)
         } catch {
             throw error
         }
@@ -28,11 +28,10 @@ class CredentialTable : ObservableObject {
 
         guard let db = db else { return }
 
-        let query = DBProperties.insertCredential
+        let query = DBTableProperties.insertCredential
 
         do {
             try db.run(query, credential.getId(), credential.getEmail(), credential.getPassword(), credential.getHint())
-            print(credential.getId(), credential.getEmail(), credential.getPassword(), credential.getHint())
         } catch {
             throw error
         }
@@ -42,7 +41,7 @@ class CredentialTable : ObservableObject {
 
         guard let db = db else { return 0}
         print(email, password)
-        let query = DBProperties.validateUser
+        let query = DBTableProperties.validateUser
 
         do {
             for row in try db.prepare(query, email, password) {
@@ -61,7 +60,7 @@ class CredentialTable : ObservableObject {
 
         guard let db = db else { return }
 
-        let query = DBProperties.updatePassword
+        let query = DBTableProperties.updatePassword
 
         do {
             try db.run(query, password, email)
@@ -76,7 +75,7 @@ class CredentialTable : ObservableObject {
         var emails:[String] = []
 
         do {
-            for row in try db.run(DBProperties.getAllEmail) {
+            for row in try db.run(DBTableProperties.getAllEmail) {
                 print(row[0] as! String )
                 emails.append(row[0] as! String)
             }
@@ -90,7 +89,7 @@ class CredentialTable : ObservableObject {
     func update(credential:Credential) throws  {
         guard let db = db else { return }
 
-        let query = DBProperties.updateCredential
+        let query = DBTableProperties.updateCredential
 
         do {
             try db.run(query, credential.getEmail(), credential.getPassword(), credential.getHint(), credential.getId())
@@ -103,7 +102,7 @@ class CredentialTable : ObservableObject {
 
         guard let db = db else { return }
 
-        let query = DBProperties.removeCredential
+        let query = DBTableProperties.removeCredential
 
         do {
             try db.run(query,id)

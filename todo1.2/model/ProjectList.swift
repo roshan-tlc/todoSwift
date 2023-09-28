@@ -42,11 +42,8 @@ class ProjectList : ObservableObject {
             switch result {
             case .success(let project):
                 DispatchQueue.main.async {
-                    self.apiProjects = project.sorted(by: { $0.sort_order > $1.sort_order})
-                    for project in project {
-                        print(project.sort_order)
-                    }
-                    self.projects = self.apiProjects
+
+                    self.projects = project.sorted(by: { $0.sort_order > $1.sort_order})
                 }
             case .failure(_):
                 self.apiProjects = []

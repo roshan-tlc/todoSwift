@@ -18,11 +18,11 @@ class InitDataBase : Identifiable {
         do {
             let fileURL = try FileManager.default
                 .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-                .appendingPathComponent("myDatabase.sqlite")
+                .appendingPathComponent(DBTableProperties.filePath)
             
             db = try Connection(fileURL.path)
         } catch {
-            print("Error opening database: \(error)")
+            db = nil
         }
     }
     

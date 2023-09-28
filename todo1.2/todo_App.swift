@@ -17,7 +17,7 @@ struct todoApp: App {
                 .environmentObject(Filter())
                 .environmentObject(ApplicationTheme.shared)
                 .environmentObject(SearchFilter())
-                .environmentObject(UserList())
+                .environmentObject(UserList.shared)
         }
     }
 }

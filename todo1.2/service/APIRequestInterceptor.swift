@@ -14,7 +14,7 @@ class APIRequestInterceptor: ObservableObject, RequestInterceptor {
     }
     func intercept(_ request: URLRequest) -> URLRequest {
         var modifiedRequest = request
-        modifiedRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        modifiedRequest.setValue("\(DBProperties.bearer) \(token)", forHTTPHeaderField: Properties.authorization)
         return modifiedRequest
     }
 }

@@ -11,11 +11,9 @@ struct UserEditView: View {
     @State var description:String
     @State var email:String
     @State var token:String
+    @State var isNavigationVisible = false
     @State var toastMessage = ""
     @State var isToastVisible = false
-    @State var fontSize : CGFloat = ApplicationTheme.shared.fontSize.rawValue
-    @State var fontFamily : String = ApplicationTheme.shared.fontFamily.rawValue
-    @State var defaultColor : Color = ApplicationTheme.shared.defaultColor.color
     @Environment(\.presentationMode) var presentation
     
     var body: some View {
@@ -28,24 +26,24 @@ struct UserEditView: View {
                             .padding()
 
                     Text(userName.prefix(1).uppercased())
-                            .font(Font.custom(fontFamily, size : fontSize))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                             .foregroundColor(.white)
                             .padding()
                 }
                 TextField(Properties.name, text: $userName)
-                        .font(Font.custom(fontFamily, size : fontSize))
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                         .frame(alignment: .center)
                         .padding(.leading, 100)
                         .padding()
 
                 TextField(Properties.description, text: $description)
-
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                         .frame(alignment: .center)
                         .padding(.leading, 100)
                         .padding()
 
                 TextField(Properties.email, text: $email)
-
+                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                         .frame(alignment: .center)
                         .padding(.leading, 100)
                         .padding()
@@ -54,12 +52,15 @@ struct UserEditView: View {
 
                     Button(action: {
                         UserList.shared.update(id: userId, name: userName, title: description, token: token)
+                        DispatchQueue.main.async {
+                            UserView(user: APIUser(), token: token).reload()
+                        }
                         presentation.wrappedValue.dismiss()
                     }) {
                         Text(Properties.save)
                     }
                             .frame(width: 80)
-                            .font(Font.custom(fontFamily, size : fontSize))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                             .padding()
 
                     Button(action: {
@@ -68,7 +69,7 @@ struct UserEditView: View {
                     }) {
                         Text(Properties.cancel)
                     } .frame(width: 80)
-                            .font(Font.custom(fontFamily, size : fontSize))
+                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                             .padding()
                 }
             }
@@ -76,5 +77,4 @@ struct UserEditView: View {
         .background(ApplicationTheme.shared.defaultColor.color)
                 .toast(isPresented: $isToastVisible, message: $toastMessage)
     }
-
 }

@@ -7,6 +7,8 @@ import SwiftUI
 struct UserView : View {
 
     @State private var user:APIUser
+    @State var userName:String
+    @State var description:String
     @State private var toastMessage = ""
     @State private var isToastVisible = false
     @State var token:String
@@ -14,6 +16,8 @@ struct UserView : View {
     init(user:APIUser, token:String) {
         self.user = user
         self.token = token
+        userName = user.getName()
+        description = user.getTitle()
     }
 
     var body : some View {
@@ -47,7 +51,7 @@ struct UserView : View {
 
             VStack {
                 NavigationLink(destination: LoginView()) {
-                    Image(systemName: Properties.logoutImage)
+                    Image(systemName: IconProperties.logoutImage)
                             .frame(width: 6, height: 6)
                             .foregroundColor(.primary)
                             .padding(.leading, 5)
@@ -55,23 +59,24 @@ struct UserView : View {
                 }
 
                 NavigationLink(destination: UserEditView(userId: user.id, userName: user.getName() , description: user.getTitle(), email: user.getEmail(), token: token)) {
-                    Image(systemName: Properties.editImage)
+                    Image(systemName: IconProperties.editImage)
                             .foregroundColor(.primary)
                             .padding(.leading, 5)
                             .padding()
                 }
-                        .onAppear {
-                            reload()
-                        }
+
             }
             Spacer()
         }
+                .onAppear {
+                    reload()
+                }
         .padding(15)
                 .toast(isPresented: $isToastVisible, message: $toastMessage)
                 .frame(width: .infinity, height: 80,alignment: .top)
     }
 
-    func getUser(userId:String)  {
+    func getUser()  {
         UserAPIService.shared.get(token: token) { result in
             switch result {
             case .success(let user):
@@ -84,6 +89,8 @@ struct UserView : View {
     }
     
     func reload() {
-        getUser(userId: user.id)
+        DispatchQueue.main.async {
+            getUser()
+        }
     }
 }

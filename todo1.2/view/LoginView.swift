@@ -75,7 +75,9 @@ struct LoginView: View {
                                         } else if result == true {
                                             token = userToken
                                             toastMessage = Properties.loginSuccess
-                                            ApplicationTheme.shared.getTheme(token: token ?? " ")
+                                            DispatchQueue.main.async {
+                                                ApplicationTheme.shared.getTheme(token: token ?? " ")
+                                            }
                                             showLogin.toggle()
                                         } else {
                                             if email.isEmpty {

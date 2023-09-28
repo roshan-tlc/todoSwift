@@ -17,14 +17,17 @@ struct ListRowView : View {
     var body: some View {
         HStack {
             TextView(text: project.getTitle())
-                .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
-            
-            Image(systemName: Properties.minusCircleImage)
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size: ApplicationTheme.shared.fontSize.rawValue))
+                    .padding(.leading, 40)
+                    .frame(width: 220)
+
+
+            Image(systemName: IconProperties.minusCircleImage)
                     .onTapGesture(perform: remove)
                     .frame(width: 20, height: 20)
-                    .padding(.trailing, 20)
                     .foregroundColor(.primary)
         }
+                .frame(width: 270)
     }
         
     

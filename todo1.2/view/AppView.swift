@@ -11,9 +11,6 @@ struct AppView: View {
 
     @EnvironmentObject var listView: ProjectList
     @EnvironmentObject var todoList: TodoList
-    @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize.rawValue
-    @State var fontFamily: ApplicationTheme.FontFamily = ApplicationTheme.shared.fontFamily
-    @State var defaultColor: Color = ApplicationTheme.shared.defaultColor.color
     @State var message = ""
     @State var isToastVisible = false
     @State var project: APIProject?
@@ -21,6 +18,7 @@ struct AppView: View {
     @State private var showMenu: Bool = false
     @State var userId: String
     @State var token:String
+    @State var user = APIUser()
     
     init(project:APIProject, showProject: Bool, userId:String, token:String){
         self.project = project
@@ -46,23 +44,24 @@ struct AppView: View {
 
             GeometryReader { geometry in
                 HStack {
-                    MenuView(userId: userId, token: token)
+                    MenuView(userId: userId, token: token, user: user)
                             .offset(x: showMenu ? 0 : UIScreen.main.bounds.width)
                 }
             }
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button {
-                                ProjectList.shared.getAll(token: token)
-                                todoList.getAll(token: token)
-
+                                DispatchQueue.main.async {
+                                    ProjectList.shared.getAll(token: token)
+                                    todoList.getAll(token: token)
+                                    UserList.shared.setUser(token: token)
+                                }
                                 self.showMenu.toggle()
                             } label: {
-                                Image(systemName: showMenu ? Properties.xMarkImage : Properties.textJustifyImage)
+                                Image(systemName: showMenu ? IconProperties.xMarkImage : IconProperties.textJustifyImage)
                                         .renderingMode(.original)
                             }
                                     .foregroundColor(Color.primary)
-
                         }
                     }
                     .toolbar {

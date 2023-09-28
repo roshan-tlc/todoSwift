@@ -167,7 +167,7 @@ struct PasswordView : View {
             }
 
             Button(action: { isPasswordVisible.toggle() }) {
-                Image(systemName: isPasswordVisible ? Properties.eyeFillImage: Properties.eyeSlashFillImage)
+                Image(systemName: isPasswordVisible ? IconProperties.eyeFillImage: IconProperties.eyeSlashFillImage)
             }
         }
                 .padding()

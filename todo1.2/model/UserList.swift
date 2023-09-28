@@ -9,10 +9,11 @@ class UserList : ObservableObject{
     @Published var usersList = [User]()
     private let userTable =  UserTable.shared
     private let credentialTable = CredentialTable.shared
+    @Published var user = APIUser()
     private var id:Int64 = 1
     static var shared = UserList()
 
-  ///  private init () {}
+    private init() {}
 
     func add(name: String, description: String, email: String, password: String, hint: String, completion: @escaping (Bool) -> Void) {
 
@@ -25,12 +26,6 @@ class UserList : ObservableObject{
             matchingTodo.setDescription(description: title)
         }
         UserAPIService.shared.update(name: name, title: title , token: token) {result, error in
-            
-            if error != nil  {
-                print("error")
-            } else if result == true {
-                
-            }
         }
     }
 
@@ -59,6 +54,21 @@ class UserList : ObservableObject{
         }
     }
 
+    func setUser(token:String)  {
+        UserAPIService.shared.get(token: token) { result in
+            switch result {
+            case .success(let user):
+                self.user = user
+            case .failure(_) :
+                self.user = self.user
+            }
+        }
+    }
+
+    func getUser() -> APIUser{
+        user
+    }
+
     func remove(id:Int64) throws  {
         do {
             try userTable.remove(id: id)
@@ -68,9 +78,7 @@ class UserList : ObservableObject{
         }
     }
 
-
-    
-    func get(id:String)  -> User {
+    func get(id:String) -> User {
         usersList.first(where: { String($0.id) == id}) ?? User(id: 0, name: "", description: "", email: "")
     }
     
@@ -81,8 +89,4 @@ class UserList : ObservableObject{
             throw error
         }
     }
-}
-
-struct Users {
-
 }

@@ -23,7 +23,7 @@ class ProjectTable : ObservableObject {
 
         do {
             //try db.run(Properties.dropProjectTable)
-            try db.run(DBProperties.createProjectTable)
+            try db.run(DBTableProperties.createProjectTable)
         } catch {
             throw error
         }
@@ -33,7 +33,7 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            let insert = DBProperties.insertProjectTable
+            let insert = DBTableProperties.insertProjectTable
             try db.run(insert, project.getTitle(), project.getUserId(), project.getOrder())
         } catch {
             throw error
@@ -46,7 +46,7 @@ class ProjectTable : ObservableObject {
         var projects: [Project] = []
 
         do {
-            for row in try db.run(DBProperties.getAllProject) {
+            for row in try db.run(DBTableProperties.getAllProject) {
                 let id = row[0] as! Int64
                 let title = row[1] as! String
                 let userId = row[2] as! Int64
@@ -63,7 +63,7 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return [] }
 
         var projects: [Project] = []
-        let query = DBProperties.getProjects
+        let query = DBTableProperties.getProjects
 
         do {
             for row in try db.prepare(query, id) {
@@ -85,7 +85,7 @@ class ProjectTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            let remove = DBProperties.removeProject
+            let remove = DBTableProperties.removeProject
             try db.run(remove, id)
         } catch {
             throw error

@@ -13,7 +13,6 @@ class APITodo : Identifiable, Decodable, Hashable, Encodable, Comparable {
         lhs.sort_order < rhs.sort_order
     }
     
-    
     static func == (lhs: APITodo, rhs: APITodo) -> Bool {
         lhs._id == rhs._id
     }
@@ -34,7 +33,7 @@ class APITodo : Identifiable, Decodable, Hashable, Encodable, Comparable {
     }
     
     init(){
-        self.additional_attributes = AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, updatedAt: 0)
+        self.additional_attributes = AdditionalAttributes()
         self._id = ""
         self.name = ""
         self.description = ""

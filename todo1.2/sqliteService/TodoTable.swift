@@ -22,7 +22,7 @@ class TodoTable : ObservableObject {
 
         do {
             //try db.run(Properties.dropTodoTable)
-            try db.run(DBProperties.createTodoTable)
+            try db.run(DBTableProperties.createTodoTable)
         } catch {
             throw error
         }
@@ -31,7 +31,7 @@ class TodoTable : ObservableObject {
     func insert(todo: Todo) throws {
         guard let db = db else { return }
         do {
-            let insert = DBProperties.insertTodos
+            let insert = DBTableProperties.insertTodos
             try db.run(insert, todo.getTitle(), todo.getStatus().rawValue, todo.getParentId(), todo.getOrder())
         } catch {
             throw error
@@ -41,7 +41,7 @@ class TodoTable : ObservableObject {
     func onCheckBoxChange(id:String) throws  {
         guard let db = db else {return }
 
-        let query = DBProperties.updateCheckbox
+        let query = DBTableProperties.updateCheckbox
 
         do {
             try db.run(query,id)
@@ -55,7 +55,7 @@ class TodoTable : ObservableObject {
         guard let db = db else { return [] }
         var todos: [Todo] = []
 
-        let query = DBProperties.getTodos
+        let query = DBTableProperties.getTodos
 
         do {
             let statement = try db.prepare(query)
@@ -85,9 +85,9 @@ class TodoTable : ObservableObject {
     func updateTodoTable() throws {
         guard let db = db else { return}
         do {
-            let projectTable = Table(DBProperties.todoTable)
-            let idColumn = Expression<String>(DBProperties.id)
-            let orderColumn = Expression<Int>(DBProperties.position)
+            let projectTable = Table(DBTableProperties.todoTable)
+            let idColumn = Expression<String>(DBTableProperties.id)
+            let orderColumn = Expression<Int>(DBTableProperties.position)
 
             try db.transaction {
                 for (index, todo) in TodoList.shared.todos.enumerated() {
@@ -104,7 +104,7 @@ class TodoTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            let remove = DBProperties.removeTodos
+            let remove = DBTableProperties.removeTodos
             try db.run(remove, parentId)
         } catch {
             throw error
@@ -115,7 +115,7 @@ class TodoTable : ObservableObject {
         guard let db = db else { return }
 
         do {
-            let remove = DBProperties.removeTodo
+            let remove = DBTableProperties.removeTodo
             try db.run(remove, id)
         } catch {
             throw error

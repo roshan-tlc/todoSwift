@@ -7,7 +7,7 @@
 
 import Foundation
 
-class APIUser : Decodable {
+class APIUser : Decodable, Equatable {
     
     var additional_attributes : UserAttributes
     var _id : String
@@ -61,6 +61,10 @@ class APIUser : Decodable {
     
     func setTitle(title:String) {
         self.title = title
+    }
+
+    static func ==(lhs: APIUser, rhs: APIUser) -> Bool {
+        lhs.id == rhs.id
     }
 }
 

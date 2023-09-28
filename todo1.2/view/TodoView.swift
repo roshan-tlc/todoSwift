@@ -20,9 +20,6 @@ struct TodoView: View {
     @State var toastMessage = ""
     @State var isToastVisible = false
     @State var selectedStatus: SearchFilter.Status = SearchFilter.Status.ALL
-    @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize.rawValue
-    @State var fontFamily: String = ApplicationTheme.shared.fontFamily.rawValue
-    @State var defaultColor: Color = ApplicationTheme.shared.defaultColor.color
     @State var isAddView = false
     @State var selectedLimit: SearchFilter.Limit = SearchFilter.Limit.FIVE
     @State var currentIndex = 0
@@ -73,7 +70,7 @@ struct TodoView: View {
                             .padding()
                             .foregroundColor(.primary)
                         Spacer()
-                        Image(systemName: Properties.plusAppImage)
+                        Image(systemName: IconProperties.plusAppImage)
                             .onTapGesture {
                                 isAddViewVisible.toggle()
                                 todos = reload()
@@ -81,7 +78,7 @@ struct TodoView: View {
                             .imageScale(.large)
                             .foregroundColor(.primary)
                         Spacer()
-                        Image(systemName: Properties.threeLineImage)
+                        Image(systemName: IconProperties.threeLineImage)
                             .onTapGesture {
                                 isSearchViewVisible.toggle()
                             }
@@ -104,7 +101,7 @@ struct TodoView: View {
                             if isSearchBarVisible {
                                 SearchBar(text: $searchText)
                                     .frame(width: .infinity)
-                                    .font(Font.custom(fontFamily, size: fontSize))
+                                        .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                                     .padding(.horizontal)
                                     .onTapGesture {
                                         isSearchEnable.toggle()
@@ -114,7 +111,7 @@ struct TodoView: View {
                                 Button(action: {
                                     isSearchBarVisible.toggle()
                                 }) {
-                                    Image(systemName: Properties.searchImage)
+                                    Image(systemName: IconProperties.searchImage)
                                 }
                                 .padding(.trailing, 10)
                                 .frame(width: 90)
@@ -128,7 +125,7 @@ struct TodoView: View {
                                 HStack {
                                     Text(Properties.picker)
                                     Text(Properties.selectedStatus)
-                                        .font(Font.custom(fontFamily, size: fontSize))
+                                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                                     
                                 }
                             }
@@ -147,7 +144,7 @@ struct TodoView: View {
                                 HStack {
                                     Text(Properties.limit)
                                     Text(Properties.selectedLimit)
-                                        .font(Font.custom(fontFamily, size: fontSize))
+                                            .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                                         .foregroundColor(.primary)
                                 }
                             }
@@ -183,8 +180,6 @@ struct TodoView: View {
                                 let newOrder = position + 1
                                 TodoAPIService.shared.updatePosition(id: todo.getId(), token: token, projectId: todo.getParentId(), updatedOrder: newOrder)  {error in
                                     if let error = error {
-                                        print("error", error
-                                        )
                                         toastMessage = "\(error)"
                                         isToastVisible.toggle()
                                     } else {
@@ -195,15 +190,19 @@ struct TodoView: View {
                             }
                         }
                     }
+
                     .onAppear {
-                        
                         DispatchQueue.main.async {
                             todos = reload()
                         }
                     }
                     
                     .onChange(of: todoView.todos) { change in
+                        todoView.getAll(token: token)
                         todos = reload()
+                        if (currentPage > totalPages || currentIndex >= currentPage * selectedLimit.rawValue) {
+                            setCurrentPage()
+                        }
                     }
                     .navigationBarBackButtonHidden(false)
                     .padding()
@@ -217,14 +216,14 @@ struct TodoView: View {
                                 }
                             }
                             .padding(.horizontal)
-                            .font(Font.custom(fontFamily, size: fontSize))
+                                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                         }
                         
                         if totalPages > 0 && !paginatedTodo.isEmpty {
                             Text("\(currentPage)/\(totalPages)")
                                 .font(.headline)
                                 .padding(.horizontal)
-                                .font(Font.custom(fontFamily, size: fontSize))
+                                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                                 .onChange(of: currentPage > totalPages || currentIndex >= currentPage * selectedLimit.rawValue) { conditionMet in
                                     if conditionMet {
                                         setCurrentPage()
@@ -237,7 +236,7 @@ struct TodoView: View {
                                 currentIndex += selectedLimit.rawValue
                             }
                             .padding(.horizontal)
-                            .font(Font.custom(fontFamily, size: fontSize))
+                                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
                         }
                     }
                     .foregroundColor(.primary)
@@ -303,17 +302,15 @@ struct TodoView: View {
 
 struct SearchBar: View {
     @Binding var text: String
-    @State var fontFamily: String = ApplicationTheme.shared.fontFamily.rawValue
-    @State var fontSize: CGFloat = ApplicationTheme.shared.fontSize.rawValue
     
     var body: some View {
         HStack {
-            Image(systemName: Properties.searchImage)
+            Image(systemName: IconProperties.searchImage)
                 .foregroundColor(.primary)
             
             TextField(Properties.search, text: $text)
                 .textFieldStyle(RoundedBorderTextFieldStyle()).frame(maxWidth: .infinity)
-                .font(Font.custom(fontFamily, size: fontSize))
+                    .font(Font.custom(ApplicationTheme.shared.fontFamily.rawValue, size : ApplicationTheme.shared.fontSize.rawValue))
             Spacer()
         }
         .padding(.horizontal)

@@ -66,9 +66,9 @@ class SettingsAPI : Identifiable {
         request.addValue(Properties.applicationJson, forHTTPHeaderField: Properties.contentType)
 
         let userData = [
-               DBProperties.fontFamily: theme.fontFamily.rawValue,
-               DBProperties.fontSize: theme.fontSize.rawValue,
-               DBProperties.color: theme.defaultColor.rawValue     
+               DBTableProperties.fontFamily: theme.fontFamily.rawValue,
+               DBTableProperties.fontSize: theme.fontSize.rawValue,
+               DBTableProperties.color: theme.defaultColor.rawValue
            ] as [String: Any]
 
          let jsonData = try? JSONSerialization.data(withJSONObject: userData)

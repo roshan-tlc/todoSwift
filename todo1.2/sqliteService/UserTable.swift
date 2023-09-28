@@ -22,7 +22,7 @@ class UserTable : ObservableObject {
 
         do {
             //try db.run(Properties.dropUserTable)
-            try db.run(DBProperties.createUserTable)
+            try db.run(DBTableProperties.createUserTable)
         } catch {
             throw error
         }
@@ -31,7 +31,7 @@ class UserTable : ObservableObject {
     func insert(user:User) throws {
         guard let db = db else { return }
 
-        let insert = DBProperties.insertUser
+        let insert = DBTableProperties.insertUser
 
         do {
             try db.run(insert, user.getName(), user.getDescription(), user.getEmail())
@@ -43,7 +43,7 @@ class UserTable : ObservableObject {
     func getId(email:String) throws -> Int64 {
         guard let db = db else { return 0 }
 
-        let query = DBProperties.getUserIdByEmail
+        let query = DBTableProperties.getUserIdByEmail
 
         do {
            for row in try db.run(query, email){
@@ -59,7 +59,7 @@ class UserTable : ObservableObject {
     func update(id:Int64, name:String, description:String, email:String ) throws {
         guard let db =  db else { return }
         
-        let update = DBProperties.updateUser
+        let update = DBTableProperties.updateUser
         
         do {
             try db.run(update, name, description, email, id)
@@ -75,7 +75,7 @@ class UserTable : ObservableObject {
         var users: [User] = []
 
         do {
-            for row in try db.prepare(DBProperties.getAllUser) {
+            for row in try db.prepare(DBTableProperties.getAllUser) {
                 let id = row[0] as! Int64
                 let name = row[1] as! String
                 let description = row[2] as! String
@@ -91,7 +91,7 @@ class UserTable : ObservableObject {
     
     func get(id:String) throws -> User {
         guard let db = db else { return User(id: 0, name: "", description: "", email: "")}
-        let query = DBProperties.getUserById
+        let query = DBTableProperties.getUserById
         
         do {
             for row in try db.prepare(query,id) {
@@ -110,7 +110,7 @@ class UserTable : ObservableObject {
 
     func get(email:String) throws -> User {
         guard let db = db else { return User(id: 0, name: "", description: "", email: "")}
-        let query = DBProperties.getUserIdByEmail
+        let query = DBTableProperties.getUserIdByEmail
 
         do {
             for row in try db.prepare(query,email) {
@@ -131,7 +131,7 @@ class UserTable : ObservableObject {
         guard let db = db else { return }
         
         do {
-            let remove = DBProperties.removeUser
+            let remove = DBTableProperties.removeUser
             try db.run(remove, id)
         } catch {
             throw error

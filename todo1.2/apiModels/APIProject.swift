@@ -27,7 +27,7 @@ class APIProject :Identifiable,Decodable, Hashable {
     }
     
     init(){
-        self.additional_attributes = AdditionalAttributes(createdBy: "", updatedBy: "", isDeleted: false, updatedAt: 0)
+        self.additional_attributes = AdditionalAttributes()
         self._id = ""
         self.name = ""
         self.description = ""

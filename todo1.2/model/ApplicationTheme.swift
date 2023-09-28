@@ -18,20 +18,21 @@ class ApplicationTheme : ObservableObject {
     static var shared = ApplicationTheme()
     
     private init(){
-        
+
     }
     enum FontSize : CGFloat {
-        case small = 14
-        case medium = 17
-        case large = 20
+        case small = 12
+        case medium = 14
+        case large = 16
         
     }
 
     enum FontFamily : String {
         case CURSIVE = "cursive"
-        case TIMES_NEW_ROMAN = "TimesNewRoman"
+        case TIMES_NEW_ROMAN = "timesNewRoman"
         case ROBOTO = "roboto"
     }
+
     enum DefaultColor: String {
         case blue = "blue"
         case green = "green"
@@ -65,10 +66,10 @@ class ApplicationTheme : ObservableObject {
         }
     }
     
-    func setFontValue( value: CGFloat) -> FontSize {
-            if value <= 16 {
+    func setFontValue(value: CGFloat) -> FontSize {
+            if value < 15 {
                 return .small
-            } else if value <= 18  {
+            } else if value < 18  {
                 return .medium
             } else {
                 return .large
@@ -77,7 +78,7 @@ class ApplicationTheme : ObservableObject {
     
     func setColorValue(_ value : String)  -> DefaultColor {
         if let color = DefaultColor(rawValue: value) {
-            print("set color", color)
+
             return color
         } else {
             return DefaultColor.light
@@ -100,10 +101,9 @@ class ApplicationTheme : ObservableObject {
                 self.theme = setting
                 self.fontSize = self.setFontValue(value: setting.font_size)
                 self.fontFamily = self.setFontFamilyValue(font: setting.font_family)
-                print(self.fontFamily)
                 self.defaultColor = self.setColorValue(setting.color)
             case .failure(_):
-                print("error")
+                self.theme = self.theme
             }
         }
     }
