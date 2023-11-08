@@ -23,7 +23,7 @@ struct MenuView: View {
                     .font(.title)
                     .foregroundColor(.black)
             VStack {
-                UserView()
+                UserView(id:"1")
             }
             VStack {
 
